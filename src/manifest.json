@@ -1,0 +1,26 @@
+{
+  "name": "Tab Insights",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "Shows insights about tabs.",
+  "browser_action": {
+  	"default_name": "Tab Insights",
+    "default_icon": "icon48.png",
+		"default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+		"16": "icon16.png",
+		"32": "icon32.png",
+		"48": "icon48.png",
+		"128": "icon128.png"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'"
+}
