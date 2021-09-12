@@ -1,16 +1,16 @@
-Storage.prototype.setObject = function(key, value) {
-    this.setItem(key, JSON.stringify(value));
+Storage.prototype.setObject = function (key, value) {
+	this.setItem(key, JSON.stringify(value));
 };
 
-Storage.prototype.getObject = function(key) {
-    return this.getItem(key) && JSON.parse(this.getItem(key));
+Storage.prototype.getObject = function (key) {
+	return this.getItem(key) && JSON.parse(this.getItem(key));
 };
 
 function addListeners() {
 
 	var storeURL = 'https://chrome.google.com/webstore/detail/fhnegjjodccfaliddboelcleikbmapik';
 
-	$('social-fb').observe('click', function(event) {
+	$('social-fb').observe('click', function (event) {
 		event.stop();
 
 		chrome.windows.create({
@@ -19,7 +19,7 @@ function addListeners() {
 		});
 	});
 
-	$('social-twitter').observe('click', function(event) {
+	$('social-twitter').observe('click', function (event) {
 		event.stop();
 
 		chrome.windows.create({
@@ -28,40 +28,17 @@ function addListeners() {
 		});
 	});
 
-	$('reset-all-tabs').observe('click', function(event) {
+	$('reset-all-tabs').observe('click', function (event) {
 		event.stop();
 
 		resetTabTotalCount();
-  	});
-
-	$('reset-max-tabs').observe('click', function(event) {
-		event.stop();
-		  
-  		resetTabMaxCount();
 	});
 
-  $('iconBgColor').observe('change', function(event) {
-    event.stop();
+	$('reset-max-tabs').observe('click', function (event) {
+		event.stop();
 
-    updateIconBgColorInput();
-  });
-  
-  //-----
-  $(function () {
-    $('#example').datetimepicker();
-  });
-  
-  
-  
-  
-  
-  $('.input-daterange').datepicker({
-format: 'dd-mm-yyyy',
-todayHighlight: true,
-startDate: '0d'
-});
-
-  //----
+		resetTabMaxCount();
+	});
 }
 
 function init() {
@@ -78,27 +55,27 @@ function init() {
 	if (!tabsMax)
 		localStorage.setObject('tabsMax', 0);
 
-	chrome.tabs.onCreated.addListener(function() {
+	chrome.tabs.onCreated.addListener(function () {
 		incrementTabOpenCount(1);
 	});
 
-	chrome.tabs.onRemoved.addListener(function() {
+	chrome.tabs.onRemoved.addListener(function () {
 		decrementTabOpenCount();
 	});
 
-	chrome.windows.onCreated.addListener(function() {
+	chrome.windows.onCreated.addListener(function () {
 		incrementWindowOpenCount();
 	});
 
-	chrome.windows.onRemoved.addListener(function() {
+	chrome.windows.onRemoved.addListener(function () {
 		decrementWindowOpenCount();
 	});
 
-    chrome.windows.onFocusChanged.addListener(function() {
-        updateWindowCurrentCount();
-    });
-  
-    getCurrentWindowTabCount();
+	chrome.windows.onFocusChanged.addListener(function () {
+		updateWindowCurrentCount();
+	});
+
+	getCurrentWindowTabCount();
 	updateTabTotalCount();
 }
 
@@ -144,9 +121,8 @@ function decrementTabOpenCount() {
 
 
 function updateTabOpenCount() {
-	chrome.browserAction.setBadgeText({text: localStorage.getObject('tabsOpen').toString()});
-  //chrome.browserAction.setBadgeBackgroundColor({ "color": [89, 65, 0, 255] });
-  chrome.browserAction.setBadgeBackgroundColor({ color: localStorage.getObject('iconBgColor').toString() });
+	chrome.browserAction.setBadgeText({ text: localStorage.getObject('tabsOpen').toString() });
+	chrome.browserAction.setBadgeBackgroundColor({ color: localStorage.getObject('iconBgColor').toString() });
 }
 
 function resetTabTotalCount() {
@@ -163,97 +139,41 @@ function resetTabMaxCount() {
 }
 
 function getCurrentWindowTabCount() {
-  chrome.windows.getCurrent({ 'populate': true }, function(window) {
-    localStorage.setObject('tabsWindowCurrentOpen', window.tabs.size());
-  });
+	chrome.windows.getCurrent({ 'populate': true }, function (window) {
+		localStorage.setObject('tabsWindowCurrentOpen', window.tabs.size());
+	});
 }
-function updateWindowCurrentCount() {
-  getCurrentWindowTabCount();
 
-  updatePopupCounts();
+function updateWindowCurrentCount() {
+	getCurrentWindowTabCount();
+
+	updatePopupCounts();
 }
 
 function updateTabTotalCount() {
-	chrome.windows.getAll({ 'populate': true }, function(windows) {
+	chrome.windows.getAll({ 'populate': true }, function (windows) {
 		incrementWindowOpenCount(windows.size());
 
-		windows.each(function(window) {
+		windows.each(function (window) {
 			incrementTabOpenCount(window.tabs.size());
 		});
 	});
 }
 
-function updateIconBgColorInput() {
-  localStorage.setObject('iconBgColor', $('iconBgColor').value);
-  updateTabOpenCount();
-}
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-function calculate(startTime, endTime) {
-
-
-  chrome.storage.local.get(function(items) {
-    console.log('Get from storage--------');
-    console.log('Start time: ' + startTime);
-    console.log('End time:   ' + endTime);
-    console.log(items);
-    
-    console.log('Tabs count: ' + items.length);
-    console.log(typeof items);
-    console.log(items);
-//    var a = items.length;
-    var timeFiltered = items.data.filter(tab => tab.timestamp >= startTime && tab.timestamp <= endTime);
-    var opened = timeFiltered.filter(tab => tab.status === 'opened');
-    var closed = timeFiltered.filter(tab => tab.status === 'closed');
-    
-    console.log('Filter');
-    console.log(timeFiltered);
-    
-    console.log('opened');
-    console.log(opened);
-    
-    console.log('closed');
-    console.log(closed);
-    
-      
-    $$('.weekOpened').invoke('update', opened.length);
-    $$('.weekClosed').invoke('update', closed.length);
-    $$('.weekDiff').invoke('update', opened.length - closed.length);
-    
-  });
-}
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-
 function updatePopupCounts() {
-  $$('.maxCounter').invoke('update', localStorage.getObject('tabsMax'));
-  $$('.totalCounter').invoke('update', localStorage.getObject('tabsTotal'));
-  $$('.totalOpen').invoke('update', localStorage.getObject('tabsOpen'));
-  $$('.windowsOpen').invoke('update', localStorage.getObject('windowsOpen'));
-  $$('.windowCurrentOpen').invoke('update', localStorage.getObject('tabsWindowCurrentOpen'));
-  
-  
-  var currectTime = Date.now();  
-  var previousWeekTime = new Date();
-  previousWeekTime.setDate(previousWeekTime.getDate() - 7);
-  
-  /*
-  $$('.weekOpened').invoke('update', calculate(previousWeekTime, currectTime));
-  $$('.weekCloseed').invoke('update', calculate(previousWeekTime, currectTime));
-*/
-  calculate(previousWeekTime.getTime(), currectTime)
+	$$('.maxCounter').invoke('update', localStorage.getObject('tabsMax'));
+	$$('.totalCounter').invoke('update', localStorage.getObject('tabsTotal'));
+	$$('.totalOpen').invoke('update', localStorage.getObject('tabsOpen'));
+	$$('.windowsOpen').invoke('update', localStorage.getObject('windowsOpen'));
+	$$('.windowCurrentOpen').invoke('update', localStorage.getObject('tabsWindowCurrentOpen'));
 
-  var iconInput = $('iconBgColor');
-  if (iconInput) {
-    iconInput.value = localStorage.getObject('iconBgColor').toString();
-  }
+	var iconInput = $('iconBgColor');
+	if (iconInput) {
+		iconInput.value = localStorage.getObject('iconBgColor').toString();
+	}
 }
 
 function initPopup() {
-  updatePopupCounts();
-
+	updatePopupCounts();
 	addListeners();
 }

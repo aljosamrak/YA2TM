@@ -2,6 +2,7 @@
   "name": "Tab Insights",
   "version": "0.1",
   "manifest_version": 2,
+  "minimum_chrome_version": "23",
   "description": "Shows insights about tabs.",
   "browser_action": {
   	"default_name": "Tab Insights",
@@ -22,5 +23,9 @@
     "activeTab",
     "storage"
   ],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'"
 }
