@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
+  document.querySelector('#expand').addEventListener("click", function () {
+    chrome.tabs.create({ 'url': chrome.extension.getURL('popup.html') }, function (tab) {
+      // Tab opened.
+    });
+  });
+
+
+
   var daysLookback = localStorage["days_lookback"];
   if (!daysLookback) {
     daysLookback = 7
@@ -45,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // var date = new Date(a.timestamp).toLocaleDateString();
       // var date = moment(new Date(a.timestamp)).startOf('day');
       // var date = a.timestamp;
-      var date = new Date(a.timestamp).setHours(0,0,0,0);
+      var date = new Date(a.timestamp).setHours(0, 0, 0, 0);
       r[date] = [...r[date] || [], a];
       return r;
     }, {});
@@ -160,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function createBarGraph(title, yLabels, data, chartElementId) {
 
 
-  const zip = (a, b) => a.map((k, i) => ({timestamp: parseInt(k), value: b[i]}));
+  const zip = (a, b) => a.map((k, i) => ({ timestamp: parseInt(k), value: b[i] }));
 
   var test1 = zip(yLabels, data);
 
@@ -178,29 +186,29 @@ function createBarGraph(title, yLabels, data, chartElementId) {
       //           x: yLabels,
       //           y: data
       //         }],
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgb(75, 192, 192)',
-              borderWidth: 1,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgb(75, 192, 192)',
+      borderWidth: 1,
     }]
   };
 
-    // data: {
-    //   labels: yLabels,
-    //   datasets: [
-    //     {
-    //       axis: 'y',
-    //       backgroundColor: data.map(val => val > 0 ? 'rgba(75, 192, 192, 0.2)' : 'rgba(255, 99, 132, 0.2)'),
-    //       borderColor: data.map(val => val > 0 ? 'rgb(75, 192, 192)' : 'rgb(255, 99, 132)'),
-    //       minBarLength: 2,
-    //       borderWidth: 1,
-    //       data: data
-    //       // data: [{
-    //       //   x: yLabels,
-    //       //   y: data
-    //       // }]
-    //     },
-    //   ],
-    // }
+  // data: {
+  //   labels: yLabels,
+  //   datasets: [
+  //     {
+  //       axis: 'y',
+  //       backgroundColor: data.map(val => val > 0 ? 'rgba(75, 192, 192, 0.2)' : 'rgba(255, 99, 132, 0.2)'),
+  //       borderColor: data.map(val => val > 0 ? 'rgb(75, 192, 192)' : 'rgb(255, 99, 132)'),
+  //       minBarLength: 2,
+  //       borderWidth: 1,
+  //       data: data
+  //       // data: [{
+  //       //   x: yLabels,
+  //       //   y: data
+  //       // }]
+  //     },
+  //   ],
+  // }
 
   return new Chart(chartContex, {
     type: 'line',
@@ -236,7 +244,7 @@ function createBarGraph(title, yLabels, data, chartElementId) {
           time: {
             // Luxon format string
             // tooltipFormat: 'DD T'
-                unit: 'day'
+            unit: 'day'
           },
           title: {
             display: true,
