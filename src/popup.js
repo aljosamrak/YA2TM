@@ -1,7 +1,4 @@
-
 window.addEventListener("load", initPopup);
-
-
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -36,7 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(typeof items);
     console.log(items);
 
-    var timeFiltered = items.data.filter(tab => tab.timestamp >= startTime && tab.timestamp <= endTime);
+    var timeFiltered
+    if (items.data !== undefined) { // TODO do better without null checking - defautl values ...
+      timeFiltered = items.data.filter(tab => tab.timestamp >= startTime && tab.timestamp <= endTime);
+    } else {
+      // TODO better message
+      timeFiltered = []
+    }
 
     let groupByDate = timeFiltered.reduce((r, a) => {
       // var date = new Date(a.timestamp).toLocaleDateString();
@@ -52,71 +55,34 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("dateLabels");
     console.log(dateLabels);
 
-    var chartOpenCloseCtx = document.getElementById("chartOpenClose").getContext('2d');
+    // var chartOpenClose = new Chart(chartOpenCloseCtx, {
+    //   type: 'line',
+    //   data: data1,
+
+    //   options: {
+    //     parsing: {
+    //       xAxisKey: "timestamp",
+    //       yAxisKey: "value"
+    //     },
+    //     scales: {
+    //       x: {
+    //         type: 'time',
+    //         time: {
+    //             unit: 'day'
+    //         }
+    //       },
+    //       // y: {
+    //       //   beginAtZero: true,
+    //       //   title: {
+    //       //     display: true,
+    //       //     text: 'Value'
+    //       //   }
+    //       // }
+    //     },
+    //   },
 
 
-
-
-    var opened = Object.entries(groupByDate).map(([key, value]) => value.filter(tab => tab.status === 'opened').length);
-    console.log("opened");
-    console.log(opened);
-
-
-    // const zip = (a, b) => a.map((k, i) => {
-    //   [{timestamp: k, value: b[i]}]
     // });
-    // const zip = (a, b) => a.map();
-    const zip = (a, b) => a.map((k, i) => ({timestamp: parseInt(k), value: b[i]}));
-
-    var test1 = zip(dateLabels, opened);
-    console.log("test1");
-    console.log(test1);
-    console.log([test1]);
-    console.log(new Array(test1));
-    console.log(Array.from(test1));
-    test1 = Array.from(test1);
-    console.log(test1);
-
-    const data1 = {
-      // labels: dateLabels,
-      datasets: [{
-        label: 'My First dataset',
-        // fill: false,
-        data: test1,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgb(75, 192, 192)',
-                borderWidth: 1,
-      }]
-    };
-
-    var chartOpenClose = new Chart(chartOpenCloseCtx, {
-      type: 'line',
-      data: data1,
-
-      options: {
-        parsing: {
-          xAxisKey: "timestamp",
-          yAxisKey: "value"
-        },
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-                // unit: 'day'
-            }
-          },
-          // y: {
-          //   beginAtZero: true,
-          //   title: {
-          //     display: true,
-          //     text: 'Value'
-          //   }
-          // }
-        },
-      },
-
-
-    });
 
     //   type: 'line',
 
@@ -172,12 +138,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // });
 
     // Opened-closed tabs per day
-    var data = Object.entries(groupByDate).map(([key, value]) => value.filter(tab => tab.status === 'opened').length - value.filter(tab => tab.status === 'closed').length);
-    createBarGraph('Diff', dateLabels, data, "chartDiff");
+    var opened = Object.entries(groupByDate).map(([key, value]) => value.filter(tab => tab.status === 'opened').length);
+    createBarGraph('Opened', dateLabels, opened, "chartOpenClose");
+
+    // Opened-closed tabs per day
+    var diff = Object.entries(groupByDate).map(([key, value]) => value.filter(tab => tab.status === 'opened').length - value.filter(tab => tab.status === 'closed').length);
+    createBarGraph('Diff', dateLabels, diff, "chartDiff");
 
     // Cumulative sum of opened-closed tabs withing the windows
     const cumulativeSum = (sum => value => sum += value)(0);
-    var cumSumData = data.map(cumulativeSum);
+    var cumSumData = diff.map(cumulativeSum);
     createBarGraph('CumSum', dateLabels, cumSumData, "chartCumSum");
 
     // Total opened tabs
@@ -188,14 +158,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /** Creates the bar graph */
 function createBarGraph(title, yLabels, data, chartElementId) {
+
+
+  const zip = (a, b) => a.map((k, i) => ({timestamp: parseInt(k), value: b[i]}));
+
+  var test1 = zip(yLabels, data);
+
+
   var chartContex = document.getElementById(chartElementId).getContext('2d');
+
+
+  const data1 = {
+    // labels: dateLabels,
+    datasets: [{
+      label: 'My First dataset',
+      // fill: false,
+      data: test1,
+      // data: [{
+      //           x: yLabels,
+      //           y: data
+      //         }],
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgb(75, 192, 192)',
+              borderWidth: 1,
+    }]
+  };
+
+    // data: {
+    //   labels: yLabels,
+    //   datasets: [
+    //     {
+    //       axis: 'y',
+    //       backgroundColor: data.map(val => val > 0 ? 'rgba(75, 192, 192, 0.2)' : 'rgba(255, 99, 132, 0.2)'),
+    //       borderColor: data.map(val => val > 0 ? 'rgb(75, 192, 192)' : 'rgb(255, 99, 132)'),
+    //       minBarLength: 2,
+    //       borderWidth: 1,
+    //       data: data
+    //       // data: [{
+    //       //   x: yLabels,
+    //       //   y: data
+    //       // }]
+    //     },
+    //   ],
+    // }
 
   return new Chart(chartContex, {
     type: 'line',
+    data: data1,
 
 
     options: {
-      responsive: true,
+      // responsive: true,
+      parsing: {
+        xAxisKey: "timestamp",
+        yAxisKey: "value"
+      },
       plugins: {
         title: {
           text: title,
@@ -218,7 +235,8 @@ function createBarGraph(title, yLabels, data, chartElementId) {
           type: 'time',
           time: {
             // Luxon format string
-            tooltipFormat: 'DD T'
+            // tooltipFormat: 'DD T'
+                unit: 'day'
           },
           title: {
             display: true,
@@ -234,25 +252,5 @@ function createBarGraph(title, yLabels, data, chartElementId) {
       },
     },
 
-
-
-
-    data: {
-      labels: yLabels,
-      datasets: [
-        {
-          axis: 'y',
-          backgroundColor: data.map(val => val > 0 ? 'rgba(75, 192, 192, 0.2)' : 'rgba(255, 99, 132, 0.2)'),
-          borderColor: data.map(val => val > 0 ? 'rgb(75, 192, 192)' : 'rgb(255, 99, 132)'),
-          minBarLength: 2,
-          borderWidth: 1,
-          data: data
-          // data: [{
-          //   x: yLabels,
-          //   y: data
-          // }]
-        },
-      ],
-    }
   });
 }
