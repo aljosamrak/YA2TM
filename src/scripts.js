@@ -122,7 +122,6 @@ function decrementTabOpenCount() {
 
 function updateTabOpenCount() {
 	chrome.browserAction.setBadgeText({ text: localStorage.getObject('tabsOpen').toString() });
-	chrome.browserAction.setBadgeBackgroundColor({ color: localStorage.getObject('iconBgColor').toString() });
 }
 
 function resetTabTotalCount() {
