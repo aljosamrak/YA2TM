@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     createBarGraph('CumSum', dateLabels, cumSumData, "chartCumSum");
 
     // Total opened tabs
-    var tabs = Object.entries(groupByDate).map(([key, value]) => Math.max.apply(null, value.map(tab => tab.tabs)));
+    var tabs = Object.entries(groupByDate).map(([key, value]) => value.reduce((a,b) => a.timestamp > b.timestamp ? a : b).tabs);
     createBarGraph('Total tabs', dateLabels, tabs, "chartTotal");
   });
 });
