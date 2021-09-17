@@ -1,3 +1,15 @@
+chrome.runtime.onInstalled.addListener(details => {
+  // if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+  //   chrome.runtime.setUninstallURL('https://example.com/extension-survey');
+  // }
+
+  // chrome.windows.getCurrent({ 'populate': true }, function (window) {
+		// chrome.browserAction.setBadgeText(chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_NONE}).size());
+	// });
+
+  
+});
+
 chrome.tabs.onCreated.addListener(function(tab) {  
   /*console.log("Tab opened1");
   // localStorage.setItem("tabid", tab.id);
