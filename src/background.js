@@ -1,137 +1,291 @@
-chrome.runtime.onInstalled.addListener(details => {
-  // if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-  //   chrome.runtime.setUninstallURL('https://example.com/extension-survey');
-  // }
+// chrome.runtime.onInstalled.addListener(details => {
+//   // if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+//   //   chrome.runtime.setUninstallURL('https://example.com/extension-survey');
+//   // }
 
-  // chrome.windows.getCurrent({ 'populate': true }, function (window) {
-		// chrome.browserAction.setBadgeText(chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_NONE}).size());
-	// });
+//   // chrome.windows.getCurrent({ 'populate': true }, function (window) {
+//   // chrome.action.setBadgeText(chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_NONE}).size());
+//   // });
 
-  
-});
 
-chrome.tabs.onCreated.addListener(function(tab) {  
-  /*console.log("Tab opened1");
-  // localStorage.setItem("tabid", tab.id);
-  
-  
-  
-  
-  
-  
-  
-  // Get all the items stored in the storage
-  chrome.storage.local.get(function(items) {
-    console.log('Get from storage');
-    console.log(items);
-    
-    
-    chrome.tabs.query({}, function(tabs) {
-      console.log('Tabs count: ' + tabs.length);
-    
-      if (Object.keys(items).length > 0 && items.data) {
-          // The data array already exists, add to it the new server and nickname
-          items.data.push({timestamp: Date.now(), status: 'opened', tabs: tabs.length});
-      } else {
-          // The data array doesn't exist yet, create it
-          items.data = [{timestamp: Date.now(), status: 'opened', tabs: tabs.length}];
-      }
+// });
 
-      // Now save the updated items using set
-      chrome.storage.local.set(items, function() {
-          console.log('Data successfully saved to the storage!');
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Received message:", request)
+
+  if (request.message === 'get') {
+    let response = querry(request.payload.startTime, request.payload.endTime);
+    response.then(res => {
+      // TODO delete after migration
+      const parsed = JSON.parse(request.payload.localStorageData)
+      console.log("Parsed value", parsed)
+      console.log("Differneces:\n", equals(parsed, res));
+
+      chrome.runtime.sendMessage({
+        message: 'get_success',
+        payload: res
       });
     });
-  });*/
-  
-  add('opened');
+  }
 });
 
 
-chrome.tabs.onRemoved.addListener(function(tab) {
-/*
-// Get all the items stored in the storage
-  chrome.storage.local.get(function(items) {
-    console.log('Get from storage');
-    console.log(items);
-    
-    
-    chrome.tabs.query({}, function(tabs) {
-      console.log('Tabs count: ' + tabs.length);
-      if (Object.keys(items).length > 0 && items.data) {
-          // The data array already exists, add to it the new server and nickname
-          items.data.push({timestamp: Date.now(), status: 'closed', tabs: tabs.length});
-      } else {
-          // The data array doesn't exist yet, create it
-          items.data = [{timestamp: Date.now(), status: 'closed', tabs: tabs.length}];
-      }
 
-      // Now save the updated items using set
-      chrome.storage.local.set(items, function() {
-          console.log('Data successfully saved to the storage!');
-      });    
+let db = null;
+function create_database() {
+  const request = indexedDB.open('TabsDB', 1);
+  request.onerror = function (event) {
+    console.log("Problem opening DB.");
+  }
+  request.onupgradeneeded = function (event) {
+    console.log(event);
+    db = event.target.result;
+
+
+    if (!db.objectStoreNames.contains('tabs')) {
+      let objectStore = db.createObjectStore('tabs', { keyPath: 'timestamp' });
+
+
+      /*
+            console.log(`upgrading database from ${ oldVersion } to ${ newVersion }`);
+        switch (oldVersion) {
+          case 0: {
+            const
+              navigation = db.createObjectStore('navigation', { keyPath: 'date' }),
+              resource = db.createObjectStore('resource', { keyPath: 'id', autoIncrement: true });
+            resource.createIndex('dateIdx', 'date', { unique: false });
+            resource.createIndex('nameIdx', 'name', { unique: false });
+          }
+        }
+        */
+
+
+
+      objectStore.transaction.oncomplete = function (event) {
+        console.log("ObjectStore Created.");
+      }
+    }
+  }
+  request.onsuccess = function (event) {
+    db = event.target.result;
+    console.log("DB OPENED.");
+    db.onerror = function (event) {
+      console.log("FAILED TO OPEN DB.")
+    }
+  };
+}
+
+function insert_records(record) {
+  if (!db) {
+    create_database();
+  }
+
+  console.log("Inserting a record:", record)
+  if (db) {
+    const insert_transaction = db.transaction("tabs",
+      "readwrite");
+    const objectStore = insert_transaction.objectStore("tabs");
+    return new Promise((resolve, reject) => {
+      insert_transaction.oncomplete = function () {
+        console.log("ALL INSERT TRANSACTIONS COMPLETE.");
+        resolve(true);
+      }
+      insert_transaction.onerror = function () {
+        console.log("PROBLEM INSERTING RECORDS.")
+        resolve(false);
+      }
+      let request = objectStore.add(record);
+      request.onsuccess = function () {
+        console.log("Added: ", record);
+      }
     });
-  });*/
-  
-  add('closed');
+  }
+}
+
+function update_record(record) {
+  if (!db) {
+    create_database();
+  }
+
+  if (db) {
+    const put_transaction = db.transaction("tabs", "readwrite");
+    const objectStore = put_transaction.objectStore("tabs");
+    return new Promise((resolve, reject) => {
+      put_transaction.oncomplete = function () {
+        console.log("ALL PUT TRANSACTIONS COMPLETE.");
+        resolve(true);
+      }
+      put_transaction.onerror = function () {
+        console.log("PROBLEM UPDATING RECORDS.")
+        resolve(false);
+      }
+      objectStore.put(record);
+    });
+  }
+}
+
+function querry(startDate, endDate) {
+  console.log('Querry');
+  if (!db) {
+    create_database();
+  }
+
+  if (db) {
+    const transaction = db.transaction("tabs", 'readonly');
+    const objectStore = transaction.objectStore('tabs');
+    var keyRangeValue = IDBKeyRange.lowerBound(startDate, true)
+
+    return new Promise((resolve, reject) => {
+      var request = objectStore.openCursor(keyRangeValue)
+      var myArray = [];
+      request.onsuccess = function () {
+        var cursor = this.result;
+        if (!cursor) return;
+        myArray.push(cursor.value);
+        cursor.continue();
+      };
+      transaction.oncomplete = function () {
+        // onCompleteCallbackFunction(myArray);
+        console.log(myArray);
+        resolve(myArray);
+      };
+      transaction.onerror = function () {
+        // onCompleteCallbackFunction(myArray);
+        console.log("ERROR");
+        resolve([]);
+      };
+    });
+  }
+}
+
+chrome.tabs.onCreated.addListener(function (tab) {
+  add(tab, 'opened');
 });
 
+chrome.tabs.onRemoved.addListener(function (tab) {
+  add(tab, 'closed');
+});
 
-
-function add(operation){
- /*
-  //###############################################################################################
+function add(tab, operation) {
   // Get all the items stored in the storage
-  var tabsHistory = JSON.parse(localStorage.getItem('tabHistory1')||"[]");
-  
-  console.log('Get from storage------------------------');
-  console.log(localStorage.getObject('tabHistory1'));
-  console.log(typeof tabsHistory);
-  console.log(tabsHistory);
-
-
-  chrome.tabs.query({}, function(tabs) {
-    console.log('Tabs count: ' + tabs.length);
-  
-    // The data array already exists, add to it the new server and nickname
-    tabsHistory.push({timestamp: Date.now(), status: operation, tabs: tabs.length});
-    
-    console.log('After');
-    console.log(tabsHistory);
-
-    // Now save the updated items using set
-  	localStorage.setItem('tabHistory1', JSON.stringify(tabsHistory));
-  });
-  //############################################################################################### 
-  */
-  
-  // Get all the items stored in the storage
-  chrome.storage.local.get(function(items) {
+  chrome.storage.local.get(function (items) {
     console.log('Get from storage');
     console.log(items);
-    
-    
-    chrome.tabs.query({}, function(tabs) {
+
+
+    chrome.tabs.query({}, function (tabs) {
       console.log('Tabs count: ' + tabs.length);
-    
+
       if (Object.keys(items).length > 0 && items.data) {
-          // The data array already exists, add to it the new server and nickname
-          items.data.push({timestamp: Date.now(), status: operation, tabs: tabs.length});
+        // The data array already exists, add to it the new server and nickname
+        items.data.push({ timestamp: Date.now(), status: operation, tabs: tabs.length });
       } else {
-          // The data array doesn't exist yet, create it
-          items.data = [{timestamp: Date.now(), status: operation, tabs: tabs.length}];
+        // The data array doesn't exist yet, create it
+        items.data = [{ timestamp: Date.now(), status: operation, tabs: tabs.length }];
       }
 
       // Now save the updated items using set
-      chrome.storage.local.set(items, function() {
-          console.log('Data successfully saved to the storage!');
+      chrome.storage.local.set(items, function () {
+        console.log('Data successfully saved to the storage!');
+      });
+
+      insert_records({
+        timestamp: Date.now(),
+        url: tab.url,
+        status: operation,
+        tabs: tabs.length
       });
     });
   });
+
 }
 
 
 // This will run when a bookmark is created.
 // chrome.bookmarks.onCreated.addListener(function() {
-  // do something
+// do something
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TODO remove after migration finishes
+// attach the .equals method to Array's prototype to call it on any array
+function equals(array1, array2) {
+  var differences = "";
+
+  // if the other array is a falsy value, return
+  if (!array1) {
+    console.log("First array is null");
+    alert("Different");
+    return false;
+  }
+
+  // if the other array is a falsy value, return
+  if (!array2) {
+    console.log("Second array is null");
+    alert("Different");
+    return false;
+  }
+
+  // compare lengths - can save a lot of time 
+  if (array1.length != array2.length) {
+    console.log("Length is diffrent: " + array1.length + ", " + array2.length);
+    alert("Different");
+    return false;
+  }
+
+  for (var i = 0, l = array1.length; i < l; i++) {
+    // Check if we have nested arrays
+    if (array1[i] instanceof Array && array2[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!array1[i].equals(array2[i])) {
+        console.log("recurse into the nested arrays false");
+        alert("Different");
+        return false;
+      }
+    }
+
+    flag = true
+    for (key in array1[i]) {
+      if (key === "timestamp") {
+        if (Math.abs(array1[i][key] - array2[i][key]) < 10) {
+          continue;
+        }
+      } else if (array1[i][key] == array2[i][key]) {
+        continue;
+      }
+
+      differences += `Diffs for key ${key}, values: '${array1[i][key]}', '${array2[i][key]}'`;
+    }
+    if (differences !== "") {
+      console.log("DIFFS:", differences);
+      alert("Different");
+      return false;
+    }
+  }
+  return true;
+}
+
+function alert(text) {
+  chrome.notifications.create('', {
+    title: 'Differences',
+    message: 'text',
+    type: 'basic',
+    iconUrl: 'icon128.png',
+    priority: 2
+  });
+}

@@ -1,3 +1,11 @@
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Received response:", request)
+  if (request.message === 'get_success') {
+    console.log(request);
+  }
+});
+
 window.addEventListener("load", initPopup);
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -48,6 +56,20 @@ document.addEventListener('DOMContentLoaded', function () {
       // TODO better message
       timeFiltered = []
     }
+
+
+
+
+  chrome.runtime.sendMessage({
+    message: 'get',
+    payload: { 
+      startTime: startTime,
+      endTime: endTime,
+      localStorageData: timeFiltered
+    }
+  });
+
+
 
     let groupByDate = timeFiltered.reduce((r, a) => {
       // var date = new Date(a.timestamp).toLocaleDateString();
