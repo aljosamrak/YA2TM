@@ -121,7 +121,7 @@ function decrementTabOpenCount() {
 
 
 function updateTabOpenCount() {
-	chrome.browserAction.setBadgeText({ text: localStorage.getObject('tabsOpen').toString() });
+	chrome.action.setBadgeText({ text: localStorage.getObject('tabsOpen').toString() });
 }
 
 function resetTabTotalCount() {

@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log("Received message:", request)
 
   if (request.message === 'get') {
-    let response = querry(request.payload.startTime, request.payload.endTime);
+    const response = query(request.payload.startTime, request.payload.endTime);
     response.then(res => {
       // TODO delete after migration
       const parsed = JSON.parse(request.payload.localStorageData)
@@ -32,61 +32,61 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 
 
-let db = null;
-function create_database() {
-  const request = indexedDB.open('TabsDB', 1);
-  request.onerror = function (event) {
-    console.log("Problem opening DB.");
-  }
-  request.onupgradeneeded = function (event) {
-    console.log(event);
-    db = event.target.result;
+function connect_database() {
+  return new Promise(function (resolve, reject) {
+    const openRequest = indexedDB.open('TabsDB', 1);
+    openRequest.onerror = function (event) {
+      console.log("Problem opening DB.");
+    }
+    openRequest.onupgradeneeded = function (event) {
+      console.log(event);
+      var db = event.target.result;
 
 
-    if (!db.objectStoreNames.contains('tabs')) {
-      let objectStore = db.createObjectStore('tabs', { keyPath: 'timestamp' });
+      if (!db.objectStoreNames.contains('tabs')) {
+        let objectStore = db.createObjectStore('tabs', { keyPath: 'timestamp' });
 
 
-      /*
-            console.log(`upgrading database from ${ oldVersion } to ${ newVersion }`);
-        switch (oldVersion) {
-          case 0: {
-            const
-              navigation = db.createObjectStore('navigation', { keyPath: 'date' }),
-              resource = db.createObjectStore('resource', { keyPath: 'id', autoIncrement: true });
-            resource.createIndex('dateIdx', 'date', { unique: false });
-            resource.createIndex('nameIdx', 'name', { unique: false });
+        /*
+              console.log(`upgrading database from ${ oldVersion } to ${ newVersion }`);
+          switch (oldVersion) {
+            case 0: {
+              const
+                navigation = db.createObjectStore('navigation', { keyPath: 'date' }),
+                resource = db.createObjectStore('resource', { keyPath: 'id', autoIncrement: true });
+              resource.createIndex('dateIdx', 'date', { unique: false });
+              resource.createIndex('nameIdx', 'name', { unique: false });
+            }
           }
+          */
+
+
+
+        objectStore.transaction.oncomplete = function (event) {
+          console.log("ObjectStore Created.");
         }
-        */
-
-
-
-      objectStore.transaction.oncomplete = function (event) {
-        console.log("ObjectStore Created.");
       }
     }
-  }
-  request.onsuccess = function (event) {
-    db = event.target.result;
-    console.log("DB OPENED.");
-    db.onerror = function (event) {
-      console.log("FAILED TO OPEN DB.")
-    }
-  };
+    openRequest.onsuccess = function (event) {
+      var db = event.target.result;
+      console.log("DB OPENED.");
+
+      db.onerror = function (event) {
+        console.log("FAILED TO OPEN DB.")
+      }
+
+      resolve(db);
+    };
+  });
 }
 
 function insert_records(record) {
-  if (!db) {
-    create_database();
-  }
-
-  console.log("Inserting a record:", record)
-  if (db) {
-    const insert_transaction = db.transaction("tabs",
-      "readwrite");
-    const objectStore = insert_transaction.objectStore("tabs");
+  return connect_database().then(function (db) {
     return new Promise((resolve, reject) => {
+      console.log("Inserting a record:", record)
+      const insert_transaction = db.transaction("tabs",
+        "readwrite");
+      const objectStore = insert_transaction.objectStore("tabs");
       insert_transaction.oncomplete = function () {
         console.log("ALL INSERT TRANSACTIONS COMPLETE.");
         resolve(true);
@@ -100,18 +100,15 @@ function insert_records(record) {
         console.log("Added: ", record);
       }
     });
-  }
+  });
 }
 
 function update_record(record) {
-  if (!db) {
-    create_database();
-  }
-
-  if (db) {
-    const put_transaction = db.transaction("tabs", "readwrite");
-    const objectStore = put_transaction.objectStore("tabs");
+  return connect_database().then(function (db) {
     return new Promise((resolve, reject) => {
+      console.log("Updating a record:", record)
+      const put_transaction = db.transaction("tabs", "readwrite");
+      const objectStore = put_transaction.objectStore("tabs");
       put_transaction.oncomplete = function () {
         console.log("ALL PUT TRANSACTIONS COMPLETE.");
         resolve(true);
@@ -122,22 +119,19 @@ function update_record(record) {
       }
       objectStore.put(record);
     });
-  }
+  });
 }
 
-function querry(startDate, endDate) {
-  console.log('Querry');
-  if (!db) {
-    create_database();
-  }
-
-  if (db) {
-    const transaction = db.transaction("tabs", 'readonly');
-    const objectStore = transaction.objectStore('tabs');
-    var keyRangeValue = IDBKeyRange.lowerBound(startDate, true)
-
+function query(startDate, endDate) {
+  return connect_database().then(function (db) {
     return new Promise((resolve, reject) => {
+      console.log(`Query startDate: ${startDate}, endDate: ${endDate}`);
+      var keyRangeValue = IDBKeyRange.lowerBound(startDate, true)
+
+      const transaction = db.transaction("tabs", 'readonly');
+      const objectStore = transaction.objectStore('tabs');
       var request = objectStore.openCursor(keyRangeValue)
+
       var myArray = [];
       request.onsuccess = function () {
         var cursor = this.result;
@@ -156,7 +150,7 @@ function querry(startDate, endDate) {
         resolve([]);
       };
     });
-  }
+  });
 }
 
 chrome.tabs.onCreated.addListener(function (tab) {
