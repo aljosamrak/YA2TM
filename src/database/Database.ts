@@ -79,7 +79,7 @@ export function insert_records(record: Record): Promise<boolean> {
 
 export async function query(startDate: number, endDate: number): Promise<Array<Record>> {
     const db = await connect_database();
-    return await new Promise((resolve, reject) => {
+    return await new Promise<Array<Record>>((resolve, reject) => {
         console.log(`Query startDate: ${startDate}, endDate: ${endDate}`);
         var keyRangeValue = IDBKeyRange.lowerBound(startDate, true);
 
