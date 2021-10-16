@@ -16,7 +16,6 @@ src.pem
 /coverage
 
 # production
-/build
 /dist
 
 # misc
@@ -33,12 +32,3 @@ yarn-error.log*
 
 # vscode
 .vscode
-
-
-
-
-.cache
-node_modules
-yarn-error.log
-*.css.d.ts
-/.envrc
