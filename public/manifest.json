@@ -1,54 +1,35 @@
 {
-  "name": "Tab Insights",
-  "description": "Shows insights about tabs.",
-  "manifest_version": 3,
-  "version": "0.1.0",
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+  "manifest_version": 2,
+  "name": "Chrome Extension TypeScript Starter",
+  "description": "Chrome Extension, TypeScript, React",
+  "version": "1.0",
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
   },
-  "action": {
-    "default_name": "Tab Insights",
-    "default_icon": "icon48.png",
+  "browser_action": {
+    "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-  // "browser_action": {
-  //   "default_icon": {
-  //     "16": "icon16.png",
-  //     "48": "icon48.png"
-  //   },
-  //   "default_popup": "popup.html"
-  // },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "build/common_for_scripts.js",
+        "build/content_script.js"
+      ]
+    }
+  ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": [
+      "build/common_for_scripts.js",
+      "build/background_script.js"
+    ]
   },
-  "options_ui": {
-    "page": "options.html"
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' ; object-src 'self'"
-  },
-  // "content_scripts": [
-  //   {
-  //     "matches": [
-  //       "*://*/*"
-  //     ],
-  //     "js": [
-  //       "content.js"
-  //     ]
-  //   }
-  // ],
   "permissions": [
-    "tabs",
-    "activeTab",
-    "notifications",
-    "unlimitedStorage",
-    "storage" //TODO remove after midration to indexDB
+    "storage",
+    "<all_urls>"
   ]
-  // ,
-  // "action": {
-  //   // TODO
-  //   "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
-  // }
 }
