@@ -1,35 +1,55 @@
 {
-  "manifest_version": 2,
-  "name": "Chrome Extension TypeScript Starter",
-  "description": "Chrome Extension, TypeScript, React",
-  "version": "1.0",
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+  "manifest_version": 3,
+  "name": "Tab Insights",
+  "description": "Shows insights about tabs.",
+  "version": "0.1.0",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
-  "browser_action": {
-    "default_icon": "icon.png",
+  "options_ui": {
+    "page": "options.html"
+  },
+  "action": {
+    "default_name": "Tab Insights",
+    "default_icon": "icon48.png",
     "default_popup": "popup.html"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "build/common_for_scripts.js",
-        "build/content_script.js"
-      ]
-    }
-  ],
+  // "browser_action": {
+  //   "default_icon": {
+  //     "16": "icon16.png",
+  //     "48": "icon48.png"
+  //   },
+  //   "default_popup": "popup.html"
+  // },
   "background": {
-    "scripts": [
-      "build/common_for_scripts.js",
-      "build/background_script.js"
-    ]
+    "service_worker": "build/background_script.js",
+    "type": "module"
   },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' ; object-src 'self'"
+  },
+  // "content_scripts": [
+  //   {
+  //     "matches": [
+  //       "*://*/*"
+  //     ],
+  //     "js": [
+  //       "content.js"
+  //     ]
+  //   }
+  // ],
   "permissions": [
-    "storage",
-    "<all_urls>"
+    "tabs",
+    "activeTab",
+    "notifications",
+    "unlimitedStorage",
+    "storage" //TODO remove after midration to indexDB
   ]
+  // ,
+  // "action": {
+  //   // TODO
+  //   "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
+  // }
 }

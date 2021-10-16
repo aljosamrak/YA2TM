@@ -1,25 +1,44 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "jsx": "react",
     "target": "es5",
-    "outDir": "dist/tsc_output",
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
     "lib": [
       "dom",
       "es2015"
     ],
+    "jsx": "react",
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
     "noEmitOnError": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "baseUrl": "./",
+    "paths": {},
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "noEmit": false
   },
   "include": [
     "src",
     "webpack.config.ts"
   ],
   "exclude": [
+    "dist",
     "node_modules"
   ]
 }
