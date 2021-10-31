@@ -1,10 +1,29 @@
-import React from 'react';
+import React from 'react'
+
+const appStyles = require('./App.css')
+// const logo = require("./logo.svg");
 
 export default function Header() {
+
+  const formattedTime: string = new Date().toLocaleTimeString('en-us', {
+    day: 'numeric',
+    hour: "2-digit",
+    minute: "2-digit",
+    month: "numeric",
+    second: "2-digit",
+    year: "numeric",
+  })
+
   return (
     <div id="header"
     // style="display: flex;"
     >
+
+
+      {/* <div className={appStyles.appHeader}>
+          <img src={logo} className={appStyles.appLogo} alt="logo" />
+          <h2>Welcome to React</h2>
+        </div> */}
 
       <h2>Tab Insights</h2>
 
@@ -15,8 +34,7 @@ export default function Header() {
       <div id="about">
 
         <div className="siteFooterBar">
-          <img src="s logo.png" width="15px" height="15px"/>
-          <div className="foot">2015 © All rights reserved.</div>
+          <img src="s logo.png" width="15px" height="15px" />
         </div>
 
         <p className="social">
@@ -34,6 +52,8 @@ export default function Header() {
       <img id="go-to-options" src="settings.png" alt="Go to options" width="25px" height="25px"
       // margin="15px"
       />
+
+      <p>Rendered at {formattedTime}</p>
 
     </div>
   )

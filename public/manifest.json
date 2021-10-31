@@ -3,18 +3,18 @@
   "name": "Tab Insights",
   "description": "Shows insights about tabs.",
   "version": "0.1.0",
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  },
+//  "icons": {
+    //    "16": "icon16.png",
+    //    "48": "icon48.png",
+//    "128": "build/icon-128.png"
+//  },
   "options_ui": {
-    "page": "options.html"
+    "page": "build/options.html"
   },
   "action": {
     "default_name": "Tab Insights",
     "default_icon": "icon48.png",
-    "default_popup": "popup.html"
+    "default_popup": "build/popup.html"
   },
   // "browser_action": {
   //   "default_icon": {
@@ -24,7 +24,7 @@
   //   "default_popup": "popup.html"
   // },
   "background": {
-    "service_worker": "build/background_script.js",
+    "service_worker": "build/background.js",
     "type": "module"
   },
   "content_security_policy": {
@@ -45,7 +45,8 @@
     "activeTab",
     "notifications",
     "unlimitedStorage",
-    "storage" //TODO remove after midration to indexDB
+    "storage"
+    //TODO remove after midration to indexDB
   ]
   // ,
   // "action": {
