@@ -55,35 +55,16 @@ const buildConfig: Configuration = {
       {
         exclude: /node_modules/,
         loader: 'ts-loader',
-        test: /\.(ts|tsx)$/,
       },
-      // css loader
-      // source maps are generated only for dev builds
-      // css compression is only used for prod builds
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: [
-          { loader: 'style-loader'/*, options: { sourceMap: !isProd() }*/ },
+          // Creates `style` nodes from JS strings
+          'style-loader',
           {
-            loader: 'css-loader', /* options: {
-              localIdentName: isProd() ? '[hash:base64]' : '[path][name]__[local]__[hash:base64:6]',
-              minimize: isProd(),
-              modules: true,
-              sourceMap: !isProd(),
-            },*/
-          },
-          {
-            loader: 'sass-loader',
+            loader: 'css-loader',
             options: {
-              // plugins: () => [autoprefixer({
-              //   browsers: [
-              //     '>1%',
-              //     'last 4 versions',
-              //     'Firefox ESR',
-              //     'not ie < 9',
-              //   ],
-              // })],
-              sourceMap: !isProd(),
+              modules: true,
             },
           },
         ],
@@ -93,7 +74,7 @@ const buildConfig: Configuration = {
         exclude: [
           /\.(html?)$/,
           /\.(ts|tsx|js|jsx)$/,
-          /\.css$/,
+          /\.scss$/,
           /\.json$/,
         ],
         loader: 'file-loader',
@@ -197,7 +178,7 @@ const buildConfig: Configuration = {
     alias,
     extensions: fileExtensions
       .map((extension) => '.' + extension)
-      .concat(['.js', '.jsx', '.ts', '.tsx', '.css']),
+      .concat(['.js', '.jsx', '.ts', '.tsx', '.scss']),
     // extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   infrastructureLogging: {

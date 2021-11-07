@@ -1,7 +1,8 @@
 import React from 'react'
 
-const appStyles = require('./App.css')
-// const logo = require("./logo.svg");
+import FullScreenImage from '../assets/images/full-screen.png'
+import SettingsImage from '../assets/images/settings.png'
+import style from './header.scss'
 
 export default function Header() {
 
@@ -15,11 +16,12 @@ export default function Header() {
   })
 
   return (
-    <div id="header"
-    // style="display: flex;"
-    >
-
-
+    <div>
+      <div>
+        <img className={style.icon} src={FullScreenImage} alt='Full screen' onClick={activateLasers} />
+        {/*<img className={styles.icon} src={FullScreenImage} alt='Full screen' onClick={activateLasers} />*/}
+        <img className={style.icon} src={SettingsImage} alt='Go to options' />
+      </div>
       {/* <div className={appStyles.appHeader}>
           <img src={logo} className={appStyles.appLogo} alt="logo" />
           <h2>Welcome to React</h2>
