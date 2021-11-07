@@ -84,6 +84,7 @@ const buildConfig: Configuration = {
         //   publicPath: 'build/',
         // },
       },
+      { test: /\.(jpg|png)$/ },
     ],
   } /*as webpack.NewModule*/,
   plugins: [
