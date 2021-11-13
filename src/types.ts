@@ -7,6 +7,6 @@ export type Record = {
 }
 
 export type GraphData = {
-  labels: number[]
+  labelData: number[]
   values: number[],
 }

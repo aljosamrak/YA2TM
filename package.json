@@ -51,10 +51,12 @@
   },
   "dependencies": {
     "chart.js": "3.6.0",
+    "chartjs-adapter-moment": "^1.0.0",
     "chartjs-react": "3.3.2",
+    "moment": "^2.29.1",
     "ng2-charts": "3.0.0-rc.7",
     "react": "17.0.1",
-    "react-chartjs-2": "3.2.0",
+    "react-chartjs-2": "3.3.0",
     "react-dom": "17.0.1",
     "rxjs": "6.5.3"
   },
