@@ -114,6 +114,15 @@ const buildConfig: Configuration = {
         },
       ],
     }),
+    new CopyWebpackPlugin({
+      // Copy Google Analytics
+      patterns: [
+        {
+          from: path.join(__dirname, 'src', 'analytics'),
+          to: path.join(__dirname, 'dist', 'build'),
+        },
+      ],
+    }),
     // new CopyWebpackPlugin({
     //   patterns: [
     //     {
