@@ -2,16 +2,14 @@ workflows:
   version: 2
   main:
     jobs:
-      - build:
+      - test:
           filters:
             branches:
-              only: master
+              ignore: []
+      - build
       - publish:
           requires:
             - build
-          filters:
-            branches:
-              only: master
 
 version: 2
 jobs:
