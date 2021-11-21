@@ -17,7 +17,7 @@
     "url": "git@github.com:aljosamrak/Chrome-Tab-Insights.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\"",
     "build": "webpack --config webpack.config.ts",
     "start": "webpack --watch",
     "watch": "cross-env NODE_ENV=development webpack -w",
