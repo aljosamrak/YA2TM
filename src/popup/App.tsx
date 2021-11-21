@@ -1,5 +1,6 @@
 import * as React from 'react'
-import Graph from './Graph'
+const appStyles = require('./App.scss')
+import Graph from './charts/Graph'
 import Header from './Header'
 import ReactGA, { InitializeOptions } from 'react-ga'
 
