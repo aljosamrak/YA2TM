@@ -1,7 +1,8 @@
-import React from 'react';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { GraphData, Record } from '../../types';
-import LineChart from '../LineChart'
+import React from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
+import { GraphData, Record } from '../../types'
+import LineChart from './LineChart'
+import graphStyle from './graph.scss'
 
 interface Props {
   data: Map<number, Record[]>
@@ -10,35 +11,34 @@ interface Props {
 
 const ChartTest: FunctionComponent<Props> = ({ data, operationFunction }) => {
 
-  const [dataForPeriod, setDataForPeriod] = useState<GraphData>();
+  const [dataForPeriod, setDataForPeriod] = useState<GraphData>()
   const fetchData = async () => {
-    console.log("IMPORTANT1")
+    console.log('IMPORTANT1')
     console.log(operationFunction)
     console.log(data)
     // console.log(graphData)
     console.log(operationFunction(data))
-    setDataForPeriod(operationFunction(data));
+    setDataForPeriod(operationFunction(data))
     // setDataForPeriod(graphData);
-  };
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
+    fetchData()
+  }, [])
 
   return (
-    <div>
+    <div className={graphStyle.graph}>
       {dataForPeriod ? (
-        <div>
-          <LineChart
-            labels={dataForPeriod.labels}
-            values={dataForPeriod.values} />
-        </div>
+        <LineChart
+          title={dataForPeriod.title}
+          labelData={dataForPeriod.labelData}
+          values={dataForPeriod.values}
+        />
       ) : (
-        "Loading..."
+        'Loading...'
       )}
     </div>
   )
 }
 
-export default ChartTest;
+export default ChartTest

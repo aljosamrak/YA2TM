@@ -33,7 +33,7 @@ const options: ChartOptions<'line'> = {
   },
 }
 
-const LineChart: React.FunctionComponent<GraphData> = ({ labelData, values }) => {
+const LineChart: React.FunctionComponent<GraphData> = ({ title, labelData, values }) => {
   console.log('Received data')
 
   console.log('Created data/labels')
@@ -43,7 +43,7 @@ const LineChart: React.FunctionComponent<GraphData> = ({ labelData, values }) =>
     labels: labelData,
     datasets: [
       {
-        label: 'My First dataset',
+        label: title,
         data: values,
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgb(75, 192, 192)',
