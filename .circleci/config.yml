@@ -15,7 +15,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: ubuntu:16.04
+      - image: circleci/node:8.9.1
     steps:
       - checkout
       - run:
@@ -29,13 +29,13 @@ jobs:
             npm run test
   build:
     docker:
-      - image: ubuntu:16.04
+      - image: circleci/node:8.9.1
     steps:
       - checkout
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get -y install nodejs zip
+#            apt-get -y install nodejs zip
             npm install
       - run:
           name: "Package Extension"
