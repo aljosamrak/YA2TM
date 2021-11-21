@@ -21,7 +21,7 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apk add --no-cache npm
+            apt-get -y install npm
             npm install
       - run:
           name: "Run Tests"
@@ -35,7 +35,7 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apk add --no-cache npm
+            apt-get -y install npm
             apk add --no-cache zip
             npm install
       - run:
