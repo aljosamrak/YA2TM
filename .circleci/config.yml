@@ -21,7 +21,7 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get -y install npm
+            apt-get -y install nodejs
             npm install
       - run:
           name: "Run Tests"
@@ -35,7 +35,7 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get -y install npm zip
+            apt-get -y install nodejs zip
             npm install
       - run:
           name: "Package Extension"
