@@ -15,7 +15,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: cibuilds/base:latest
+      - image: ubuntu:16.04
     steps:
       - checkout
       - run:
@@ -29,14 +29,13 @@ jobs:
             npm run test
   build:
     docker:
-      - image: cibuilds/chrome-extension:latest
+      - image: ubuntu:16.04
     steps:
       - checkout
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get -y install npm
-            apk add --no-cache zip
+            apt-get -y install npm zip
             npm install
       - run:
           name: "Package Extension"
