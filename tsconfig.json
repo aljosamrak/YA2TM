@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "lib": [
       "dom",
       "es2015"
     ],
     "jsx": "react",
-    "outDir": "dist",
+    "outDir": "./dist/",
     "sourceMap": true,
     "strict": true,
     "noImplicitReturns": true,

@@ -53,6 +53,7 @@ const buildConfig: Configuration = {
         exclude: /node_modules/,
       },
       {
+        test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
         loader: 'ts-loader',
       },
@@ -135,8 +136,8 @@ const buildConfig: Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.join(__dirname, 'src', 'assets', 'img', 'icon-128.png'),
-          to: path.join(__dirname, 'build'),
+          from: path.join(__dirname, 'src', 'assets', 'images', 'icon-128.png'),
+          to: path.join(__dirname, 'dist'),
           force: true,
         },
       ],
