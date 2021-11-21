@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const appStyles = require("./App.css");
+const appStyles = require("./App.scss");
 
 interface IUserPrefs {
   colorful: boolean;
