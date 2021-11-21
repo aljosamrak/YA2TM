@@ -1,21 +1,72 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
-version: 2.1
-
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
-# See: https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  node: circleci/node@4.7
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  version: 2
+  main:
     jobs:
-      - node/test:
-          # This is the node version to use for the `cimg/node` tag
-          # Relevant tags can be found on the CircleCI Developer Hub
-          # https://circleci.com/developer/images/image/cimg/node
-          version: '16.10'
-          # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: npm
+      - test:
+          filters:
+            branches:
+              ignore: []
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+version: 2
+jobs:
+  test:
+    docker:
+      - image: cibuilds/base:latest
+    steps:
+      - checkout
+      - run:
+          name: "Install Dependencies"
+          command: |
+            apk add --no-cache npm
+            npm install
+      - run:
+          name: "Run Tests"
+          command: |
+            npm run test
+  build:
+    docker:
+      - image: cibuilds/chrome-extension:latest
+    steps:
+      - checkout
+      - run:
+          name: "Install Dependencies"
+          command: |
+            apk add --no-cache npm
+            apk add --no-cache zip
+            npm install
+      - run:
+          name: "Package Extension"
+          command: |
+            npm run build
+            zip -r build.zip build
+      - persist_to_workspace:
+          root: /root/project
+          paths:
+            - build.zip
+
+  publish:
+    docker:
+      - image: cibuilds/chrome-extension:latest
+    environment:
+      - APP_ID: 57dc27e3-5fbc-4b84-b3fa-12f395fc0a28
+    steps:
+      - attach_workspace:
+          at: /root/workspace
+      - run:
+          name: "Publish to the Google Chrome Store"
+          command: |
+            ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+            curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T /root/workspace/build.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
+            curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
