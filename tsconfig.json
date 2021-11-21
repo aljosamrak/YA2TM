@@ -7,7 +7,7 @@
       "es2015"
     ],
     "jsx": "react",
-    "outDir": "./dist/",
+    "outDir": "./build/",
     "sourceMap": true,
     "strict": true,
     "noImplicitReturns": true,
@@ -38,7 +38,7 @@
     "webpack.config.ts"
   ],
   "exclude": [
-    "dist",
+    "build",
     "node_modules"
   ]
 }

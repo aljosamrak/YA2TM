@@ -39,7 +39,7 @@ const buildConfig: Configuration = {
     // panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
   output: {
-    path: path.join(__dirname, 'dist/build'),
+    path: path.join(__dirname, 'build/build'),
     filename: '[name].js',
     clean: true,
   },
@@ -96,12 +96,12 @@ const buildConfig: Configuration = {
     //   minChunks: 2,
     //   name: 'common_for_ui',
     // }),
-    // copy files in public to dist
+    // copy files in public to build
     new CopyWebpackPlugin({
       patterns: [
         {
           from: 'public/manifest.json',
-          to: path.join(__dirname, 'dist'),
+          to: path.join(__dirname, 'build'),
           // force: true,
           // transform(content, path: string) {
           //   // generates the manifest file using the package.json informations
