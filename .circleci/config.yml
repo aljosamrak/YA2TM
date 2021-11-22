@@ -41,7 +41,7 @@ jobs:
             npm run build
             zip -r build.zip build
       - persist_to_workspace:
-          root: /root/project
+          root: "~"
           paths:
             - build.zip
 
