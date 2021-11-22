@@ -51,7 +51,7 @@ jobs:
     docker:
       - image: cibuilds/chrome-extension:latest
     environment:
-      - APP_ID: 57dc27e3-5fbc-4b84-b3fa-12f395fc0a28
+      - APP_ID: plbkmgccljbmoclpmjppnglfbblpmapd
     steps:
       - attach_workspace:
           at: /root/workspace
