@@ -40,6 +40,8 @@ jobs:
           command: |
             npm run build
             zip -r build.zip build
+      - store_artifacts:
+          path: build.zip
       - persist_to_workspace:
           root: "~"
           paths:
