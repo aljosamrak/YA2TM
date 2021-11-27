@@ -8,6 +8,10 @@ orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@4.7.0
 
+  # Automatically find bugs and errors in your shell scripts with ShellCheck on every commit.
+  # Add this static analysis tool to any CI/CD workflow and ShellCheck your scripts across your repository.
+  shellcheck: circleci/shellcheck@2.2.4
+
 jobs:
   install-dependencies:
     # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
@@ -87,12 +91,13 @@ jobs:
       - run:
           name: "Publish to the Google Chrome Store"
           command: |
-            ./scripts/publish_on_web_store.sh build.zip
+            sh ./scripts/publish_on_web_store.sh build.zip
 
 workflows:
   version: 2
   main:
     jobs:
+      - shellcheck/check
       - install-dependencies
       - test:
           filters:
@@ -105,6 +110,7 @@ workflows:
             - install-dependencies
       - publish:
           requires:
+            - shellcheck/check
             - build
 #          branches:
 #            ignore: /.*/
