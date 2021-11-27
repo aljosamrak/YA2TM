@@ -58,8 +58,9 @@ jobs:
           include-branch-in-cache-key: false
 
       # Run build command
-      - node/run:
-          npm-run: build
+      - run:
+          name: "Build"
+          command: node run build
 
       # Zip the build folder to create a Chrome extension package
       - run:
