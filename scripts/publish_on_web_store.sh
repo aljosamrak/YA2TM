@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 FILE_NAME=$1
 
 curlf() {
