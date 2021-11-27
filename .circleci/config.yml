@@ -6,7 +6,7 @@ orbs:
   # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
   # Orbs reduce the amount of configuration required for common tasks.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@4.1
+  node: circleci/node@4.7.0
 
 jobs:
   install-dependencies:
@@ -54,14 +54,14 @@ jobs:
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
-          - cache-path: node_modules
-          - include-branch-in-cache-key: false
+          cache-path: node_modules
+          include-branch-in-cache-key: false
 
       # Run build command
       - node/run:
           npm-run: build
 
-      # Zip teh build folder to create a Chrome extension package
+      # Zip the build folder to create a Chrome extension package
       - run:
           name: "Zip package"
           command: zip -r build.zip build
