@@ -83,6 +83,9 @@ jobs:
     docker:
       - image: cibuilds/chrome-extension:latest
     steps:
+      # Checkout the code as the first step.
+      - checkout
+
       # Attach the build result build.zip
       - attach_workspace:
           at: .
@@ -91,7 +94,7 @@ jobs:
       - run:
           name: "Publish to the Google Chrome Store"
           command: |
-            bash ./scripts/publish_on_web_store.sh build.zip
+            sh ./scripts/publish_on_web_store.sh build.zip
 
 workflows:
   version: 2
@@ -110,6 +113,7 @@ workflows:
             - install-dependencies
       - publish:
           requires:
+            - shellcheck/check
             - build
 #          branches:
 #            ignore: /.*/
