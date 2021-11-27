@@ -1,65 +1,110 @@
-workflows:
-  version: 2
-  main:
-    jobs:
-      - test:
-          filters:
-            branches:
-              ignore: []
-      - build
-      - publish:
-          requires:
-            - build
-
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+
+orbs:
+  # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
+  # Orbs reduce the amount of configuration required for common tasks.
+  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
+  node: circleci/node@4.1
+
 jobs:
-  test:
+  install-dependencies:
+    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
     docker:
-      - image: cimg/node:17.1.0
+      - image: cimg/node:17.1
+
+    # Then run your tests!
+    # CircleCI will report the results back to your VCS provider
     steps:
+      # Checkout the code as the first step
       - checkout
-      - run:
-          name: "Install Dependencies"
-          command: |
-            npm ci
-      - run:
-          name: "Run Tests"
-          command: |
-            npm run test
+
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          - cache-path: node_modules
+          - include-branch-in-cache-key: false
+
+  test:
+    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
+    docker:
+      - image: cimg/node:17.1
+
+    # Then run your tests!
+    # CircleCI will report the results back to your VCS provider
+    steps:
+      # Checkout the code as the first step
+      - checkout
+
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          - cache-path: node_modules
+          - include-branch-in-cache-key: false
+
+      # Run tests
+      - node/run:
+          npm-run: test
+
   build:
     docker:
       - image: cimg/node:17.1.0
     steps:
+      # Checkout the code as the first step.
       - checkout
+
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          - cache-path: node_modules
+          - include-branch-in-cache-key: false
+
+      # Run build command
+      - node/run:
+          npm-run: build
+
+      # Zip teh build folder to create a Chrome extension package
       - run:
-          name: "Install Dependencies"
-          command: |
-            npm ci
-      - run:
-          name: "Package Extension"
-          command: |
-            npm run build
-            zip -r build.zip build
+          name: "Zip package"
+          command: zip -r build.zip build
+
+      # Store the build result as an artefact
       - store_artifacts:
           path: build.zip
+
+      # Persist the build result for further steps
       - persist_to_workspace:
-          root: "."
+          root: .
           paths:
             - build.zip
 
   publish:
     docker:
       - image: cibuilds/chrome-extension:latest
-    environment:
-      - APP_ID: plbkmgccljbmoclpmjppnglfbblpmapd
     steps:
+      # Attach the build result build.zip
       - attach_workspace:
-          at: /root/workspace
+          at: .
+
+      # Publish the zip file to the Chrome Web Store Developer Dashboard
       - run:
           name: "Publish to the Google Chrome Store"
           command: |
-            set -e
-            ACCESS_TOKEN=$(curl --show-error --fail "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
-            curl -H --show-error --fail "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T /root/workspace/build.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
-            curl -H --show-error --fail "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
-#TODO fix fail on command exit error
+            scripts/publish_on_web_store build.zip
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - install-dependencies
+      - test:
+          filters:
+            branches:
+              ignore: []
+          requires:
+            - install-dependencies
+      - build:
+          requires:
+            - install-dependencies
+      - publish:
+          requires:
+            - build
+            - test
