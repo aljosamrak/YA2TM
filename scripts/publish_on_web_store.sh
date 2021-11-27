@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -eu -o pipefail -E
+
 FILE_NAME=$1
 
 curlf() {
