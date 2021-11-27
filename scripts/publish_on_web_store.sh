@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -eu -o
+#!/bin/sh
 FILE_NAME=$1
 
 curlf() {

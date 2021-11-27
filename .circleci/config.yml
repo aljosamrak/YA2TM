@@ -110,7 +110,6 @@ workflows:
             - install-dependencies
       - publish:
           requires:
-            - shellcheck/check
             - build
 #          branches:
 #            ignore: /.*/
