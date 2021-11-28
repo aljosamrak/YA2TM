@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu -o pipefail -E
+set -eu -o pipefail
 
 FILE_NAME=$1
 
