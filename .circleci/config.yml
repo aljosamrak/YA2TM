@@ -26,7 +26,6 @@ jobs:
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
-          app-dir: .
           include-branch-in-cache-key: false
 
   test:
@@ -42,7 +41,6 @@ jobs:
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
-          app-dir: .
           include-branch-in-cache-key: false
 
       # Run tests
@@ -59,7 +57,6 @@ jobs:
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
-          app-dir: .
           include-branch-in-cache-key: false
 
       # Run build command
