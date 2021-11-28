@@ -98,7 +98,6 @@ workflows:
   version: 2
   main:
     jobs:
-      - shellcheck/check
       - install-dependencies
       - test:
           requires:
