@@ -30,7 +30,7 @@ RESPONSE=$(curl \
 "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$APP_ID")
 
 if [[ $(jq -r '.uploadState'  <<< "${RESPONSE}") == "FAILURE" ]]; then
- echo "Failed to upload";
- jq --color-output  <<< "${RESPONSE}"
- return 1
+  echo "Failed to upload";
+  jq --color-output  <<< "${RESPONSE}"
+  exit 2
 fi
