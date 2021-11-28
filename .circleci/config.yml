@@ -114,6 +114,7 @@ workflows:
           requires:
             - shellcheck/check
             - test
+            - build
 #          branches:
 #            ignore: /.*/
 #          tags:
