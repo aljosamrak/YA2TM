@@ -21,10 +21,16 @@ ACCESS_TOKEN=$(curlf "https://accounts.google.com/o/oauth2/token" -d "client_id=
 
 echo "Got access token"
 
-curl \
+RESPONSE=$(curl \
 -H "Authorization: Bearer $ACCESS_TOKEN"  \
 -H "x-goog-api-version: 2" \
 -X PUT \
 -T "$FILE_NAME" \
 -v \
-"https://www.googleapis.com/upload/chromewebstore/v1.1/items/$APP_ID"
+"https://www.googleapis.com/upload/chromewebstore/v1.1/items/$APP_ID")
+
+if [[ $(jq -r '.uploadState'  <<< "${RESPONSE}") == "FAILURE" ]]; then
+ echo "Failed to upload";
+ jq --color-output  <<< "${RESPONSE}"
+ return 1
+fi
