@@ -93,8 +93,7 @@ jobs:
       # Publish the zip file to the Chrome Web Store Developer Dashboard
       - run:
           name: "Publish to the Google Chrome Store"
-          command: |
-            sh ./scripts/publish_on_web_store.sh build.zip
+          command: ./scripts/publish_on_web_store.sh build.zip
 
 workflows:
   version: 2
@@ -114,7 +113,7 @@ workflows:
       - publish:
           requires:
             - shellcheck/check
-            - build
+            - test
 #          branches:
 #            ignore: /.*/
 #          tags:
