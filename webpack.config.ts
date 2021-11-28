@@ -120,7 +120,7 @@ const buildConfig: Configuration = {
       patterns: [
         {
           from: path.join(__dirname, 'src', 'analytics'),
-          to: path.join(__dirname, 'dist', 'build'),
+          to: path.join(__dirname, 'build', 'build'),
         },
       ],
     }),
@@ -137,7 +137,7 @@ const buildConfig: Configuration = {
       patterns: [
         {
           from: path.join(__dirname, 'src', 'assets', 'images', 'icon-128.png'),
-          to: path.join(__dirname, 'dist'),
+          to: path.join(__dirname, 'build'),
           force: true,
         },
       ],
@@ -205,7 +205,7 @@ if (isProd()) {
       'process.env': { NODE_ENV: JSON.stringify('production') },
     }),
     // clean output files
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['build']),
   ])
 } else {
   buildConfig.devtool = 'cheap-module-source-map'
