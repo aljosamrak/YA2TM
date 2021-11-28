@@ -8,8 +8,9 @@ orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@4.7.0
 
-  # A Chrome Web Store Manager. Source: https://github.com/sugarshin/circleci-orbs
-  chrome-webstore: sugarshin/chrome-webstore@0.0.3
+  # Automatically find bugs and errors in your shell scripts with ShellCheck on every commit.
+  # Add this static analysis tool to any CI/CD workflow and ShellCheck your scripts across your repository.
+  shellcheck: circleci/shellcheck@2.2.4
 
 jobs:
   install-dependencies:
@@ -101,6 +102,7 @@ workflows:
   version: 2
   main:
     jobs:
+      - shellcheck/check
       - install-dependencies
       - test:
           requires:
@@ -108,14 +110,9 @@ workflows:
       - build:
           requires:
             - install-dependencies
-      - chrome-webstore/upload:
-          attach-workspace: true
-          auto-publish: true
-          checkout: false
-          extension-id: $APP_ID
-          source: build.zip
-          workspace-root: .
+      - publish:
           requires:
+            - shellcheck/check
             - test
             - build
 #          branches:
