@@ -16,13 +16,6 @@
     "default_icon": "icon48.png",
     "default_popup": "build/popup.html"
   },
-  // "browser_action": {
-  //   "default_icon": {
-  //     "16": "icon16.png",
-  //     "48": "icon48.png"
-  //   },
-  //   "default_popup": "popup.html"
-  // },
   "background": {
     "service_worker": "build/background.js",
     "type": "module"
@@ -30,16 +23,6 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' ; object-src 'self'"
   },
-  // "content_scripts": [
-  //   {
-  //     "matches": [
-  //       "*://*/*"
-  //     ],
-  //     "js": [
-  //       "content.js"
-  //     ]
-  //   }
-  // ],
   "permissions": [
     "tabs",
     "activeTab",
@@ -48,9 +31,4 @@
     "storage"
     //TODO remove after midration to indexDB
   ]
-  // ,
-  // "action": {
-  //   // TODO
-  //   "default_title": "Press Ctrl(Win)/Command(Mac)+Shift+Right/Left to flip tabs"
-  // }
 }
