@@ -3,11 +3,11 @@
   "name": "Tab Insights",
   "description": "Shows insights about tabs.",
   "version": "0.1.0",
-//  "icons": {
-    //    "16": "icon16.png",
-    //    "48": "icon48.png",
-//    "128": "build/icon-128.png"
-//  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "build/icon-128.png"
+  },
   "options_ui": {
     "page": "build/options.html"
   },
