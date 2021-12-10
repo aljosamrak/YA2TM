@@ -29,6 +29,5 @@
     "notifications",
     "unlimitedStorage",
     "storage"
-    //TODO remove after midration to indexDB
   ]
 }
