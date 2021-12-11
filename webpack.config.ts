@@ -102,6 +102,12 @@ const buildConfig: Configuration = {
         {
           from: 'public/manifest.json',
           to: path.join(__dirname, 'build'),
+          transform(content: { toString: () => string }) {
+            // generates the manifest file using the package.json informations
+            const contentJson = JSON.parse(content.toString())
+            contentJson.version += '.' + process.env.CIRCLE_BUILD_NUM
+            return JSON.stringify(contentJson)
+          },
           // force: true,
           // transform(content, path: string) {
           //   // generates the manifest file using the package.json informations
