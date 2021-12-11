@@ -105,7 +105,9 @@ const buildConfig: Configuration = {
           transform(content: { toString: () => string }) {
             // generates the manifest file using the package.json informations
             const contentJson = JSON.parse(content.toString())
-            contentJson.version += '.' + process.env.CIRCLE_BUILD_NUM
+            if (process.env.CIRCLE_BUILD_NUM) {
+              contentJson.version += '.' + process.env.CIRCLE_BUILD_NUM
+            }
             return JSON.stringify(contentJson)
           },
           // force: true,
