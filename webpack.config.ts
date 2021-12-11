@@ -107,6 +107,9 @@ const buildConfig: Configuration = {
             const contentJson = JSON.parse(content.toString())
             if (process.env.CIRCLE_BUILD_NUM) {
               contentJson.version += '.' + process.env.CIRCLE_BUILD_NUM
+              contentJson.version_name = contentJson.version
+            } else {
+              contentJson.version_name += '-dev'
             }
             return JSON.stringify(contentJson)
           },
