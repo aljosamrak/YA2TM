@@ -147,8 +147,8 @@ const buildConfig: Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.join(__dirname, 'src', 'assets', 'images', 'icon-128.png'),
-          to: path.join(__dirname, 'build'),
+          from: path.join(__dirname, 'src', 'assets', 'images', 'icon-*'),
+          to: path.join(__dirname, 'build/[name][ext]'),
           force: true,
         },
       ],
