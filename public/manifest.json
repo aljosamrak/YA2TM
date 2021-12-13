@@ -4,16 +4,16 @@
   "description": "Shows insights about tabs.",
   "version": "0.1.1",
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "build/icon-128.png"
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
   },
   "options_ui": {
     "page": "build/options.html"
   },
   "action": {
     "default_name": "Tab Insights",
-    "default_icon": "icon48.png",
+    "default_icon": "icon-48.png",
     "default_popup": "build/popup.html"
   },
   "background": {
