@@ -15,7 +15,7 @@ orbs:
 defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
-    - image: circleci/node:8.9.1
+    - image: cimg/node:17.1
   resource_class: small
 
 jobs:
