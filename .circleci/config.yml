@@ -12,11 +12,15 @@ orbs:
   # Add this static analysis tool to any CI/CD workflow and ShellCheck your scripts across your repository.
   shellcheck: circleci/shellcheck@2.2.4
 
+defaults: &defaults
+  # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
+  docker:
+    - image: circleci/node:8.9.1
+  resource_class: small
+
 jobs:
   install-dependencies:
-    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
-    docker:
-      - image: cimg/node:17.1
+    <<: *defaults
 
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider
@@ -29,9 +33,7 @@ jobs:
           include-branch-in-cache-key: false
 
   test:
-    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
-    docker:
-      - image: cimg/node:17.1
+    <<: *defaults
 
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider
@@ -49,8 +51,8 @@ jobs:
           command: npm run test
 
   build:
-    docker:
-      - image: cimg/node:17.1.0
+    <<: *defaults
+
     steps:
       # Checkout the code as the first step.
       - checkout
@@ -82,6 +84,7 @@ jobs:
   publish:
     docker:
       - image: cibuilds/chrome-extension:latest
+
     steps:
       # Checkout the code as the first step.
       - checkout
