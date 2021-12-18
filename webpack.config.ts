@@ -102,6 +102,7 @@ const buildConfig: Configuration = {
         {
           from: 'public/manifest.json',
           to: path.join(__dirname, 'build'),
+          force: true,
           transform(content: { toString: () => string }) {
             // generates the manifest file using the package.json informations
             const contentJson = JSON.parse(content.toString())
@@ -132,6 +133,7 @@ const buildConfig: Configuration = {
         {
           from: path.join(__dirname, 'src', 'analytics'),
           to: path.join(__dirname, 'build', 'build'),
+          force: true,
         },
       ],
     }),
