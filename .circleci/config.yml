@@ -12,6 +12,10 @@ orbs:
   # Add this static analysis tool to any CI/CD workflow and ShellCheck your scripts across your repository.
   shellcheck: circleci/shellcheck@2.2.4
 
+  # Install a variety of browsers and tools for browser testing. Includes Chrome, FireFox, ChromeDriver and GeckoDriver.
+  # Used for testing Chrome extension installation
+  browser-tools: circleci/browser-tools@1.2.3
+
 defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
@@ -33,7 +37,10 @@ jobs:
           include-branch-in-cache-key: false
 
   test:
-    <<: *defaults
+    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
+    docker:
+      - image: cimg/node:17.1-browser
+    resource_class: small
 
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider
@@ -44,6 +51,25 @@ jobs:
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
           include-branch-in-cache-key: false
+
+      # Build the extension. Used only by the test installation script.
+      - run:
+          name: "Build"
+          command: npm run build
+
+      # Install Chrome browser
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+          name: Check install
+
+      # Test if the extension can be installed
+      - run:
+          name: "Test Chrome extension installation"
+          command: ./scripts/extension_install_test.sh
 
       # Run tests
       - run:
