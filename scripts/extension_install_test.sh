@@ -2,10 +2,9 @@
 
 EXTENSION_SEARCH_PATTERN="Extension error: "
 RUN_DIR="/tmp/$RANDOM"
-CHROME_PATH=$(which google-chrome)
 
 # Load extension to Chrome and run Chrome as fresh start
-"$CHROME_PATH"\
+google-chrome \
   --user-data-dir="$RUN_DIR" \
   --load-extension=build/ \
   --no-first-run \
