@@ -37,10 +37,7 @@ jobs:
           include-branch-in-cache-key: false
 
   test:
-    # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
-    docker:
-      - image: cimg/node:17.1-browser
-    resource_class: small
+    <<: *defaults
 
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider
