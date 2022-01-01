@@ -1,6 +1,8 @@
 From: https://github.com/libertylocked/chrome-extension-typescript-react
 
-# Chrome Tab Counter
+# YATM
+
+A Chrome extension tab manager with focus on having low number of tabs.
 
 Shows a counter of currently open tabs, open windows and the number of all-time opened tabs.
 
