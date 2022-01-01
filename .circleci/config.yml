@@ -23,19 +23,6 @@ defaults: &defaults
   resource_class: small
 
 jobs:
-  install-dependencies:
-    <<: *defaults
-
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider
-    steps:
-      # Checkout the code as the first step
-      - checkout
-
-      # Install the dependencies from a package.json and cache them for faster future runs
-      - node/install-packages:
-          include-branch-in-cache-key: false
-
   test:
     <<: *defaults
 
@@ -126,13 +113,8 @@ workflows:
   main:
     jobs:
       - shellcheck/check
-      - install-dependencies
-      - test:
-          requires:
-            - install-dependencies
-      - build:
-          requires:
-            - install-dependencies
+      - test
+      - build
       - publish:
           requires:
             - shellcheck/check
