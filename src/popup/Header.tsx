@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <div>
       <div className={headerStyle.right}>
-        <h2 style={{ marginBottom: 0 }}>Tab insights</h2>
+        <h2 style={{ marginBottom: 0 }}>YATM</h2>
         <div className={headerStyle.grow} />
         <img className={headerStyle.icon} src={fullScreenImage} alt="Full screen" onClick={openFullScreen} />
         <img className={headerStyle.icon} src={settingsImage} alt="Go to options" onClick={openSetting} />

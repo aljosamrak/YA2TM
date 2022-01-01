@@ -1,20 +1,20 @@
 {
-  "name": "tab-insights",
+  "name": "yatm",
   "version": "0.1.0",
-  "description": "Shows insights about tabs.",
+  "description": "Tab manager",
   "keywords": [
     "typescript",
     "react",
     "chrome-extension"
   ],
   "bugs": {
-    "url": "https://github.com/aljosamrak/Chrome-Tab-Insights/issues"
+    "url": "https://github.com/aljosamrak/YATM/issues"
   },
   "author": "Aljosa Mrak <aljosa.mrak@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:aljosamrak/Chrome-Tab-Insights.git"
+    "url": "git@github.com:aljosamrak/YATM.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\"",
