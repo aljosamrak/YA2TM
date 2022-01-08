@@ -20,6 +20,10 @@
     "ordered-imports": false,
     "no-console": false,
     "interface-over-type-literal": false,
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
     "quotemark": [
       true,
       "single",
@@ -35,5 +39,12 @@
     "no-empty-interface": false,
     "no-unused-variable": true
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  }
 }
