@@ -13,6 +13,8 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noEmitOnError": true,
     "esModuleInterop": true,
     "strictFunctionTypes": true,

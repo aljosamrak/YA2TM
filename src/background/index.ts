@@ -1,8 +1,10 @@
-import { insert_records } from '../database/Database'
+import { Database } from '../database/Database'
 import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import Window = chrome.windows.Window
 import WindowEventFilter = chrome.windows.WindowEventFilter
+import { container } from '../inversify/inversify.config'
+import SERVICE_IDENTIFIER from '../inversify/identifiers'
 
 let activeTabs: TabActiveInfo[] = []
 
@@ -143,7 +145,7 @@ async function add(operation: string, tab?: chrome.tabs.Tab) {
 
   chrome.action.setBadgeText({ text: tabs.length.toString() })
 
-  insert_records({
+  container.get<Database>(SERVICE_IDENTIFIER.DatabaseService).insert_records({
     timestamp: timeNow,
     url: tab === undefined ? '' : tab.url!,
     status: operation,

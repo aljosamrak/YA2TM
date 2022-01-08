@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { GraphData, Record } from '../../types'
+import { GraphData } from '../../types'
 import LineChart from './LineChart'
 
 type Props = {

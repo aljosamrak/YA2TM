@@ -1,6 +1,7 @@
 import React from 'react'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { GraphData, Record } from '../../types'
+import { GraphData } from '../../types'
+import { Record } from '../../database/Database'
 import LineChart from './LineChart'
 import graphStyle from './graph.scss'
 

@@ -1,8 +1,10 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { GraphData, Record } from '../../types'
-import { query } from '../../database/Database'
+import { Database, Record } from '../../database/Database'
 import CustomChartTest from './CustomChartTest'
+import { container } from '../../inversify/inversify.config'
+import SERVICE_IDENTIFIER from '../../inversify/identifiers'
+import { GraphData } from 'src/types'
 
 export default function Graph() {
   // Opened-closed tabs per day
@@ -43,7 +45,7 @@ export default function Graph() {
   const [dataForPeriod, setDataForPeriod] = useState<Map<number, Record[]>>()
   const [graphData, setGraphData] = useState<GraphData>()
   const fetchData = async () => {
-    const data = await query(0, 50621728000000)
+    const data = await container.get<Database>(SERVICE_IDENTIFIER.DatabaseService).query(0, 50621728000000)
 
     console.log('Queried data')
     console.log(data)
