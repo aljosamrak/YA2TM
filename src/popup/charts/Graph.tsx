@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { Database, Record } from '../../database/Database'
+import { Database, Record } from '../../storage/Database'
 import CustomChartTest from './CustomChartTest'
 import { container } from '../../inversify/inversify.config'
 import SERVICE_IDENTIFIER from '../../inversify/identifiers'

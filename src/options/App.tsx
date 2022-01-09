@@ -1,23 +1,29 @@
-import * as React from "react";
+import * as React from "react"
+import { container } from "../inversify/inversify.config"
+import SERVICE_IDENTIFIER from "../inversify/identifiers"
+import { Logger } from "../services/Logger"
 
-const appStyles = require("./App.scss");
+const appStyles = require("./App.scss")
 
-interface IUserPrefs {
-  colorful: boolean;
-  favoriteColor: string;
+interface UserPrefs {
+  colorful: boolean
+  favoriteColor: string
 }
 
-class App extends React.Component<{}, { prefs: IUserPrefs }> {
+class App extends React.Component<{}, { prefs: UserPrefs }> {
+
+  logger = container.get<Logger>(SERVICE_IDENTIFIER.Logger)
+  localStorage = container.get<LocalStorage>(SERVICE_IDENTIFIER.LocalStorageService)
 
   constructor(props: {}) {
-    super(props);
+    super(props)
     // init state with default values
     this.state = {
       prefs: {
         colorful: false,
         favoriteColor: "red",
       },
-    };
+    }
   }
 
   public componentWillMount() {
@@ -48,7 +54,7 @@ class App extends React.Component<{}, { prefs: IUserPrefs }> {
           <button onClick={this.handleSaveClick}>Save</button>
         </div>
       </div>
-    );
+    )
   }
 
   private handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -57,7 +63,7 @@ class App extends React.Component<{}, { prefs: IUserPrefs }> {
         colorful: this.state.prefs.colorful,
         favoriteColor: e.target.value,
       },
-    });
+    })
   }
 
   private handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,17 +72,14 @@ class App extends React.Component<{}, { prefs: IUserPrefs }> {
         colorful: e.target.checked,
         favoriteColor: this.state.prefs.favoriteColor,
       },
-    });
+    })
   }
 
   private handleSaveClick = () => {
     // save options
-    chrome.storage.sync.set(this.state.prefs, () => {
-      // notify user that settings are saved
-      console.log("options saved", this.state.prefs);
-    });
+    localStorage.setItem("key", this.state.prefs.favoriteColor)
   }
 
 }
 
-export default App;
+export default App

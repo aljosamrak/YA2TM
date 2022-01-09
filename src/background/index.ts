@@ -1,4 +1,4 @@
-import { Database } from '../database/Database'
+import { Database } from '../storage/Database'
 import { container } from '../inversify/inversify.config'
 import SERVICE_IDENTIFIER from '../inversify/identifiers'
 import Tab = chrome.tabs.Tab
