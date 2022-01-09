@@ -1,10 +1,14 @@
 import { Database } from '../database/Database'
+import { container } from '../inversify/inversify.config'
+import SERVICE_IDENTIFIER from '../inversify/identifiers'
 import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import Window = chrome.windows.Window
 import WindowEventFilter = chrome.windows.WindowEventFilter
-import { container } from '../inversify/inversify.config'
-import SERVICE_IDENTIFIER from '../inversify/identifiers'
+import { Logger } from '../services/Logger'
+
+const database = container.get<Database>(SERVICE_IDENTIFIER.DatabaseService)
+const logger: Logger = container.get(SERVICE_IDENTIFIER.Logger)
 
 let activeTabs: TabActiveInfo[] = []
 
@@ -77,7 +81,7 @@ function windowFocus(windowId: number) {
       hideWindows(windowId)
     }
   } catch (e) {
-    console.log(e)
+    logger.error(e)
   }
 }
 
@@ -87,7 +91,7 @@ function windowCreated(window: Window, filter?: WindowEventFilter | undefined) {
       windowActive(window.id)
     }
   } catch (e) {
-    console.log(e)
+    logger.error(e)
   }
 }
 
@@ -97,7 +101,7 @@ function windowRemoved(windowId: number) {
       windowActive(windowId)
     }
   } catch (e) {
-    console.log(e)
+    logger.error(e)
   }
 }
 
@@ -117,7 +121,7 @@ async function hideWindows(windowId: number) {
         return
       }
     } else {
-      console.log('no local storage')
+      logger.warning('no local storage')
       return
     }
   }
@@ -145,7 +149,7 @@ async function add(operation: string, tab?: chrome.tabs.Tab) {
 
   chrome.action.setBadgeText({ text: tabs.length.toString() })
 
-  container.get<Database>(SERVICE_IDENTIFIER.DatabaseService).insert_records({
+  database.insert_records({
     timestamp: timeNow,
     url: tab === undefined ? '' : tab.url!,
     status: operation,
