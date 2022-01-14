@@ -5,6 +5,7 @@ import { IndexedDBDatabase } from "../storage/IndexedDBDatabase"
 import TYPES from "./identifiers"
 import { Logger, logger } from "../services/Logger"
 import { LocalStorageImpl } from "../storage/LocalStorageImpl"
+import { LocalStorage } from "../storage/LocalStorage"
 
 const container = new Container()
 container.bind<Logger>(TYPES.Logger).toConstantValue(logger)

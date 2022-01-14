@@ -1,23 +1,23 @@
 import { injectable } from "inversify"
+import { Key, LocalStorage } from "./LocalStorage"
 
 @injectable()
 class LocalStorageImpl implements LocalStorage {
-  private readonly storage: LocalStorage
-
-  public constructor(getStorage = (): LocalStorage => window.localStorage) {
-    this.storage = getStorage()
+  async get<T>(key: Key<T>): Promise<{ [key: string]: T }> {
+    return chrome.storage.local.get(key.key).then((result) => {
+      if (result[key.key]) {
+        return result
+      }
+      return { key: key.defaultValue }
+    })
   }
 
-  getItem(key: string): string | null {
-    return this.storage.getItem(key)
+  async set(key: Key<any>, value: any): Promise<void> {
+    return chrome.storage.local.set({ [key.key] : value })
   }
 
-  removeItem(key: string): void {
-    this.storage.removeItem(key)
-  }
-
-  setItem(key: string, value: string): void {
-    this.storage.setItem(key, value)
+  removeItem(key: Key<any>): Promise<void> {
+    return chrome.storage.local.remove(key.key)
   }
 }
 
