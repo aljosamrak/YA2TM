@@ -2,84 +2,93 @@ import * as React from "react"
 import { container } from "../inversify/inversify.config"
 import SERVICE_IDENTIFIER from "../inversify/identifiers"
 import { Logger } from "../services/Logger"
+import { USER_PREFERENCES, UserPreferences } from "../storage/Key"
+import { LocalStorage } from "../storage/LocalStorage"
+import "reflect-metadata"
 
 const appStyles = require("./App.scss")
 
-interface UserPrefs {
-  colorful: boolean
-  favoriteColor: string
-}
-
-class App extends React.Component<{}, { prefs: UserPrefs }> {
-
+class App extends React.Component<{}, { prefs: UserPreferences }> {
   logger = container.get<Logger>(SERVICE_IDENTIFIER.Logger)
   localStorage = container.get<LocalStorage>(SERVICE_IDENTIFIER.LocalStorageService)
 
-  constructor(props: {}) {
-    super(props)
-    // init state with default values
-    this.state = {
-      prefs: {
-        colorful: false,
-        favoriteColor: "red",
-      },
-    }
-  }
-
   public componentWillMount() {
     // read options from storage, with default values
-    // chrome.storage.sync.get(["favoriteColor", "colorful"], (items: IUserPrefs) => {
-    //   this.setState({ prefs: items });
-    //   console.log("options loaded", items);
-    // });
+    this.localStorage.get(USER_PREFERENCES).then((result) => {
+      this.state = {
+        prefs: result["user-preferences"],
+      }
+      this.setState(this.state)
+    })
   }
 
   public render() {
-    return (
-      <div className={appStyles.app}>
-        <div>
-          <label>Favorite color</label>
-          <select onChange={this.handleSelectChange} value={this.state.prefs.favoriteColor}>
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="blue">Blue</option>
-            <option value="yellow">Yellow</option>
-          </select>
+    if (this.state === null || this.state.prefs === null) {
+      return <div> Loading... </div>
+    } else {
+      return (
+        <div className={appStyles.app}>
+          <div className="optionsBox">
+            <h4>Enable changing badge</h4>
+            <input
+              type="checkbox"
+              // onMouseEnter={this.props.tabLimitText}
+              onChange={this.handleChangingBadge}
+              checked={this.state.prefs.changingBadge}
+              id="enable_changing_badge"
+              name="enable_changing_badge"
+            />
+            <h4>Desired max tabs</h4>
+            <div className="toggle-box">
+              <input
+                type="number"
+                // onMouseEnter={this.props.tabLimitText}
+                onChange={this.handleDesiredTabs}
+                value={this.state.prefs.desiredTabs}
+                id="enable_tabLimit"
+                name="enable_tabLimit"
+              />
+              <div className="option-description">
+                What's your preferred number of total tabs that you would like
+                to have.
+                <br />
+                <i>By default: 20</i>
+                <br />
+                <i>Suggested value: 20</i>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button onClick={this.handleSaveClick}>Save</button>
+          </div>
         </div>
-        <div>
-          <label>Colorful background</label>
-          <input type="checkbox" checked={this.state.prefs.colorful} onChange={this.handleCheckboxChange} />
-        </div>
-        <div>
-          <button onClick={this.handleSaveClick}>Save</button>
-        </div>
-      </div>
-    )
+      )
+    }
   }
 
-  private handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({
+  private handleChangingBadge = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.state = {
       prefs: {
-        colorful: this.state.prefs.colorful,
-        favoriteColor: e.target.value,
+        changingBadge: e.target.checked,
+        desiredTabs: this.state.prefs.desiredTabs,
       },
-    })
+    }
+    this.setState(this.state)
   }
 
-  private handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
+  private handleDesiredTabs = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.state = {
       prefs: {
-        colorful: e.target.checked,
-        favoriteColor: this.state.prefs.favoriteColor,
+        changingBadge: this.state.prefs.changingBadge,
+        desiredTabs: e.target.valueAsNumber,
       },
-    })
+    }
+    this.setState(this.state)
   }
 
   private handleSaveClick = () => {
-    // save options
-    localStorage.setItem("key", this.state.prefs.favoriteColor)
+    this.localStorage.set(USER_PREFERENCES, this.state.prefs)
   }
-
 }
 
 export default App
