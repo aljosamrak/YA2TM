@@ -1,16 +1,16 @@
+import "reflect-metadata"
 import * as React from "react"
 import { container } from "../inversify/inversify.config"
-import SERVICE_IDENTIFIER from "../inversify/identifiers"
 import { Logger } from "../services/Logger"
 import { USER_PREFERENCES, UserPreferences } from "../storage/Key"
 import { LocalStorage } from "../storage/LocalStorage"
-import "reflect-metadata"
+import { TYPES } from "../inversify/types"
 
 const appStyles = require("./App.scss")
 
 class App extends React.Component<{}, { prefs: UserPreferences }> {
-  logger = container.get<Logger>(SERVICE_IDENTIFIER.Logger)
-  localStorage = container.get<LocalStorage>(SERVICE_IDENTIFIER.LocalStorageService)
+  logger = container.get<Logger>(TYPES.Logger)
+  localStorage = container.get<LocalStorage>(TYPES.LocalStorageService)
 
   public componentWillMount() {
     // read options from storage, with default values

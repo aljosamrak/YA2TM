@@ -1,14 +1,13 @@
 import { Database } from "../storage/Database"
-import { container } from "../inversify/inversify.config"
+import { container, TYPES } from "../inversify/inversify.config"
 import { clamp, hslToHex } from "../util/utils"
 import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import Window = chrome.windows.Window
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import { Logger } from "../services/Logger"
-import TYPES from "../inversify/identifiers"
 import { LocalStorage } from "../storage/LocalStorage"
-import { USER_PREFERENCES} from "../storage/Key"
+import { TYPES } from "../inversify/types"
 
 const logger: Logger = container.get(TYPES.Logger)
 const database = container.get<Database>(TYPES.DatabaseService)
@@ -177,7 +176,7 @@ async function updateTabCount() {
     chrome.tabs.query({}).then((tabs) => {
         chrome.action.setBadgeText({ text: tabs.length.toString() })
 
-      container.get<LocalStorage>(TYPES.LocalStorageService).get(USER_PREFERENCES)
+      container.get<LocalStorage>(SERVICE_IDENTIFIER.LocalStorageService).get(USER_PREFERENCES)
         .then(result => {
           if (result[USER_PREFERENCES.key].changingBadge) {
             // Calculate color
