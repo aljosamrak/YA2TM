@@ -1,14 +1,17 @@
-import { Database } from '../storage/Database'
-import { container } from '../inversify/inversify.config'
-import SERVICE_IDENTIFIER from '../inversify/identifiers'
+import { Database } from "../storage/Database"
+import { container } from "../inversify/inversify.config"
+import { clamp, hslToHex } from "../util/utils"
 import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import Window = chrome.windows.Window
 import WindowEventFilter = chrome.windows.WindowEventFilter
-import { Logger } from '../services/Logger'
+import { Logger } from "../services/Logger"
+import TYPES from "../inversify/identifiers"
+import { LocalStorage } from "../storage/LocalStorage"
+import { USER_PREFERENCES} from "../storage/Key"
 
-const database = container.get<Database>(SERVICE_IDENTIFIER.DatabaseService)
-const logger: Logger = container.get(SERVICE_IDENTIFIER.Logger)
+const logger: Logger = container.get(TYPES.Logger)
+const database = container.get<Database>(TYPES.DatabaseService)
 
 let activeTabs: TabActiveInfo[] = []
 
@@ -173,6 +176,20 @@ async function updateTabCount() {
     // Set tabs count on start
     chrome.tabs.query({}).then((tabs) => {
         chrome.action.setBadgeText({ text: tabs.length.toString() })
+
+      container.get<LocalStorage>(TYPES.LocalStorageService).get(USER_PREFERENCES)
+        .then(result => {
+          if (result[USER_PREFERENCES.key].changingBadge) {
+            // Calculate color
+            const hue = clamp(-3 * (tabs.length - result[USER_PREFERENCES.key].desiredTabs) + 60, 0, 120)
+            chrome.action.setBadgeBackgroundColor({ color: hslToHex(hue, 50, 50) })
+          }
+        })
+
+        // Preserve only tabs that were queried
+        activeTabs =
+          activeTabs.filter((activeTab) =>
+            tabs.some((tab) => tab.id === activeTab.tabId))
       },
     )
   } else {
