@@ -1,16 +1,16 @@
 import { Database } from "../storage/Database"
-import { container, TYPES } from "../inversify/inversify.config"
-import { clamp, hslToHex } from "../util/utils"
+import { container } from "../inversify/inversify.config"
 import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import Window = chrome.windows.Window
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import { Logger } from "../services/Logger"
-import { LocalStorage } from "../storage/LocalStorage"
+import { BadgeController } from "./BadgeController"
 import { TYPES } from "../inversify/types"
 
 const logger: Logger = container.get(TYPES.Logger)
 const database = container.get<Database>(TYPES.DatabaseService)
+const badgeController = container.get<BadgeController>(TYPES.BadgeController)
 
 let activeTabs: TabActiveInfo[] = []
 
@@ -39,12 +39,12 @@ async function setupListeners() {
   chrome.windows.onFocusChanged.addListener(windowFocus)
   chrome.windows.onCreated.addListener(windowCreated)
   chrome.windows.onRemoved.addListener(windowRemoved)
-  updateTabCount()
+  badgeController.updateTabCount()
 }
 
 async function tabAdded(tab: Tab) {
   add('opened', tab)
-  updateTabCount()
+  badgeController.updateTabCount()
 }
 
 async function tabRemoved(tabId: number) {
@@ -73,7 +73,7 @@ function tabActiveChanged(tab: TabActiveInfo) {
     }
     activeTabs.push(tab)
   }
-  updateTabCount()
+  badgeController.updateTabCount()
 }
 
 function windowFocus(windowId: number) {
@@ -158,42 +158,6 @@ async function add(operation: string, tab?: chrome.tabs.Tab) {
     windows: windows.length,
     tabs: tabs.length,
   })
-}
-
-async function updateTabCount() {
-  let run = true
-  if (localStorageAvailable()) {
-    if (typeof localStorage.badge === 'undefined') {
-      localStorage.badge = '1'
-    }
-    if (localStorage.badge === '0') {
-      run = false
-    }
-  }
-
-  if (run) {
-    // Set tabs count on start
-    chrome.tabs.query({}).then((tabs) => {
-        chrome.action.setBadgeText({ text: tabs.length.toString() })
-
-      container.get<LocalStorage>(SERVICE_IDENTIFIER.LocalStorageService).get(USER_PREFERENCES)
-        .then(result => {
-          if (result[USER_PREFERENCES.key].changingBadge) {
-            // Calculate color
-            const hue = clamp(-3 * (tabs.length - result[USER_PREFERENCES.key].desiredTabs) + 60, 0, 120)
-            chrome.action.setBadgeBackgroundColor({ color: hslToHex(hue, 50, 50) })
-          }
-        })
-
-        // Preserve only tabs that were queried
-        activeTabs =
-          activeTabs.filter((activeTab) =>
-            tabs.some((tab) => tab.id === activeTab.tabId))
-      },
-    )
-  } else {
-    await chrome.action.setBadgeText({ text: '' })
-  }
 }
 
 function localStorageAvailable() {
