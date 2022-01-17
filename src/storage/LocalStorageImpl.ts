@@ -16,8 +16,8 @@ class LocalStorageImpl implements LocalStorage {
     return chrome.storage.local.set({ [key.key] : value })
   }
 
-  removeItem(key: Key<any>): Promise<void> {
-    return chrome.storage.local.remove(key.key)
+  addOnChangedListener(callback: (changes: object, areaName: string) => void): void {
+    chrome.storage.onChanged.addListener(callback)
   }
 }
 

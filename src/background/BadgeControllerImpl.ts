@@ -8,7 +8,9 @@ import { TYPES } from "../inversify/types"
 @injectable()
 class BadgeControllerImpl implements BadgeController {
 
-  constructor(@inject(TYPES.LocalStorageService) private localStorage: LocalStorage) { }
+  constructor(@inject(TYPES.LocalStorageService) private localStorage: LocalStorage) {
+    this.localStorage.addOnChangedListener(() => this.updateTabCount())
+  }
 
   async updateTabCount(): Promise<void> {
     const [tabs, localStorageResult] = await Promise.all([chrome.tabs.query({}), this.localStorage.get(USER_PREFERENCES)])
