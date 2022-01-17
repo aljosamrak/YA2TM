@@ -17,7 +17,7 @@
     "url": "git@github.com:aljosamrak/YATM.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "jest",
     "build": "webpack --config webpack.config.ts",
     "start": "webpack --watch",
     "watch": "cross-env NODE_ENV=development webpack -w",
@@ -25,29 +25,6 @@
     "build-prod": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf ./build",
     "lint": "tslint -p tsconfig.json"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{ts,tsx,js,jsx}"
-    ],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/*.(ts|tsx|js|jsx)",
-      "<rootDir>/src/**/?(*.)(spec|test).(ts|tsx|js|jsx)"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/jest/file-transform.ts",
-      "\\.(css|less)$": "identity-obj-proxy"
-    }
   },
   "dependencies": {
     "chart.js": "3.6.0",
@@ -71,7 +48,7 @@
     "@hot-loader/react-dom": "^17.0.1",
     "@types/chrome": "0.0.162",
     "@types/copy-webpack-plugin": "^5.0.0",
-    "@types/jest": "27.0.0",
+    "@types/jest": "^27.0.0",
     "@types/jquery": "^3.2.7",
     "@types/node": "^8.10.66",
     "@types/react": "^17.0.30",
@@ -99,7 +76,7 @@
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.4.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.0.0",
+    "jest": "^27.4.7",
     "node-sass": "^7.0.1",
     "npm-run-all": "^4.1.5",
     "postcss-loader": "^6.2.1",
@@ -110,7 +87,7 @@
     "source-map-loader": "^3.0.0",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.2.4",
-    "ts-jest": "27.0.7",
+    "ts-jest": "^27.0.7",
     "ts-loader": "^9.2.6",
     "ts-node": "^3.3.0",
     "tslint": "^5.20.1",
