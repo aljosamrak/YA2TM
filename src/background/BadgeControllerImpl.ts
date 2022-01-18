@@ -1,25 +1,39 @@
-import "reflect-metadata"
-import { injectable, inject } from "inversify"
-import { LocalStorage } from "../storage/LocalStorage"
-import { USER_PREFERENCES } from "../storage/Key"
-import { BadgeController } from "./BadgeController"
-import { TYPES } from "../inversify/types"
+import 'reflect-metadata'
+import { inject, injectable } from 'inversify'
+import { LocalStorage } from '../storage/LocalStorage'
+import { USER_PREFERENCES } from '../storage/Key'
+import { BadgeController } from './BadgeController'
+import { TYPES } from '../inversify/types'
+import { BadgeView } from '../view/BadgeView'
+import { TabData } from '../model/TabData'
 
 @injectable()
 class BadgeControllerImpl implements BadgeController {
 
-  constructor(@inject(TYPES.LocalStorageService) private localStorage: LocalStorage) {
+  constructor(
+    @inject(TYPES.TabData) private tabData: TabData,
+    @inject(TYPES.LocalStorageService) private localStorage: LocalStorage,
+    @inject(TYPES.BadgeView) private badgeView: BadgeView) {
     this.localStorage.addOnChangedListener(() => this.updateTabCount())
   }
 
   async updateTabCount(): Promise<void> {
-    const [tabs, localStorageResult] = await Promise.all([chrome.tabs.query({}), this.localStorage.get(USER_PREFERENCES)])
+    const [tabs, localStorageResult] = await Promise.all([
+      this.tabData.query(),
+      this.localStorage.get(USER_PREFERENCES),
+    ])
 
-    chrome.action.setBadgeText({ text: tabs.length.toString() })
+    // Set tab number
+    this.badgeView.setText(tabs.length.toString())
+
+    // Set badge color
     if (localStorageResult[USER_PREFERENCES.key].changingBadge) {
-      chrome.action.setBadgeBackgroundColor({
-        color: this.getBadgeColor(tabs.length, localStorageResult[USER_PREFERENCES.key].desiredTabs)
-      })
+      this.badgeView.setBackgroundColor(
+        this.getBadgeColor(
+          tabs.length,
+          localStorageResult[USER_PREFERENCES.key].desiredTabs
+        )
+      )
     }
   }
 
@@ -66,7 +80,7 @@ function hslToHex(h: number, s: number, l: number) {
   }
   const toHex = (x: number) => {
     const hex = Math.round(x * 255).toString(16)
-    return hex.length === 1 ? "0" + hex : hex
+    return hex.length === 1 ? '0' + hex : hex
   }
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
