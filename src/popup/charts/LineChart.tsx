@@ -10,7 +10,6 @@ const options: ChartOptions<'line'> = {
   plugins: {
     title: {
       display: true,
-      text: 'Chart with Tick Configuration',
     },
     legend: {
       display: false,
@@ -51,6 +50,8 @@ const LineChart: React.FunctionComponent<GraphData> = ({ title, labelData, value
       },
     ],
   }
+
+  options.plugins!.title!.text = title
 
   return (
     <Line data={generateChartData} options={options} />
