@@ -5,6 +5,7 @@ const TYPES = {
 
   // Models
   TabData: Symbol.for('TabData'),
+  WindowData: Symbol.for('WindowData'),
 
   // Views
   BadgeView: Symbol.for('BadgeView'),

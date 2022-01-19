@@ -12,6 +12,8 @@ import { ChromeBadgeView } from '../view/chrome/ChromeBadgeView'
 import { BadgeView } from '../view/BadgeView'
 import { TabData } from '../model/TabData'
 import { ChromeTabData } from '../model/chrome/ChromeTabData'
+import { WindowData } from '../model/WindowData'
+import { ChromeWindowData } from '../model/chrome/ChromeWindowData'
 
 const container = new Container()
 container.bind<Logger>(TYPES.Logger).toConstantValue(logger)
@@ -20,6 +22,7 @@ container.bind<Database>(TYPES.DatabaseService).to(IndexedDBDatabase).inSingleto
 
 // Models
 container.bind<TabData>(TYPES.TabData).to(ChromeTabData).inSingletonScope()
+container.bind<WindowData>(TYPES.WindowData).to(ChromeWindowData).inSingletonScope()
 
 // Views
 container.bind<BadgeView>(TYPES.BadgeView).to(ChromeBadgeView).inSingletonScope()

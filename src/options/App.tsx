@@ -34,7 +34,7 @@ class App extends React.Component<{}, { prefs: UserPreferences }> {
               type="checkbox"
               // onMouseEnter={this.props.tabLimitText}
               onChange={this.handleChangingBadge}
-              checked={this.state.prefs.changingBadge}
+              checked={this.state.prefs.changingColorEnabled}
               id="enable_changing_badge"
               name="enable_changing_badge"
             />
@@ -69,7 +69,9 @@ class App extends React.Component<{}, { prefs: UserPreferences }> {
   private handleChangingBadge = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.state = {
       prefs: {
-        changingBadge: e.target.checked,
+        badgeEnabled: this.state.prefs.badgeEnabled,
+        badgeTextType: this.state.prefs.badgeTextType,
+        changingColorEnabled: e.target.checked,
         desiredTabs: this.state.prefs.desiredTabs,
       },
     }
@@ -79,7 +81,9 @@ class App extends React.Component<{}, { prefs: UserPreferences }> {
   private handleDesiredTabs = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.state = {
       prefs: {
-        changingBadge: this.state.prefs.changingBadge,
+        badgeEnabled: this.state.prefs.badgeEnabled,
+        badgeTextType: this.state.prefs.badgeTextType,
+        changingColorEnabled: this.state.prefs.changingColorEnabled,
         desiredTabs: e.target.valueAsNumber,
       },
     }
