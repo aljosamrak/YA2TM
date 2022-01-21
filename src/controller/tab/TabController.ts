@@ -46,15 +46,17 @@ class TabController {
     chrome.tabs.onMoved.addListener(this.tabRemoved)
     chrome.windows.onCreated.addListener(this.windowCreated)
     chrome.windows.onRemoved.addListener(this.windowRemoved)
-    this.badgeController.updateTabCount()
+    this.badgeController.updateTabCount(this.tabData.query())
   }
 
-  async tabAdded(tab: Tab) {
-    return this.saveEventToDatabase(TrackedEvent.TabOpened, tab)
+  async tabCreated(tab: Tab) {
+    const currentTabsPromise = this.tabData.query()
+
+    this.saveEventToDatabase(TrackedEvent.TabOpened, currentTabsPromise, tab)
   }
 
   async tabRemoved(tabId: number) {
-    return this.saveEventToDatabase(TrackedEvent.TabClosed, undefined)
+    return this.saveEventToDatabase(TrackedEvent.TabClosed, this.tabData.query())
   }
 
   async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
@@ -63,16 +65,21 @@ class TabController {
     this.deduplicate(tab, currentTabsPromise)
   }
 
-  windowCreated(window: Window, filter?: WindowEventFilter | undefined) {
-    return this.saveEventToDatabase(TrackedEvent.WindowOpened, undefined)
+  windowCreated(_window: Window, filter?: WindowEventFilter | undefined) {
+    return this.saveEventToDatabase(TrackedEvent.WindowOpened, this.tabData.query())
   }
 
   windowRemoved(windowId: number) {
-    return this.saveEventToDatabase(TrackedEvent.WindowClosed, undefined)
+    return this.saveEventToDatabase(TrackedEvent.WindowClosed, this.tabData.query())
   }
 
-  async saveEventToDatabase(event: TrackedEvent, tab?: chrome.tabs.Tab) {
-    this.badgeController.updateTabCount()
+  async saveEventToDatabase(
+    event: TrackedEvent,
+    currentTabsPromise: Promise<chrome.tabs.Tab[]>,
+    tab?: chrome.tabs.Tab
+  ) {
+    this.badgeController.updateTabCount(currentTabsPromise)
+
     // Query opened tabs and windows
     const timeNow = Date.now()
 

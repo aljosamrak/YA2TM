@@ -32,7 +32,7 @@ describe('BadgeControllerImpl tests', () => {
       const spySetColor = jest.spyOn(stubBadgeView, 'setBackgroundColor')
       stubLocalStorage.set(USER_PREFERENCES, { badgeEnabled: false })
 
-      await SUT.updateTabCount()
+      await SUT.updateTabCount(stubTabData.query())
 
       expect(spySetText).toHaveBeenCalledTimes(0)
       expect(spySetColor).toHaveBeenCalledTimes(0)
@@ -42,7 +42,7 @@ describe('BadgeControllerImpl tests', () => {
       const spySetColor = jest.spyOn(stubBadgeView, 'setBackgroundColor')
       stubLocalStorage.set(USER_PREFERENCES, { badgeEnabled: true, changingColorEnabled: false })
 
-      await SUT.updateTabCount()
+      await SUT.updateTabCount(stubTabData.query())
 
       expect(spySetColor).toHaveBeenCalledTimes(0)
     })
@@ -53,7 +53,7 @@ describe('BadgeControllerImpl tests', () => {
       stubLocalStorage.set(USER_PREFERENCES, { badgeEnabled: true, badgeTextType: BadgeTextType.ALL_TABS})
       stubTabData.setTabs(new Array(20))
 
-      await SUT.updateTabCount()
+      await SUT.updateTabCount(stubTabData.query())
 
       expect(stubBadgeView.getText()).toBe('20')
     })
@@ -62,7 +62,7 @@ describe('BadgeControllerImpl tests', () => {
       stubLocalStorage.set(USER_PREFERENCES, { badgeEnabled: true, badgeTextType: BadgeTextType.ALL_WINDOW})
       stubWindowData.set(new Array(20))
 
-      await SUT.updateTabCount()
+      await SUT.updateTabCount(stubTabData.query())
 
       expect(stubBadgeView.getText()).toBe('20')
     })
@@ -80,8 +80,10 @@ describe('BadgeControllerImpl tests', () => {
       stubTabData.setTabs(new Array(tabCount))
       stubLocalStorage.set(USER_PREFERENCES, { badgeEnabled: true, changingColorEnabled: true, changingBadge: true,  desiredTabs: desiredTabs})
 
-      return SUT.updateTabCount().then(_ =>
-        expect(stubBadgeView.getBackgroundColor()).toBe(hslToHex(expectedColorHue, 50, 50))
+      return SUT.updateTabCount(stubTabData.query()).then((_) =>
+        expect(stubBadgeView.getBackgroundColor()).toBe(
+          hslToHex(expectedColorHue, 50, 50)
+        )
       )
     })
   })

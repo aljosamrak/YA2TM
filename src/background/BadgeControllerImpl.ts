@@ -16,12 +16,12 @@ class BadgeControllerImpl implements BadgeController {
     @inject(TYPES.LocalStorageService) private localStorage: LocalStorage,
     @inject(TYPES.BadgeView) private badgeView: BadgeView
   ) {
-    this.localStorage.addOnChangedListener(() => this.updateTabCount())
+    this.localStorage.addOnChangedListener(() => this.updateTabCount(tabData.query()))
   }
 
-  async updateTabCount(): Promise<any> {
+  async updateTabCount(currentTabsPromise: Promise<chrome.tabs.Tab[]>): Promise<any> {
     const [tabs, localStorageResult] = await Promise.all([
-      this.tabData.query(),
+      currentTabsPromise,
       this.localStorage.get(USER_PREFERENCES),
     ])
 
