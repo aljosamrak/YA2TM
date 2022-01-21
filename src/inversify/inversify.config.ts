@@ -14,6 +14,7 @@ import { TabData } from '../model/TabData'
 import { ChromeTabData } from '../model/chrome/ChromeTabData'
 import { WindowData } from '../model/WindowData'
 import { ChromeWindowData } from '../model/chrome/ChromeWindowData'
+import { TabController } from '../controller/tab/TabController'
 
 const container = new Container()
 container.bind<Logger>(TYPES.Logger).toConstantValue(logger)
@@ -29,5 +30,6 @@ container.bind<BadgeView>(TYPES.BadgeView).to(ChromeBadgeView).inSingletonScope(
 
 // Controllers
 container.bind<BadgeController>(TYPES.BadgeController).to(BadgeControllerImpl).inSingletonScope()
+container.bind<TabController>(TYPES.TabController).to(TabController).inSingletonScope()
 
 export { container }

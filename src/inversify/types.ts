@@ -12,6 +12,7 @@ const TYPES = {
 
   // Controllers
   BadgeController: Symbol.for('BadgeController'),
+  TabController: Symbol.for('TabController'),
 }
 
 export { TYPES }
