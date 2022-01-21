@@ -35,6 +35,7 @@ const buildConfig: Configuration = {
     background: path.join(__dirname, 'src', 'background', 'index.ts'),
     options: path.join(__dirname, 'src', 'options', 'index.tsx'),
     popup: path.join(__dirname, 'src', 'popup', 'index.tsx'),
+    experiments: path.join(__dirname, 'src', 'experiment', 'index.tsx'),
     // devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
     // panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
@@ -174,6 +175,12 @@ const buildConfig: Configuration = {
       template: path.join(__dirname, 'src', 'options', 'options.html'),
       filename: 'options.html',
       chunks: ['options'],
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', 'experiment', 'experiments.html'),
+      filename: 'experiments.html',
+      chunks: ['experiments'],
       cache: false,
     }),
     // new HtmlWebpackPlugin({

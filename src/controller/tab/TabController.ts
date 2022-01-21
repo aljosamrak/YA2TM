@@ -7,6 +7,7 @@ import { WindowData } from '../../model/WindowData'
 import { BadgeController } from '../../background/BadgeController'
 import { TrackedEvent } from '../../model/TrackedEvent'
 import { Database } from '../../storage/Database'
+import { Experiments } from '../../experiment/Experiments'
 import Tab = chrome.tabs.Tab
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
@@ -89,6 +90,10 @@ class TabController {
   }
 
   deduplicate(newTab: chrome.tabs.Tab, existingTabsPromise: Promise<chrome.tabs.Tab[]>) {
+    if (!new Experiments().tabDeduplication) {
+      return
+    }
+
     if (newTab.id === undefined) {
       return
     }
