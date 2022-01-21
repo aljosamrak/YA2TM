@@ -90,7 +90,7 @@ class TabController {
     this.database.insert_records({
       timestamp: timeNow,
       url: tab === undefined ? '' : tab.url!,
-      event: event,
+      status: event + '',
       windows: windows.length,
       tabs: tabs.length,
     })
