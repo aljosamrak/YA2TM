@@ -8,6 +8,10 @@ class ChromeTabData implements TabData {
   async query(): Promise<Tab[]> {
     return chrome.tabs.query({})
   }
+
+  async remove(tabId: number): Promise<void> {
+    return chrome.tabs.remove(tabId)
+  }
 }
 
 export { ChromeTabData }

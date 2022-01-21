@@ -6,10 +6,11 @@ import { TabData } from '../../model/TabData'
 import { WindowData } from '../../model/WindowData'
 import { BadgeController } from '../../background/BadgeController'
 import { TrackedEvent } from '../../model/TrackedEvent'
+import { Database } from '../../storage/Database'
 import Tab = chrome.tabs.Tab
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
-import { Database } from '../../storage/Database'
+import TabChangeInfo = chrome.tabs.TabChangeInfo
 
 @injectable()
 class TabController {
@@ -24,7 +25,8 @@ class TabController {
 
   async setupListeners() {
     // Remove listeners
-    chrome.tabs.onCreated.removeListener(this.tabAdded)
+    chrome.tabs.onCreated.removeListener(this.tabCreated)
+    chrome.tabs.onUpdated.removeListener(this.tabUpdated)
     chrome.tabs.onRemoved.removeListener(this.tabRemoved)
     chrome.tabs.onReplaced.removeListener(this.tabRemoved)
     chrome.tabs.onDetached.removeListener(this.tabRemoved)
@@ -34,7 +36,8 @@ class TabController {
     chrome.windows.onRemoved.removeListener(this.windowRemoved)
 
     // Add listeners
-    chrome.tabs.onCreated.addListener(this.tabAdded)
+    chrome.tabs.onCreated.addListener(this.tabCreated)
+    chrome.tabs.onUpdated.addListener(this.tabUpdated)
     chrome.tabs.onRemoved.addListener(this.tabRemoved)
     chrome.tabs.onReplaced.addListener(this.tabRemoved)
     chrome.tabs.onDetached.addListener(this.tabRemoved)
@@ -51,6 +54,12 @@ class TabController {
 
   async tabRemoved(tabId: number) {
     return this.saveEventToDatabase(TrackedEvent.TabClosed, undefined)
+  }
+
+  async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
+    const currentTabsPromise = this.tabData.query()
+
+    this.deduplicate(tab, currentTabsPromise)
   }
 
   windowCreated(window: Window, filter?: WindowEventFilter | undefined) {
@@ -76,6 +85,18 @@ class TabController {
       event: event,
       windows: windows.length,
       tabs: tabs.length,
+    })
+  }
+
+  deduplicate(newTab: chrome.tabs.Tab, existingTabsPromise: Promise<chrome.tabs.Tab[]>) {
+    if (newTab.id === undefined) {
+      return
+    }
+
+    existingTabsPromise.then(existingTabs => {
+      if (existingTabs.includes(newTab)) {
+        this.tabData.remove(newTab.id!)
+      }
     })
   }
 }

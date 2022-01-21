@@ -11,6 +11,11 @@ class StubTabData implements TabData {
   setTabs(tabs: chrome.tabs.Tab[]) {
     this._tabs = tabs
   }
+
+  remove(id: number): Promise<void> {
+    this._tabs = this._tabs.splice(id, 1)
+    return Promise.resolve(undefined)
+  }
 }
 
 export { StubTabData }
