@@ -2,14 +2,14 @@ import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import { LocalStorage } from '../storage/LocalStorage'
 import { BadgeTextType, USER_PREFERENCES } from '../storage/Key'
-import { BadgeController } from './BadgeController'
 import { TYPES } from '../inversify/types'
 import { BadgeView } from '../view/BadgeView'
 import { TabData } from '../model/TabData'
 import { WindowData } from '../model/WindowData'
 
 @injectable()
-class BadgeControllerImpl implements BadgeController {
+class BadgeController {
+
   constructor(
     @inject(TYPES.TabData) private tabData: TabData,
     @inject(TYPES.WindowData) private windowData: WindowData,
@@ -126,4 +126,4 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
 
-export { BadgeControllerImpl, hslToHex }
+export { BadgeController, hslToHex }

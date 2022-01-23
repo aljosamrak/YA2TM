@@ -5,8 +5,7 @@ import { IndexedDBDatabase } from '../storage/IndexedDBDatabase'
 import { Logger, logger } from '../services/Logger'
 import { LocalStorageImpl } from '../storage/LocalStorageImpl'
 import { LocalStorage } from '../storage/LocalStorage'
-import { BadgeController } from '../background/BadgeController'
-import { BadgeControllerImpl } from '../background/BadgeControllerImpl'
+import { BadgeController } from '../controller/BadgeController'
 import { TYPES } from './types'
 import { ChromeBadgeView } from '../view/chrome/ChromeBadgeView'
 import { BadgeView } from '../view/BadgeView'
@@ -29,7 +28,7 @@ container.bind<WindowData>(TYPES.WindowData).to(ChromeWindowData).inSingletonSco
 container.bind<BadgeView>(TYPES.BadgeView).to(ChromeBadgeView).inSingletonScope()
 
 // Controllers
-container.bind<BadgeController>(TYPES.BadgeController).to(BadgeControllerImpl).inSingletonScope()
+container.bind<BadgeController>(TYPES.BadgeController).to(BadgeController).inSingletonScope()
 container.bind<TabController>(TYPES.TabController).to(TabController).inSingletonScope()
 
 export { container }

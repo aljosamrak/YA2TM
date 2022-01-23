@@ -1,8 +1,5 @@
 import 'reflect-metadata'
-import {
-  BadgeControllerImpl,
-  hslToHex,
-} from '../background/BadgeControllerImpl'
+import { BadgeController, hslToHex } from '../controller/BadgeController'
 import { USER_PREFERENCES } from '../storage/Key'
 import { StubLocalStorage } from './stub/StubLocalStorage'
 import { StubBadgeView } from './stub/StubBadgeView'
@@ -11,7 +8,7 @@ import { StubWindowData } from './stub/StubWindowData'
 import { BadgeTextType } from '../storage/Key'
 
 describe('BadgeControllerImpl tests', () => {
-  let SUT: BadgeControllerImpl
+  let SUT: BadgeController
 
   let stubTabData: StubTabData
   let stubWindowData: StubWindowData
@@ -23,7 +20,7 @@ describe('BadgeControllerImpl tests', () => {
     stubWindowData = new StubWindowData()
     stubLocalStorage = new StubLocalStorage()
     stubBadgeView = new StubBadgeView()
-    SUT = new BadgeControllerImpl(stubTabData, stubWindowData, stubLocalStorage, stubBadgeView)
+    SUT = new BadgeController(stubTabData, stubWindowData, stubLocalStorage, stubBadgeView)
   })
 
   describe('User settings enable/disable', () => {
