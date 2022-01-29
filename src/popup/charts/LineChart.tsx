@@ -27,7 +27,7 @@ const options: ChartOptions<'line'> = {
       },
     },
     y: {
-      beginAtZero: true,
+      // beginAtZero: true,
     },
   },
 }
