@@ -1,17 +1,17 @@
+import {TrackedEvent} from './TrackedEvent'
+
 type Record = {
   timestamp: number
+  event: TrackedEvent
   url: string
-  status: string
   windows: number
-  tabs: number,
+  tabs: number
 }
 
 interface Database {
-  connect_database(): Promise<any>
-
-  insert_records(record: Record): Promise<boolean>
+  insert_records(record: Record): Promise<void>
 
   query(startDate: number, endDate: number): Promise<Record[]>
 }
 
-export { Database, Record }
+export {Database, Record}
