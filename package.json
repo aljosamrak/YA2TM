@@ -17,12 +17,13 @@
     "url": "git@github.com:aljosamrak/YATM.git"
   },
   "scripts": {
-    "test": "jest",
     "build": "webpack --config webpack.config.ts",
     "start": "webpack --watch",
     "watch": "cross-env NODE_ENV=development webpack -w",
     "build-dev": "cross-env NODE_ENV=development webpack",
     "build-prod": "cross-env NODE_ENV=production webpack",
+    "test": "jest",
+    "test-watch": "npm run test -- --watch",
     "clean": "rimraf ./build",
     "lint": "tslint -p tsconfig.json"
   },
