@@ -4,32 +4,35 @@ import { GraphData } from '../../types'
 import { ChartData, ChartOptions } from 'chart.js'
 import 'chartjs-adapter-moment'
 
-const options: ChartOptions<'line'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    title: {
-      display: true,
-    },
-    legend: {
-      display: false,
-    },
-  },
-  scales: {
-    x: {
-      type: 'time',
-      time: {
-        unit: 'day',
+function createOptions(title: string): ChartOptions<'line'> {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        text: title,
+        display: true,
       },
-      ticks: {
-        source: 'auto',
-        maxRotation: 90,
+      legend: {
+        display: false,
       },
     },
-    y: {
-      // beginAtZero: true,
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'day',
+        },
+        ticks: {
+          source: 'auto',
+          maxRotation: 90,
+        },
+      },
+      y: {
+        // beginAtZero: true,
+      },
     },
-  },
+  }
 }
 
 const LineChart: React.FunctionComponent<GraphData> = ({ title, labelData, values }) => {
@@ -51,11 +54,7 @@ const LineChart: React.FunctionComponent<GraphData> = ({ title, labelData, value
     ],
   }
 
-  options.plugins!.title!.text = title
-
-  return (
-    <Line data={generateChartData} options={options} />
-  )
+  return <Line data={generateChartData} options={createOptions(title)} />
 }
 
 export default LineChart
