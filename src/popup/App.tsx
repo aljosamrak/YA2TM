@@ -2,7 +2,7 @@ import * as React from 'react'
 const appStyles = require('./App.scss')
 import Graph from './charts/Graph'
 import Header from './Header'
-import ReactGA, { InitializeOptions } from 'react-ga'
+import ReactGA, {InitializeOptions} from 'react-ga'
 
 const options: InitializeOptions = {
   // debug: true,
@@ -14,7 +14,9 @@ const options: InitializeOptions = {
 }
 
 ReactGA.initialize('UA-212146766-1', options)
-ReactGA.ga('set', 'checkProtocolTask', () => { /* nothing */ })
+ReactGA.ga('set', 'checkProtocolTask', () => {
+  /* nothing */
+})
 ReactGA.pageview('main')
 
 class App extends React.Component<{}, {}> {

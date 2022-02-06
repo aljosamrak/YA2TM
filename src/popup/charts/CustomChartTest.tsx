@@ -1,7 +1,7 @@
 import React from 'react'
-import { FunctionComponent, useEffect, useState } from 'react'
-import { GraphData } from '../../types'
-import { Record } from '../../storage/Database'
+import {FunctionComponent, useEffect, useState} from 'react'
+import {GraphData} from '../../types'
+import {Record} from '../../model/Database'
 import LineChart from './LineChart'
 import graphStyle from './graph.scss'
 
@@ -10,8 +10,7 @@ interface Props {
   operationFunction: (records: Map<number, Record[]>) => GraphData
 }
 
-const ChartTest: FunctionComponent<Props> = ({ data, operationFunction }) => {
-
+const ChartTest: FunctionComponent<Props> = ({data, operationFunction}) => {
   const [dataForPeriod, setDataForPeriod] = useState<GraphData>()
   const fetchData = async () => {
     console.log('IMPORTANT1')

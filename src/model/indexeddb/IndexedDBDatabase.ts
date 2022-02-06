@@ -43,13 +43,12 @@ class IndexedDBDatabase implements Database {
               action: 'Open size',
               value: (estimate?.usage / estimate?.quota) * 100,
               label: `usage: ${estimate.usage}, quota: ${estimate.quota}`,
-              nonInteraction: true,
             })
           }
         })
         this.analytics.time({
           category: 'Database',
-          variable: 'Open time',
+          name: 'Open time',
           value: performance.now() - start,
         })
 
@@ -74,7 +73,6 @@ class IndexedDBDatabase implements Database {
             category: 'Database',
             action: 'Upgrade',
             value: event.oldVersion,
-            nonInteraction: true,
           })
           if (!request.transaction) {
             logger.error(
