@@ -10,8 +10,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 // webpack plugins
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-// postcss plugins
-// require('autoprefixer')
+
 const isProd = (): boolean => {
   return process.env.NODE_ENV === 'production'
 }
@@ -41,8 +40,6 @@ const buildConfig: Configuration = {
     options: path.join(__dirname, 'src', 'options', 'index.tsx'),
     popup: path.join(__dirname, 'src', 'popup', 'index.tsx'),
     experiments: path.join(__dirname, 'src', 'experiment', 'index.tsx'),
-    // devtools: path.join(__dirname, 'src', 'pages', 'Devtools', 'index.js'),
-    // panel: path.join(__dirname, 'src', 'pages', 'Panel', 'index.jsx'),
   },
   output: {
     path: path.join(__dirname, 'build/build'),
