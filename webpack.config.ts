@@ -1,5 +1,10 @@
 import * as path from 'path'
-import { Configuration, DefinePlugin, ProgressPlugin, SourceMapDevToolPlugin } from 'webpack'
+import {
+  Configuration,
+  DefinePlugin,
+  ProgressPlugin,
+  SourceMapDevToolPlugin,
+} from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 // webpack plugins
@@ -73,12 +78,7 @@ const buildConfig: Configuration = {
       },
       // file loader for media assets
       {
-        exclude: [
-          /\.(html?)$/,
-          /\.(ts|tsx|js|jsx)$/,
-          /\.scss$/,
-          /\.json$/,
-        ],
+        exclude: [/\.(html?)$/, /\.(ts|tsx|js|jsx)$/, /\.scss$/, /\.json$/],
         loader: 'file-loader',
         // query: {
         //   name: '[hash].[ext]',
@@ -86,7 +86,18 @@ const buildConfig: Configuration = {
         //   publicPath: 'build/',
         // },
       },
-      { test: /\.(jpg|png)$/ },
+      {test: /\.(jpg|png)$/},
+      {
+        // Inject Google Analytics tracking ID
+        test: /GoogleAnalytics\.ts$/,
+        loader: 'string-replace-loader',
+        options: {
+          search: '${__TRACKING_ID__}',
+          replace: JSON.stringify(
+            process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'UA-YYYYYYY',
+          ),
+        },
+      },
     ],
   } /*as webpack.NewModule*/,
   plugins: [
@@ -104,7 +115,7 @@ const buildConfig: Configuration = {
           from: 'public/manifest.json',
           to: path.join(__dirname, 'build'),
           force: true,
-          transform(content: { toString: () => string }) {
+          transform(content: {toString: () => string}) {
             // generates the manifest file using the package.json informations
             const contentJson = JSON.parse(content.toString())
             if (process.env.CIRCLE_BUILD_NUM) {
@@ -125,16 +136,6 @@ const buildConfig: Configuration = {
           //       ...JSON.parse(content.toString()),
           //     })
           //   );
-        },
-      ],
-    }),
-    new CopyWebpackPlugin({
-      // Copy Google Analytics
-      patterns: [
-        {
-          from: path.join(__dirname, 'src', 'analytics'),
-          to: path.join(__dirname, 'build', 'build'),
-          force: true,
         },
       ],
     }),
@@ -197,12 +198,12 @@ const buildConfig: Configuration = {
     // }),
   ],
 
-      // context: 'public/',
-      // from: {
-      //   dot: false,
-      //   glob: '**/*',
-      // },
-      // to: path.join(__dirname, 'dist/'),
+  // context: 'public/',
+  // from: {
+  //   dot: false,
+  //   glob: '**/*',
+  // },
+  // to: path.join(__dirname, 'dist/'),
   //   }]),
   // ],
   resolve: {
@@ -211,6 +212,10 @@ const buildConfig: Configuration = {
       .map((extension) => '.' + extension)
       .concat(['.js', '.jsx', '.ts', '.tsx', '.scss']),
     // extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    fallback: {
+      // Because of measurement-protocol dependency
+      https: false,
+    },
   },
   infrastructureLogging: {
     level: 'info',
@@ -222,7 +227,7 @@ if (isProd()) {
   buildConfig.devtool = 'cheap-module-source-map'
   buildConfig.plugins = (buildConfig.plugins || []).concat([
     new DefinePlugin({
-      'process.env': { NODE_ENV: JSON.stringify('production') },
+      'process.env': {NODE_ENV: JSON.stringify('production')},
     }),
     // clean output files
     new CleanWebpackPlugin(['build']),

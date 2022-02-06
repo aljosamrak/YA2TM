@@ -1,10 +1,22 @@
-import { EventArgs, TimingArgs, TrackerNames } from 'react-ga'
-
-interface Analytics {
-
-  event(args: EventArgs, trackerNames?: TrackerNames): void
-
-  time(args: TimingArgs, trackerNames?: TrackerNames): void
+type EventArgs = {
+  category: string
+  action: string
+  label?: string
+  value?: number
+}
+type TimingArgs = {
+  category: string
+  name: string
+  value: number
+  label?: string
 }
 
-export { Analytics }
+interface Analytics {
+  event(eventArgs: EventArgs): void
+
+  time(timeArgs: TimingArgs): void
+
+  modalView(name: string): void
+}
+
+export {Analytics, EventArgs, TimingArgs}

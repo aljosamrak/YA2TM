@@ -1,13 +1,11 @@
-import { Analytics } from '../../analytics/Analytics'
-import { EventArgs, TimingArgs, TrackerNames } from 'react-ga'
+import {Analytics, EventArgs, TimingArgs} from '../../analytics/Analytics'
 
 class StubAnalytics implements Analytics {
+  event(args: EventArgs): void {}
 
-  event(args: EventArgs, trackerNames?: TrackerNames): void {
-  }
+  time(args: TimingArgs): void {}
 
-  time(args: TimingArgs, trackerNames?: TrackerNames): void {
-  }
+  modalView(path: string): void {}
 }
 
-export { StubAnalytics }
+export {StubAnalytics}

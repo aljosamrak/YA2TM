@@ -1,16 +1,32 @@
-import { Analytics } from './Analytics'
-import ReactGA, { EventArgs, TimingArgs, TrackerNames } from 'react-ga'
-import { injectable } from 'inversify'
+import {Analytics, EventArgs, TimingArgs} from './Analytics'
+import {injectable} from 'inversify'
+import {measure} from 'measurement-protocol'
+import {IncomingMessage} from 'http'
+
+const TRACKING_ID = '${__TRACKING_ID__}'
 
 @injectable()
 class GoogleAnalytics implements Analytics {
-  event(args: EventArgs, trackerNames?: TrackerNames): void {
-    ReactGA.event(args, trackerNames)
+  async event(eventArgs: EventArgs): Promise<Response | IncomingMessage> {
+    return measure(TRACKING_ID)
+      .event(
+        eventArgs.category,
+        eventArgs.action,
+        eventArgs.label,
+        eventArgs.value,
+      )
+      .send()
   }
 
-  time(args: TimingArgs, trackerNames?: TrackerNames): void {
-    ReactGA.timing(args, trackerNames)
+  async time(timeArgs: TimingArgs): Promise<Response | IncomingMessage> {
+    return measure(TRACKING_ID)
+      .timing(timeArgs.category, timeArgs.name, timeArgs.value, timeArgs.label)
+      .send()
+  }
+
+  async modalView(name: string): Promise<Response | IncomingMessage> {
+    return measure(TRACKING_ID).screenview(name).send()
   }
 }
 
-export { GoogleAnalytics }
+export {GoogleAnalytics}

@@ -1,23 +1,13 @@
-import * as React from 'react'
-const appStyles = require('./App.scss')
+import React from 'react'
 import Graph from './charts/Graph'
 import Header from './Header'
-import ReactGA, {InitializeOptions} from 'react-ga'
+import {container} from '../inversify/inversify.config'
+import {TYPES} from '../inversify/types'
+import {Analytics} from '../analytics/Analytics'
+const appStyles = require('./App.scss')
 
-const options: InitializeOptions = {
-  // debug: true,
-  titleCase: false,
-  gaOptions: {
-    siteSpeedSampleRate: 100,
-  },
-  gaAddress: 'analytics.js',
-}
-
-ReactGA.initialize('UA-212146766-1', options)
-ReactGA.ga('set', 'checkProtocolTask', () => {
-  /* nothing */
-})
-ReactGA.pageview('main')
+const analytics = container.get<Analytics>(TYPES.Analytics)
+analytics.modalView('main-app')
 
 class App extends React.Component<{}, {}> {
   public render() {
