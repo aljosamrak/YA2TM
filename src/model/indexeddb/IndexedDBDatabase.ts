@@ -138,7 +138,7 @@ class IndexedDBDatabase implements Database {
     const startTime = performance.now()
     return this._databasePromise.then((db: IDBDatabase): Promise<Record[]> => {
       return new Promise<Record[]>((resolve, reject) => {
-        const keyRangeValue = IDBKeyRange.lowerBound(startDate, true)
+        const keyRangeValue = IDBKeyRange.bound(startDate, endDate, true)
 
         const transaction = db.transaction(
           IndexedDBDatabase.OBJECT_STORE,

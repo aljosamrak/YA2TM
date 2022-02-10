@@ -6,6 +6,8 @@ import {GraphData} from '../../types'
 import {TYPES} from '../../inversify/types'
 import {TrackedEvent} from '../../model/TrackedEvent'
 
+const DAYS_7 = 7 * 24 * 3600 * 1000
+
 export default function Graph() {
   // Opened-closed tabs per day
   const openClosed = (groupByDate: Map<number, Record[]>): GraphData => {
@@ -70,10 +72,11 @@ export default function Graph() {
 
   const [dataForPeriod, setDataForPeriod] = useState<Map<number, Record[]>>()
   const [graphData, setGraphData] = useState<GraphData>()
+  const timeNow = Date.now()
   const fetchData = async () => {
     const data = await container
       .get<Database>(TYPES.DatabaseService)
-      .query(0, 50621728000000)
+      .query(timeNow - DAYS_7, timeNow)
 
     console.log('Queried data')
     console.log(data)
