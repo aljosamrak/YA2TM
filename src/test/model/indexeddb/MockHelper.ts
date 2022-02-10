@@ -1,13 +1,14 @@
 function mockNavigationStorage() {
-  // const estimateMock = jest.fn().mockResolvedValue({})
-  const estimateMock = jest.fn(() => Promise.resolve({data: {}}))
   Object.defineProperty(navigator, 'storage', {
-    value: {
-      estimate: estimateMock,
-    },
+    value: new MockNavigator(),
     configurable: true,
   })
-  return estimateMock
+}
+
+class MockNavigator {
+  estimate() {
+    return Promise.resolve({data: {}})
+  }
 }
 
 export {mockNavigationStorage}
