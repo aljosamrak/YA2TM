@@ -55,6 +55,7 @@ class IndexedDBDatabase implements Database {
         resolve(request.result)
       }
       request.onupgradeneeded = (event) => {
+        const upgradestartTime = performance.now()
         const db = request.result
 
         if (!db.objectStoreNames.contains(IndexedDBDatabase.OBJECT_STORE)) {
@@ -97,6 +98,12 @@ class IndexedDBDatabase implements Database {
               newObjectStore.add(convert(oldEntry))
             })
             db.deleteObjectStore(LEGACY_SORE_NAME_V1)
+
+            this.analytics.time({
+              category: 'Database',
+              name: 'Upgrade v1 time',
+              value: performance.now() - upgradestartTime,
+            })
           }
         }
       }
@@ -128,6 +135,7 @@ class IndexedDBDatabase implements Database {
   }
 
   public async query(startDate: number, endDate: number): Promise<Record[]> {
+    const startTime = performance.now()
     return this._databasePromise.then((db: IDBDatabase): Promise<Record[]> => {
       return new Promise<Record[]>((resolve, reject) => {
         const keyRangeValue = IDBKeyRange.lowerBound(startDate, true)
@@ -151,6 +159,12 @@ class IndexedDBDatabase implements Database {
           cursor.continue()
         }
         transaction.oncomplete = () => {
+          this.analytics.time({
+            category: 'Database',
+            name: 'Query time',
+            value: performance.now() - startTime,
+            label: `Window: ${endDate - startTime}, size: ${data.length}`,
+          })
           resolve(data)
         }
         transaction.onerror = (event: Event) => {
