@@ -1,0 +1,82 @@
+<div
+  style="
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border: 0;
+  "
+>
+  <!-- Navbar-->
+  <mdb-navbar
+    SideClass="navbar navbar-expand-lg navbar-dark purple lighten-1"
+    [containerInside]="false"
+  >
+    <div class="container-fluid justify-content-between">
+      <!-- Left elements -->
+      <ul class="navbar-nav flex-row d-none d-md-flex">
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+          <a class="nav-link waves-light" mdbWavesEffect routerLink="/tabs">
+            <span>Tabs</span>
+          </a>
+        </li>
+
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+          <a class="nav-link waves-light" mdbWavesEffect routerLink="/graphs">
+            <span>Graphs</span>
+          </a>
+        </li>
+
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+          <a
+            class="nav-link waves-light"
+            mdbWavesEffect
+            routerLink="/duplicates"
+          >
+            <span>Duplicates</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Left elements -->
+
+      <!-- Right elements -->
+      <ul class="navbar-nav flex-row">
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+          <a class="nav-link waves-light" mdbWavesEffect routerLink="/TODO">
+            <img
+              src="assets/full-screen.png"
+              height="22"
+              alt=""
+              loading="lazy"
+            />
+          </a>
+        </li>
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+          <a
+            class="nav-link waves-light"
+            mdbWavesEffect
+            routerLink="/achievements"
+          >
+            <img src="assets/trophy.png" height="22" alt="" loading="lazy" />
+            <span class="badge rounded-pill badge-notification bg-danger"
+              >2</span
+            >
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link waves-light" mdbWavesEffect routerLink="/settings">
+            <img src="assets/settings.png" height="22" alt="" loading="lazy" />
+          </a>
+        </li>
+      </ul>
+      <!-- Right elements -->
+    </div>
+  </mdb-navbar>
+  <!-- Navbar -->
+
+  <router-outlet></router-outlet>
+</div>
