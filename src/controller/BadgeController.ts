@@ -1,20 +1,21 @@
 import 'reflect-metadata'
-import { inject, injectable } from 'inversify'
-import { LocalStorage } from '../storage/LocalStorage'
-import { BadgeTextType, USER_PREFERENCES } from '../storage/Key'
-import { TYPES } from '../inversify/types'
-import { BadgeView } from '../view/BadgeView'
-import { TabData } from '../model/TabData'
-import { WindowData } from '../model/WindowData'
+import {LocalStorage} from '../storage/LocalStorage'
+import {BadgeTextType, USER_PREFERENCES} from '../storage/Key'
+import {BadgeView} from '../view/BadgeView'
+import {TabData} from '../model/TabData'
+import {WindowData} from '../model/WindowData'
+import {Inject, Injectable} from '@angular/core'
 
-@injectable()
+@Injectable({
+  providedIn: 'root',
+})
 class BadgeController {
 
   constructor(
-    @inject(TYPES.TabData) private tabData: TabData,
-    @inject(TYPES.WindowData) private windowData: WindowData,
-    @inject(TYPES.LocalStorageService) private localStorage: LocalStorage,
-    @inject(TYPES.BadgeView) private badgeView: BadgeView
+    @Inject('TabData') private tabData: TabData,
+    @Inject('WindowData') private windowData: WindowData,
+    @Inject('LocalStorageService') private localStorage: LocalStorage,
+    @Inject('BadgeView') private badgeView: BadgeView,
   ) {
     this.localStorage.addOnChangedListener(() => this.updateTabCount(tabData.query()))
   }

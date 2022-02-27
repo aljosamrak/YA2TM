@@ -1,10 +1,11 @@
-import { injectable } from 'inversify'
-import { TabData } from '../TabData'
+import {TabData} from '../TabData'
 import Tab = chrome.tabs.Tab
+import {Injectable} from '@angular/core'
 
-@injectable()
-class ChromeTabData implements TabData {
-
+@Injectable({
+  providedIn: 'root',
+})
+export class ChromeTabData implements TabData {
   async query(): Promise<Tab[]> {
     return chrome.tabs.query({})
   }
@@ -13,5 +14,3 @@ class ChromeTabData implements TabData {
     return chrome.tabs.remove(tabId)
   }
 }
-
-export { ChromeTabData }

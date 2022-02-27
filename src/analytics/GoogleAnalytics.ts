@@ -1,11 +1,13 @@
 import {Analytics, EventArgs, TimingArgs} from './Analytics'
-import {injectable} from 'inversify'
+import {Injectable} from '@angular/core'
 import {measure} from 'measurement-protocol'
 import {IncomingMessage} from 'http'
 
 const TRACKING_ID = '${__TRACKING_ID__}'
 
-@injectable()
+@Injectable({
+  providedIn: 'root',
+})
 class GoogleAnalytics implements Analytics {
   async event(eventArgs: EventArgs): Promise<Response | IncomingMessage> {
     return measure(TRACKING_ID)

@@ -1,11 +1,11 @@
-import { injectable } from 'inversify'
-import { WindowData } from '../WindowData'
+import {WindowData} from '../WindowData'
+import {Injectable} from '@angular/core'
 
-@injectable()
-class ChromeWindowData implements WindowData {
+@Injectable({
+  providedIn: 'root',
+})
+export class ChromeWindowData implements WindowData {
   async getAll(): Promise<chrome.windows.Window[]> {
     return chrome.windows.getAll()
   }
 }
-
-export { ChromeWindowData }
