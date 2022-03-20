@@ -1,12 +1,13 @@
 import 'reflect-metadata'
 import {Database, Record} from '../Database'
-import {inject, injectable} from 'inversify'
-import {TYPES} from '../../inversify/types'
-import {Logger} from '../../services/Logger'
 import {convert, LEGACY_SORE_NAME_V1, OldRecord} from './LegacyIndexedDb'
 import {Analytics} from '../../analytics/Analytics'
+import {Inject, Injectable} from '@angular/core'
+import {NGXLogger} from 'ngx-logger'
 
-@injectable()
+@Injectable({
+  providedIn: 'root',
+})
 class IndexedDBDatabase implements Database {
   static DATABASE_NAME = 'TabsDB'
   static DATABASE_VERSION = 2
@@ -15,8 +16,8 @@ class IndexedDBDatabase implements Database {
   private _databasePromise
 
   constructor(
-    @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.Analytics) private analytics: Analytics,
+    private logger: NGXLogger,
+    @Inject('Analytics') private analytics: Analytics,
   ) {
     if (!indexedDB) {
       this.logger.error(
