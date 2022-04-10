@@ -4,7 +4,6 @@ import {BrowserModule} from '@angular/platform-browser'
 import {AppRoutingModule} from './app-routing.module'
 import {AppComponent} from './app.component'
 import {TabsComponent} from './tabs/tabs.component'
-import {HistoryComponent} from './history/history.component'
 import {DuplicatesComponent} from './duplicates/duplicates.component'
 import {SettingsComponent} from './settings/settings.component'
 import {NgChartsModule} from 'ng2-charts'
@@ -24,26 +23,35 @@ import {BadgeView} from '../view/BadgeView'
 import {ChromeBadgeView} from '../view/chrome/ChromeBadgeView'
 import {BadgeController} from '../controller/BadgeController'
 import {TabController} from '../controller/tab/TabController'
-import {TotalTabChartComponent} from './chart-components/total-tab-chart.component'
 import {PageNotFoundComponentComponent} from './page-not-found-component/page-not-found-component.component'
 import {MDBBootstrapModule} from 'angular-bootstrap-md'
+import {TabInsightsModule} from './tab-insights/tab-insights.module'
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger'
+// HttpClientModule is only needed if you want to log on server or if you want to inspect sourcemaps
+import {HttpClientModule} from '@angular/common/http'
+
 
 @NgModule({
   declarations: [
     AppComponent,
     TabsComponent,
-    HistoryComponent,
     DuplicatesComponent,
     SettingsComponent,
     AchievementsComponent,
-    TotalTabChartComponent,
     PageNotFoundComponentComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgChartsModule,
-    MDBBootstrapModule.forRoot(),
+    TabInsightsModule,
+    MDBBootstrapModule.forRoot(), // HttpClientModule is only needed if you want to log on server or if you want to inspect sourcemaps
+    HttpClientModule,
+    LoggerModule.forRoot({
+      serverLoggingUrl: '/api/logs',
+      level: NgxLoggerLevel.DEBUG,
+      serverLogLevel: NgxLoggerLevel.ERROR,
+    }),
   ],
   providers: [
     {provide: 'Analytics', useClass: GoogleAnalytics},
