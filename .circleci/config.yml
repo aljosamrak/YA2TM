@@ -19,7 +19,7 @@ orbs:
 defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
-    - image: cimg/node:17.1
+    - image: cimg/node:16.14
   resource_class: small
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
       # Build the extension. Used only by the test installation script.
       - run:
           name: "Build"
-          command: npm run build
+          command: ng build
 
       # Install Chrome browser
       - browser-tools/install-chrome
@@ -58,7 +58,7 @@ jobs:
       # Run tests
       - run:
           name: "Build"
-          command: npm run test
+          command: ng test
 
   build:
     <<: *defaults
@@ -74,7 +74,7 @@ jobs:
       # Run build command
       - run:
           name: "Build"
-          command: npm run build
+          command: ng build
 
       # Zip the build folder to create a Chrome extension package
       - run:
