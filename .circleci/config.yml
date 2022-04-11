@@ -32,11 +32,6 @@ jobs:
       # Checkout the code as the first step
       - checkout
 
-      # Install Angular Angular globally
-      - run:
-          name: "Install Angular"
-          command: npm install -g angular-cli
-
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
           include-branch-in-cache-key: false
@@ -71,11 +66,6 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout
-
-      # Install Angular Angular globally
-      - run:
-          name: "Install Angular"
-          command: npm install -g angular-cli
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
