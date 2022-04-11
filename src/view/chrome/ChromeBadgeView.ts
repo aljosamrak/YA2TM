@@ -1,8 +1,10 @@
-import { BadgeView } from '../BadgeView'
-import { injectable } from 'inversify'
+import {BadgeView} from '../BadgeView'
+import {Injectable} from '@angular/core'
 
-@injectable()
-class ChromeBadgeView implements BadgeView {
+@Injectable({
+  providedIn: 'root',
+})
+export class ChromeBadgeView implements BadgeView {
   setText(text: string): void {
     chrome.action.setBadgeText({ text: text })
   }

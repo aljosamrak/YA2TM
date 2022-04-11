@@ -1,7 +1,9 @@
-import { injectable } from "inversify"
-import { Key, LocalStorage } from "./LocalStorage"
+import {Key, LocalStorage} from './LocalStorage'
+import {Injectable} from '@angular/core'
 
-@injectable()
+@Injectable({
+  providedIn: 'root',
+}) // TODO change to chrome.sync
 class LocalStorageImpl implements LocalStorage {
   async get<T>(key: Key<T>): Promise<{ [key: string]: T }> {
     return chrome.storage.local.get(key.key).then((result) => {
