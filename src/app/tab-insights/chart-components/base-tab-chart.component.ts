@@ -6,7 +6,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
-import {Chart, ChartConfiguration, ChartType} from 'chart.js'
+import {Chart, ChartConfiguration, ChartType, TooltipItem} from 'chart.js'
 import {Database, Record} from '../../../model/Database'
 import 'chartjs-adapter-moment'
 import 'hammerjs'
@@ -52,19 +52,21 @@ export class BaseTabChartComponent {
   }
 
   setChartData(labels: Date[], values: number[]) {
-    this.lineChartData = {
-      datasets: [
-        {
-          data: values,
-          borderColor: CHART_COLORS.green,
-          borderWidth: 1,
-          tension: 0.2,
-          normalized: true,
-          spanGaps: true,
-        },
-      ],
-      labels: labels,
+    if (this.chart && this.chart.chart) {
+      this.chart.chart.data.datasets[0].data = values
+      this.chart.chart.data.labels = labels
+      this.chart.chart.stop() // make sure animations are not running
+      this.chart.chart.update('none')
     }
+  }
+
+  footer = (tooltipItems: TooltipItem<any>[]) => {
+    let sum = 0
+
+    tooltipItems.forEach(function (tooltipItem) {
+      sum += tooltipItem.parsed.y
+    })
+    return 'Sum: ' + sum
   }
 
   onZoomPanChange(context: {chart: Chart}) {
@@ -89,11 +91,18 @@ export class BaseTabChartComponent {
       legend: {
         display: false,
       },
+      //TODO
       decimation: {
         enabled: true,
         algorithm: 'min-max',
       },
       zoom: {
+        limits: {
+          x: {
+            // TODO better, maybe injected from top?
+            max: Date.now(),
+          },
+        },
         zoom: {
           wheel: {
             enabled: true,
@@ -105,6 +114,11 @@ export class BaseTabChartComponent {
           enabled: true,
           mode: 'x',
           onPanComplete: this.onZoomPanChange.bind(this),
+        },
+      },
+      tooltip: {
+        callbacks: {
+          footer: this.footer.bind(this),
         },
       },
     },
@@ -140,5 +154,21 @@ export class BaseTabChartComponent {
 
     // Add zoom plugin
     Chart.register(zoomPlugin)
+
+    this.lineChartData = {
+      datasets: [
+        {
+          data: [],
+          label: 'Series A',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: CHART_COLORS.green,
+          borderWidth: 1,
+          tension: 0.2,
+          normalized: true,
+          spanGaps: true,
+        },
+      ],
+      labels: [],
+    }
   }
 }
