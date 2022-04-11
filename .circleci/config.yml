@@ -19,7 +19,7 @@ orbs:
 defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
-    - image: cimg/node:16.14
+    - image: cimg/node:17.1
   resource_class: small
 
 jobs:
@@ -32,6 +32,11 @@ jobs:
       # Checkout the code as the first step
       - checkout
 
+      # Install Angular Angular globally
+      - run:
+          name: "Install Angular"
+          command: npm install -g angular-cli
+
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
           include-branch-in-cache-key: false
@@ -39,7 +44,7 @@ jobs:
       # Build the extension. Used only by the test installation script.
       - run:
           name: "Build"
-          command: ng build
+          command: npm run build
 
       # Install Chrome browser
       - browser-tools/install-chrome
@@ -58,7 +63,7 @@ jobs:
       # Run tests
       - run:
           name: "Build"
-          command: ng test
+          command: npm run test
 
   build:
     <<: *defaults
@@ -67,6 +72,11 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      # Install Angular Angular globally
+      - run:
+          name: "Install Angular"
+          command: npm install -g angular-cli
+
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
           include-branch-in-cache-key: false
@@ -74,7 +84,7 @@ jobs:
       # Run build command
       - run:
           name: "Build"
-          command: ng build
+          command: npm run build
 
       # Zip the build folder to create a Chrome extension package
       - run:
