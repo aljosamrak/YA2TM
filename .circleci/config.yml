@@ -21,6 +21,7 @@ defaults: &defaults
   docker:
     - image: cimg/node:17.1-browsers
   resource_class: small
+  parallelism: 4
 
 jobs:
   test:
@@ -45,14 +46,14 @@ jobs:
       - node/install-packages:
           include-branch-in-cache-key: false
 
-      # Build the extension. Used only by the test installation script.
-      - run:
-          name: "Build"
-          command: npm run build
-      # Test if the extension can be installed
-      - run:
-          name: "Test Chrome extension installation"
-          command: ./scripts/extension_install_test.sh
+#      # Build the extension. Used only by the test installation script.
+#      - run:
+#          name: "Build"
+#          command: npm run build
+#      # Test if the extension can be installed
+#      - run:
+#          name: "Test Chrome extension installation"
+#          command: ./scripts/extension_install_test.sh
 
       # Run tests
       - run:
