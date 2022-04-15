@@ -92,7 +92,7 @@ jobs:
       # Zip the build folder to create a Chrome extension package
       - run:
           name: "Zip package"
-          command: zip -r build.zip build
+          command: zip -r build.zip dist/YA2TM
 
       # Store the build result as an artefact
       - store_artifacts:
