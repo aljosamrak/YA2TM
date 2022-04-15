@@ -13,5 +13,3 @@ export class ChromeBadgeView implements BadgeView {
     chrome.action.setBadgeBackgroundColor({ color: color })
   }
 }
-
-export { ChromeBadgeView }

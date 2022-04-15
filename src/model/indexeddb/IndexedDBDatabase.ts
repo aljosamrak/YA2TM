@@ -56,7 +56,7 @@ class IndexedDBDatabase implements Database {
         resolve(request.result)
       }
       request.onupgradeneeded = (event) => {
-        const upgradestartTime = performance.now()
+        const upgradeStartTime = performance.now()
         const db = request.result
 
         if (!db.objectStoreNames.contains(IndexedDBDatabase.OBJECT_STORE)) {
@@ -103,7 +103,7 @@ class IndexedDBDatabase implements Database {
             this.analytics.time({
               category: 'Database',
               name: 'Upgrade v1 time',
-              value: performance.now() - upgradestartTime,
+              value: performance.now() - upgradeStartTime,
             })
           }
         }

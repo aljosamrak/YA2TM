@@ -3,7 +3,7 @@ enum TrackedEvent {
   TabClosed,
   WindowOpened,
   WindowClosed,
-  TabDeduplicated
+  TabDeduplicated,
 }
 
 export { TrackedEvent }
