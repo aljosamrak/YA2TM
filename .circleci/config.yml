@@ -44,6 +44,7 @@ jobs:
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
+          pkg-manager: npm
           include-branch-in-cache-key: false
 
 #      # Build the extension. Used only by the test installation script.
@@ -76,17 +77,17 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      - run: node --version
+
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
+          pkg-manager: npm
           include-branch-in-cache-key: false
 
-#      # Run build command
-#      - run:
-#          name: "Build"
-#          command: npm run build
-
-      - node/run:
-          npm-run: build
+      # Run build command
+      - run:
+          name: "Build"
+          command: npm run build
 
       # Zip the build folder to create a Chrome extension package
       - run:
@@ -125,12 +126,12 @@ workflows:
   main:
     jobs:
       - shellcheck/check
-      - test
+#      - test
       - build
       - publish:
           requires:
             - shellcheck/check
-            - test
+#            - test
             - build
 #          branches:
 #            ignore: /.*/
