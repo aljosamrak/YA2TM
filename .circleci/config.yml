@@ -20,7 +20,7 @@ defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
     - image: cimg/node:17.1-browsers
-  resource_class: small
+  resource_class: large
   parallelism: 4
 
 jobs:
