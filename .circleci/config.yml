@@ -6,7 +6,7 @@ orbs:
   # The Node.js orb contains a set of prepackaged CircleCI configuration you can utilize
   # Orbs reduce the amount of configuration required for common tasks.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@4.7.0
+  node: circleci/node@5.0.2
 
   # Automatically find bugs and errors in your shell scripts with ShellCheck on every commit.
   # Add this static analysis tool to any CI/CD workflow and ShellCheck your scripts across your repository.
@@ -80,10 +80,13 @@ jobs:
       - node/install-packages:
           include-branch-in-cache-key: false
 
-      # Run build command
-      - run:
-          name: "Build"
-          command: npm run build
+#      # Run build command
+#      - run:
+#          name: "Build"
+#          command: npm run build
+
+      - node/run:
+          npm-run: build
 
       # Zip the build folder to create a Chrome extension package
       - run:
