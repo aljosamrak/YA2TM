@@ -24,43 +24,6 @@ defaults: &defaults
   parallelism: 4
 
 jobs:
-  test:
-    <<: *defaults
-
-    # Then run your tests!
-    # CircleCI will report the results back to your VCS provider
-    steps:
-      # Install Chrome browser
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      - run:
-          command: |
-            google-chrome --version
-            chromedriver --version
-          name: Check install
-
-      # Checkout the code as the first step
-      - checkout
-
-      # Install the dependencies from a package.json and cache them for faster future runs
-      - node/install-packages:
-          pkg-manager: npm
-          include-branch-in-cache-key: false
-
-#      # Build the extension. Used only by the test installation script.
-#      - run:
-#          name: "Build"
-#          command: npm run build
-#      # Test if the extension can be installed
-#      - run:
-#          name: "Test Chrome extension installation"
-#          command: ./scripts/extension_install_test.sh
-
-      # Run tests
-      - run:
-          name: "Build"
-          command: npm run test
-
   build:
     <<: *defaults
 
@@ -72,22 +35,30 @@ jobs:
           command: |
             google-chrome --version
             chromedriver --version
+            node --version
           name: Check install
 
-      # Checkout the code as the first step.
       - checkout
-
-      - run: node --version
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
           pkg-manager: npm
           include-branch-in-cache-key: false
 
+      # Run tests
+      - run:
+          name: "Build"
+          command: npm run test
+
       # Run build command
       - run:
           name: "Build"
           command: npm run build
+
+      # Test if the extension can be installed
+      - run:
+          name: "Test Chrome extension installation"
+          command: ./scripts/extension_install_test.sh
 
       # Zip the build folder to create a Chrome extension package
       - run:
@@ -126,14 +97,8 @@ workflows:
   main:
     jobs:
       - shellcheck/check
-#      - test
       - build
       - publish:
           requires:
             - shellcheck/check
-#            - test
             - build
-#          branches:
-#            ignore: /.*/
-#          tags:
-#            only: /.*/
