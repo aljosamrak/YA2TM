@@ -37,11 +37,11 @@ writeFile(
 export const VERSION = ${JSON.stringify(gitInfo, null, 4)};
 
 /**
- * Google analytics tracking ID from the environment variables
+ * Google Analytics tracking ID from the environment variables
  */
-export const GOOGLE_ANALYTICS_TRACKING_ID = ${
+export const GOOGLE_ANALYTICS_TRACKING_ID = '${
     process.env.GOOGLE_ANALYTICS_TRACKING_ID
-  }
+  }'
 
 /* tslint:enable */
 `,
