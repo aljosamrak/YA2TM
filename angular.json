@@ -29,14 +29,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "sass",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/manifest.json"
-            ],
-            "styles": [
-              "src/styles.sass"
-            ],
+            "assets": ["src/favicon.ico", "src/assets", "src/manifest.json", "src/analytics/analytics.js"],
+            "styles": ["src/styles.sass"],
             "scripts": []
           },
           "configurations": {
