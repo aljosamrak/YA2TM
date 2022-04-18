@@ -1,6 +1,7 @@
 import { Injectable, Optional } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
-const loadGa = require('./loadGA')
+// @ts-ignore
+import loadGa from './loadGA'
 
 declare var ga: Function
 
