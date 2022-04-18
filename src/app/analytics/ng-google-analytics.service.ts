@@ -5,9 +5,23 @@ const loadGa = require('./loadGA')
 declare var ga: Function
 
 // TODO copy from react ga lib
-export type AnalyticsIdConfig = {
-  id: string
+export class AnalyticsIdConfig {
+  id = ''
   scriptPath?: string
+}
+
+export type EventArgs = {
+  category: string
+  action: string
+  label?: string
+  value?: number
+}
+
+export type TimingArgs = {
+  category: string
+  name: string
+  value: number
+  label?: string
 }
 
 @Injectable({
@@ -15,9 +29,6 @@ export type AnalyticsIdConfig = {
 })
 export class NgGoogleAnalyticsTracker {
   constructor(router: Router, @Optional() config: AnalyticsIdConfig) {
-    if (!config.scriptPath) {
-      config.scriptPath = '/www.google-analytics.com/analytics.js'
-    }
     try {
       loadGa({
         gaAddress: config.scriptPath,
@@ -39,20 +50,6 @@ export class NgGoogleAnalyticsTracker {
     })
   }
 
-  public eventTracker(
-    eventCategory: string,
-    eventAction: string,
-    eventLabel: string,
-    eventValue: number,
-  ) {
-    ga('send', 'event', {
-      eventCategory: eventCategory,
-      eventLabel: eventLabel,
-      eventAction: eventAction,
-      eventValue: eventValue,
-    })
-  }
-
   public create(gaTrackingID: string, options?: any) {
     if (options && options.gaOptions) {
       ga('create', gaTrackingID, options.gaOptions)
@@ -62,6 +59,24 @@ export class NgGoogleAnalyticsTracker {
 
     ga('set', 'checkProtocolTask', () => {
       /* nothing */
+    })
+  }
+
+  event(eventArgs: EventArgs) {
+    ga('send', 'event', {
+      eventCategory: eventArgs.category,
+      eventLabel: eventArgs.label,
+      eventAction: eventArgs.action,
+      eventValue: eventArgs.value,
+    })
+  }
+
+  public time(timingArgs: TimingArgs) {
+    ga('send', 'timing', {
+      timingCategory: timingArgs.category,
+      timingVar: timingArgs.value,
+      timingLabel: timingArgs.label,
+      timingValue: timingArgs.value,
     })
   }
 }

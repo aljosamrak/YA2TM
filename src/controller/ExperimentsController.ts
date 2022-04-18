@@ -21,7 +21,7 @@ class ExperimentsController {
 
   constructor(
     private logger: NGXLogger,
-    @Inject('Analytics') private analytics: Analytics,
+    protected analytics: NgGoogleAnalyticsTracker,
     @Inject('LocalStorageService') private localStorage: LocalStorage,
   ) {}
 

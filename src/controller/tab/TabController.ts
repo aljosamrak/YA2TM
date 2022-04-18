@@ -18,12 +18,13 @@ import {Inject, Injectable} from '@angular/core'
 })
 class TabController {
   constructor(
+    private logger: NGXLogger,
+    protected analytics: NgGoogleAnalyticsTracker,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
     @Inject('LocalStorageService') private localStorage: LocalStorage,
     @Inject('DatabaseService') private database: Database,
     @Inject('BadgeController') private badgeController: BadgeController,
-    @Inject('Analytics') private analytics: Analytics,
   ) {
     chrome.tabs.onCreated.addListener(this.tabCreated.bind(this))
     chrome.tabs.onUpdated.addListener(this.tabUpdated.bind(this))

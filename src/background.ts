@@ -19,7 +19,12 @@ import {
   NGXLoggerServerService,
   NGXLoggerWriterService,
 } from 'ngx-logger'
-import {Observable} from 'rxjs'
+import { Observable } from 'rxjs'
+import {
+  AnalyticsIdConfig,
+  NgGoogleAnalyticsTracker,
+} from './app/analytics/ng-google-analytics.service'
+import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
   handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
@@ -43,13 +48,20 @@ const options = {
   providers: [
     {provide: NGXLogger, useValue: logger},
 
-    {provide: GoogleAnalytics, deps: []},
+    {
+      provide: AnalyticsIdConfig,
+      useValue: {
+        id: GOOGLE_ANALYTICS_TRACKING_ID,
+        scriptPath: 'analytics/analytics.js',
+      },
+    },
+    { provide: NgGoogleAnalyticsTracker, deps: [AnalyticsIdConfig] },
 
-    {provide: LocalStorageImpl, deps: []},
-    {provide: IndexedDBDatabase, deps: [NGXLogger, GoogleAnalytics]},
+    { provide: LocalStorageImpl, deps: [] },
+    { provide: IndexedDBDatabase, deps: [NGXLogger, NgGoogleAnalyticsTracker] },
     {
       provide: ExperimentsController,
-      deps: [NGXLogger, GoogleAnalytics, LocalStorageImpl],
+      deps: [NGXLogger, NgGoogleAnalyticsTracker, LocalStorageImpl],
     },
 
     // Models

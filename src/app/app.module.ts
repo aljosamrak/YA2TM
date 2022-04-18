@@ -29,6 +29,9 @@ import {TabInsightsModule} from './tab-insights/tab-insights.module'
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger'
 // HttpClientModule is only needed if you want to log on server or if you want to inspect sourcemaps
 import {HttpClientModule} from '@angular/common/http'
+import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
+import { NgGoogleAnalyticsModule } from './analytics/ng-google-analytics.module'
+
 
 
 @NgModule({
@@ -51,6 +54,10 @@ import {HttpClientModule} from '@angular/common/http'
       serverLoggingUrl: '/api/logs',
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR,
+    }),
+    NgGoogleAnalyticsModule.forRoot({
+      id: GOOGLE_ANALYTICS_TRACKING_ID,
+      scriptPath: 'analytics/analytics.js',
     }),
   ],
   providers: [

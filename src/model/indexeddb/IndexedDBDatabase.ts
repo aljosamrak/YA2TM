@@ -17,7 +17,7 @@ class IndexedDBDatabase implements Database {
 
   constructor(
     private logger: NGXLogger,
-    @Inject('Analytics') private analytics: Analytics,
+    protected analytics: NgGoogleAnalyticsTracker,
   ) {
     if (!indexedDB) {
       this.logger.error(
