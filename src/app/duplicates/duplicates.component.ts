@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'duplicates',
@@ -11,14 +11,14 @@ export class DuplicatesComponent implements OnInit {
   data = ''
 
   ngOnInit(): void {
-    chrome.runtime.getBackgroundPage(
-      function (bg: any) {
-        if (bg) {
-          // @ts-ignore
-          ;(this as DuplicatesComponent).data = bg.myUrl
-          // alert(myUrl)
-        }
-      }.bind(this),
-    )
+    // chrome.runtime.getBackgroundPage(
+    //   function (bg: any) {
+    //     if (bg) {
+    //       // @ts-ignore
+    //       ;(this as DuplicatesComponent).data = bg.myUrl
+    //       // alert(myUrl)
+    //     }
+    //   }.bind(this),
+    // )
   }
 }
