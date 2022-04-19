@@ -1,8 +1,8 @@
+import { Inject, Injectable } from '@angular/core'
+import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
-import {Key, LocalStorage} from '../storage/LocalStorage'
-import {Analytics} from '../analytics/Analytics'
-import {Inject, Injectable} from '@angular/core'
-import {NGXLogger} from 'ngx-logger'
+import { NgGoogleAnalyticsTracker } from '../app/analytics/ng-google-analytics.service'
+import { Key, LocalStorage } from '../storage/LocalStorage'
 
 class Experiments {
   tabDeduplication = true

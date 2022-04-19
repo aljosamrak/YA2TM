@@ -1,5 +1,5 @@
-import {IndexedDBDatabase} from '../../../model/indexeddb/IndexedDBDatabase'
-import {LEGACY_SORE_NAME_V1} from '../../../model/indexeddb/LegacyIndexedDb'
+import { IndexedDBDatabase } from '../../../model/indexeddb/IndexedDBDatabase'
+import { LEGACY_SORE_NAME_V1 } from '../../../model/indexeddb/LegacyIndexedDb'
 
 export function createAndFillDbVersion1(...objects: any[]) {
   return new Promise<IDBDatabase>((resolve) => {
@@ -7,7 +7,7 @@ export function createAndFillDbVersion1(...objects: any[]) {
     const request = indexedDB.open(IndexedDBDatabase.DATABASE_NAME, 1)
     request.onupgradeneeded = () => {
       const db = request.result
-      db.createObjectStore(LEGACY_SORE_NAME_V1, {keyPath: 'timestamp'})
+      db.createObjectStore(LEGACY_SORE_NAME_V1, { keyPath: 'timestamp' })
     }
     request.onsuccess = () => {
       resolve(request.result)

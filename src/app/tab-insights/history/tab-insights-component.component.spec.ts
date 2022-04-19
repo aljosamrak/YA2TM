@@ -1,6 +1,5 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing'
-
-import {TabInsightsComponent} from './tab-insights-component.component'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { TabInsightsComponent } from './tab-insights-component.component'
 
 describe('HistoryComponent', () => {
   let component: TabInsightsComponent

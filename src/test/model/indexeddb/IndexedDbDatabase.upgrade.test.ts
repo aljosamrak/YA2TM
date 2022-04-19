@@ -1,18 +1,17 @@
 /**
  * @jest-environment jsdom
  */
-
 import * as assert from 'assert'
+import { IndexedDBDatabase } from '../../../model/indexeddb/IndexedDBDatabase'
+import { LEGACY_SORE_NAME_V1 } from '../../../model/indexeddb/LegacyIndexedDb'
+import { TrackedEvent } from '../../../model/TrackedEvent'
+import { logger } from '../../../services/Logger'
+import { StubAnalytics } from '../../stub/StubAnalytics'
+import { createAndFillDbVersion1 } from './LegacyIndexedDbTestUtils'
+import { mockNavigationStorage } from './MockHelper'
 
 require('fake-indexeddb/auto')
 const FDBFactory = require('fake-indexeddb/lib/FDBFactory')
-import {IndexedDBDatabase} from '../../../model/indexeddb/IndexedDBDatabase'
-import {logger} from '../../../services/Logger'
-import {TrackedEvent} from '../../../model/TrackedEvent'
-import {createAndFillDbVersion1} from './LegacyIndexedDbTestUtils'
-import {StubAnalytics} from '../../stub/StubAnalytics'
-import {LEGACY_SORE_NAME_V1} from '../../../model/indexeddb/LegacyIndexedDb'
-import {mockNavigationStorage} from './MockHelper'
 
 describe('IndexedDBDatabase upgrade tests', () => {
   beforeEach(async () => {
@@ -47,8 +46,8 @@ describe('IndexedDBDatabase upgrade tests', () => {
   describe('Upgrade from version 1', () => {
     test('Old entries status gets converted correctly to event', async () => {
       await createAndFillDbVersion1(
-        {timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5},
-        {timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5},
+        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
       )
 
       const database = new IndexedDBDatabase(logger, new StubAnalytics())
@@ -77,8 +76,8 @@ describe('IndexedDBDatabase upgrade tests', () => {
 
     test('Old object store gets removed', async () => {
       await createAndFillDbVersion1(
-        {timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5},
-        {timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5},
+        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
       )
 
       const database = new IndexedDBDatabase(logger, new StubAnalytics())

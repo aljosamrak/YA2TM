@@ -1,7 +1,6 @@
 import { TabData } from '../../model/TabData'
 
 class StubTabData implements TabData {
-
   private _tabs: chrome.tabs.Tab[] = []
 
   query(): Promise<chrome.tabs.Tab[]> {

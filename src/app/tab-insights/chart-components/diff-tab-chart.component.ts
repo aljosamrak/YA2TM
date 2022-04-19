@@ -1,12 +1,12 @@
-import {Component, Inject, Input, OnInit} from '@angular/core'
-import {Database, Record} from '../../../model/Database'
+import { Component, Inject, Input, OnInit } from '@angular/core'
+import { Chart } from 'chart.js'
 import 'chartjs-adapter-moment'
-import 'hammerjs'
-import 'chartjs-plugin-zoom'
-import {BaseTabChartComponent, CHART_COLORS} from './base-tab-chart.component'
-import {TrackedEvent} from '../../../model/TrackedEvent'
 import annotationPlugin from 'chartjs-plugin-annotation'
-import {Chart} from 'chart.js'
+import 'chartjs-plugin-zoom'
+import 'hammerjs'
+import { Database, Record } from '../../../model/Database'
+import { TrackedEvent } from '../../../model/TrackedEvent'
+import { BaseTabChartComponent, CHART_COLORS } from './base-tab-chart.component'
 
 @Component({
   selector: 'diff-tab-chart-component',

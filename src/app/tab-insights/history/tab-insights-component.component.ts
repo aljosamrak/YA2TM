@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core'
-import {Database, Record} from '../../../model/Database'
-import {TrackedEvent} from '../../../model/TrackedEvent'
+import { Component, Inject, OnInit } from '@angular/core'
+import { Database, Record } from '../../../model/Database'
+import { TrackedEvent } from '../../../model/TrackedEvent'
 
 const DAYS_7 = 17 * 24 * 3600 * 1000
 
@@ -26,6 +26,7 @@ export class TabInsightsComponent implements OnInit {
       max: timeNow,
     }
   }
+
   //TODO reset zoom button
   ngOnInit(): void {
     const timeNow = Date.now()

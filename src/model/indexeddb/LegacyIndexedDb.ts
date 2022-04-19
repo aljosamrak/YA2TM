@@ -1,5 +1,5 @@
-import {Record} from '../Database'
-import {TrackedEvent} from '../TrackedEvent'
+import { Record } from '../Database'
+import { TrackedEvent } from '../TrackedEvent'
 
 export const LEGACY_SORE_NAME_V1 = 'tabs'
 

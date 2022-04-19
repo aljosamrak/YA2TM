@@ -1,6 +1,6 @@
-import {TrackedEvent} from './TrackedEvent'
+import { TrackedEvent } from './TrackedEvent'
 
-type Record = {
+export type Record = {
   timestamp: number
   event: TrackedEvent
   url: string

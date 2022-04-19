@@ -1,6 +1,6 @@
 type Key<T> = {
-  key: string;
-  defaultValue: T;
+  key: string
+  defaultValue: T
 }
 
 interface LocalStorage {

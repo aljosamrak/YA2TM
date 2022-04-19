@@ -1,5 +1,5 @@
-import {BadgeView} from '../BadgeView'
-import {Injectable} from '@angular/core'
+import { Injectable } from '@angular/core'
+import { BadgeView } from '../BadgeView'
 
 @Injectable({
   providedIn: 'root',

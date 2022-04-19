@@ -1,7 +1,6 @@
 import { BadgeView } from '../../view/BadgeView'
 
 class StubBadgeView implements BadgeView {
-
   private _text = ''
   private _color = ''
 

@@ -6,14 +6,14 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
-import {Chart, ChartConfiguration, ChartType, TooltipItem} from 'chart.js'
-import {Database, Record} from '../../../model/Database'
+import { Chart, ChartConfiguration, ChartType, TooltipItem } from 'chart.js'
 import 'chartjs-adapter-moment'
-import 'hammerjs'
 import 'chartjs-plugin-zoom'
 import zoomPlugin from 'chartjs-plugin-zoom'
-import {DateRange} from '../history/tab-insights-component.component'
-import {BaseChartDirective} from 'ng2-charts'
+import 'hammerjs'
+import { BaseChartDirective } from 'ng2-charts'
+import { Database, Record } from '../../../model/Database'
+import { DateRange } from '../history/tab-insights-component.component'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -34,7 +34,7 @@ export class BaseTabChartComponent {
   private database: Database
 
   public lineChartType: ChartType = 'line'
-  public lineChartData: ChartConfiguration['data'] = {datasets: []}
+  public lineChartData: ChartConfiguration['data'] = { datasets: [] }
 
   @ViewChild(BaseChartDirective) protected chart: BaseChartDirective | undefined
 
@@ -69,9 +69,9 @@ export class BaseTabChartComponent {
     return 'Sum: ' + sum
   }
 
-  onZoomPanChange(context: {chart: Chart}) {
-    const {min, max} = context.chart.scales['x']
-    this.dataRangeOutput.emit({min, max})
+  onZoomPanChange(context: { chart: Chart }) {
+    const { min, max } = context.chart.scales['x']
+    this.dataRangeOutput.emit({ min, max })
   }
 
   public lineChartOptions: ChartConfiguration['options'] = {

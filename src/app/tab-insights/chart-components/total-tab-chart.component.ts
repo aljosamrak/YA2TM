@@ -1,10 +1,10 @@
-import {Component, Inject, Input, OnInit} from '@angular/core'
-import {Database, Record} from '../../../model/Database'
+import { Component, Inject, Input, OnInit } from '@angular/core'
+import { LinearScaleOptions } from 'chart.js'
 import 'chartjs-adapter-moment'
-import 'hammerjs'
 import 'chartjs-plugin-zoom'
-import {BaseTabChartComponent} from './base-tab-chart.component'
-import {LinearScaleOptions} from 'chart.js'
+import 'hammerjs'
+import { Database, Record } from '../../../model/Database'
+import { BaseTabChartComponent } from './base-tab-chart.component'
 
 @Component({
   selector: 'total-tab-chart-component',

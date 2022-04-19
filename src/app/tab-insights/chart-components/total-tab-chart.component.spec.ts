@@ -1,6 +1,5 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing'
-
-import {TotalTabChartComponent} from './total-tab-chart.component'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { TotalTabChartComponent } from './total-tab-chart.component'
 
 describe('TotalTabChartComponentComponent', () => {
   let component: TotalTabChartComponent

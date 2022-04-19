@@ -1,7 +1,6 @@
 import { WindowData } from '../../model/WindowData'
 
 class StubWindowData implements WindowData {
-
   private _windows: chrome.windows.Window[] = []
 
   getAll(): Promise<chrome.windows.Window[]> {

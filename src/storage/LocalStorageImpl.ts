@@ -1,5 +1,5 @@
-import {Key, LocalStorage} from './LocalStorage'
-import {Injectable} from '@angular/core'
+import { Injectable } from '@angular/core'
+import { Key, LocalStorage } from './LocalStorage'
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ class LocalStorageImpl implements LocalStorage {
   }
 
   async set(key: Key<any>, value: any): Promise<void> {
-    return chrome.storage.local.set({ [key.key] : value })
+    return chrome.storage.local.set({ [key.key]: value })
   }
 
   addOnChangedListener(callback: (changes: object, areaName: string) => void): void {

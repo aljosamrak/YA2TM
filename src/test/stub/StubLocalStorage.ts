@@ -4,7 +4,7 @@ class StubLocalStorage implements LocalStorage {
   _localStore = {}
 
   addOnChangedListener(
-    callback: (changes: object, areaName: string) => void
+    callback: (changes: object, areaName: string) => void,
   ): void {}
 
   get<T>(key: Key<T>): Promise<{ [p: string]: T }> {
@@ -15,7 +15,7 @@ class StubLocalStorage implements LocalStorage {
   }
 
   set<T>(key: Key<T>, value: any): void {
-    (this._localStore as any)[key.key] = value
+    ;(this._localStore as any)[key.key] = value
   }
 }
 

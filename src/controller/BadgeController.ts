@@ -1,10 +1,10 @@
+import { Inject, Injectable } from '@angular/core'
 import 'reflect-metadata'
-import {LocalStorage} from '../storage/LocalStorage'
-import {BadgeTextType, USER_PREFERENCES} from '../storage/Key'
-import {BadgeView} from '../view/BadgeView'
-import {TabData} from '../model/TabData'
-import {WindowData} from '../model/WindowData'
-import {Inject, Injectable} from '@angular/core'
+import { TabData } from '../model/TabData'
+import { WindowData } from '../model/WindowData'
+import { BadgeTextType, USER_PREFERENCES } from '../storage/Key'
+import { LocalStorage } from '../storage/LocalStorage'
+import { BadgeView } from '../view/BadgeView'
 
 @Injectable({
   providedIn: 'root',

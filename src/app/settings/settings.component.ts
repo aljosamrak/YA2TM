@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.sass']
+  styleUrls: ['./settings.component.sass'],
 })
 export class SettingsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

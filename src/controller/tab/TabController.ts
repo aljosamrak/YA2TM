@@ -1,17 +1,17 @@
+import { Inject, Injectable } from '@angular/core'
+import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
-import {LocalStorage} from '../../storage/LocalStorage'
-import {TabData} from '../../model/TabData'
-import {WindowData} from '../../model/WindowData'
-import {BadgeController} from '../BadgeController'
-import {TrackedEvent} from '../../model/TrackedEvent'
-import {Database} from '../../model/Database'
-import {Experiments} from '../../experiment/Experiments'
-import Tab = chrome.tabs.Tab
+import { NgGoogleAnalyticsTracker } from '../../app/analytics/ng-google-analytics.service'
+import { Database } from '../../model/Database'
+import { TabData } from '../../model/TabData'
+import { TrackedEvent } from '../../model/TrackedEvent'
+import { WindowData } from '../../model/WindowData'
+import { LocalStorage } from '../../storage/LocalStorage'
+import { BadgeController } from '../BadgeController'
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
 import TabChangeInfo = chrome.tabs.TabChangeInfo
-import {Analytics} from '../../analytics/Analytics'
-import {Inject, Injectable} from '@angular/core'
+import Tab = chrome.tabs.Tab
 
 @Injectable({
   providedIn: 'root',

@@ -1,4 +1,4 @@
-import {Analytics, EventArgs, TimingArgs} from '../../analytics/Analytics'
+import { Analytics, EventArgs, TimingArgs } from '../../analytics/Analytics'
 
 class StubAnalytics implements Analytics {
   event(args: EventArgs): void {}
@@ -8,4 +8,4 @@ class StubAnalytics implements Analytics {
   modalView(path: string): void {}
 }
 
-export {StubAnalytics}
+export { StubAnalytics }

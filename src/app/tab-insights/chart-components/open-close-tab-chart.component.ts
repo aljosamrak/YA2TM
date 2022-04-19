@@ -1,10 +1,10 @@
-import {Component, Inject, Input} from '@angular/core'
-import {Database, Record} from '../../../model/Database'
+import { Component, Inject, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
-import 'hammerjs'
 import 'chartjs-plugin-zoom'
-import {BaseTabChartComponent} from './base-tab-chart.component'
-import {TrackedEvent} from '../../../model/TrackedEvent'
+import 'hammerjs'
+import { Database, Record } from '../../../model/Database'
+import { TrackedEvent } from '../../../model/TrackedEvent'
+import { BaseTabChartComponent } from './base-tab-chart.component'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',

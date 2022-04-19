@@ -7,8 +7,8 @@ function mockNavigationStorage() {
 
 class MockNavigator {
   estimate() {
-    return Promise.resolve({data: {}})
+    return Promise.resolve({ data: {} })
   }
 }
 
-export {mockNavigationStorage}
+export { mockNavigationStorage }

@@ -1,9 +1,9 @@
-import {Component, Inject, Input} from '@angular/core'
-import {Database, Record} from '../../../model/Database'
+import { Component, Inject, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
-import 'hammerjs'
 import 'chartjs-plugin-zoom'
-import {BaseTabChartComponent} from './base-tab-chart.component'
+import 'hammerjs'
+import { Database, Record } from '../../../model/Database'
+import { BaseTabChartComponent } from './base-tab-chart.component'
 
 @Component({
   selector: 'total-window-chart-component',

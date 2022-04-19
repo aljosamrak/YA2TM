@@ -1,15 +1,14 @@
 /**
  * @jest-environment jsdom
  */
-
-import {mockNavigationStorage} from './MockHelper'
+import { IndexedDBDatabase } from '../../../model/indexeddb/IndexedDBDatabase'
+import { TrackedEvent } from '../../../model/TrackedEvent'
+import { logger } from '../../../services/Logger'
+import { StubAnalytics } from '../../stub/StubAnalytics'
+import { mockNavigationStorage } from './MockHelper'
 
 require('fake-indexeddb/auto')
 const FDBFactory = require('fake-indexeddb/lib/FDBFactory')
-import {IndexedDBDatabase} from '../../../model/indexeddb/IndexedDBDatabase'
-import {logger} from '../../../services/Logger'
-import {TrackedEvent} from '../../../model/TrackedEvent'
-import {StubAnalytics} from '../../stub/StubAnalytics'
 
 describe('IndexedDBDatabase tests', () => {
   let dbDatabase: IndexedDBDatabase
