@@ -1,9 +1,9 @@
+import { Injectable } from '@angular/core'
+import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
-import {Database, Record} from '../Database'
-import {convert, LEGACY_SORE_NAME_V1, OldRecord} from './LegacyIndexedDb'
-import {Analytics} from '../../analytics/Analytics'
-import {Inject, Injectable} from '@angular/core'
-import {NGXLogger} from 'ngx-logger'
+import { NgGoogleAnalyticsTracker } from '../../app/analytics/ng-google-analytics.service'
+import { Database, Record } from '../Database'
+import { convert, LEGACY_SORE_NAME_V1, OldRecord } from './LegacyIndexedDb'
 
 @Injectable({
   providedIn: 'root',
