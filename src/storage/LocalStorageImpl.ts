@@ -10,7 +10,7 @@ class LocalStorageImpl implements LocalStorage {
       if (result[key.key]) {
         return result
       }
-      return { key: key.defaultValue }
+      return { [key.key]: key.defaultValue }
     })
   }
 
@@ -18,7 +18,9 @@ class LocalStorageImpl implements LocalStorage {
     return chrome.storage.local.set({ [key.key]: value })
   }
 
-  addOnChangedListener(callback: (changes: object, areaName: string) => void): void {
+  addOnChangedListener(
+    callback: (changes: object, areaName: string) => void,
+  ): void {
     chrome.storage.onChanged.addListener(callback)
   }
 }
