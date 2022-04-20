@@ -20,7 +20,6 @@ import { AppComponent } from './app.component'
 import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/settings.component'
-import { TabGraphComponent } from './tab-graph/tab-graph.component'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
 
@@ -51,23 +50,20 @@ import { TabsComponent } from './tabs/tabs.component'
     }),
   ],
   providers: [
-    {provide: 'Analytics', useClass: GoogleAnalytics},
-
-    {provide: 'LocalStorage', useClass: LocalStorageImpl},
-    {provide: 'Database', useClass: IndexedDBDatabase},
-    {provide: 'ExperimentsController', useClass: ExperimentsController},
+    { provide: 'LocalStorage', useClass: LocalStorageImpl },
+    { provide: 'Database', useClass: IndexedDBDatabase },
+    { provide: 'ExperimentsController', useClass: ExperimentsController },
 
     // Models
-    {provide: 'TabData', useClass: ChromeTabData},
-    {provide: 'WindowData', useClass: ChromeWindowData},
+    { provide: 'TabData', useClass: ChromeTabData },
+    { provide: 'WindowData', useClass: ChromeWindowData },
 
     // Views
-    {provide: 'BadgeView', useClass: ChromeBadgeView},
+    { provide: 'BadgeView', useClass: ChromeBadgeView },
 
     // Controllers
-    {provide: 'BadgeController', useClass: BadgeController},
-    {provide: 'TabController', useClass: TabController},
-    {provide: 'Analytics', useClass: GoogleAnalytics},
+    { provide: 'BadgeController', useClass: BadgeController },
+    { provide: 'TabController', useClass: TabController },
   ],
   bootstrap: [AppComponent],
 })
