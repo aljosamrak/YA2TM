@@ -1,5 +1,5 @@
-import {WindowData} from '../WindowData'
-import {Injectable} from '@angular/core'
+import { Injectable } from '@angular/core'
+import { WindowData } from '../WindowData'
 
 @Injectable({
   providedIn: 'root',

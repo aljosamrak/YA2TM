@@ -10,17 +10,20 @@ import { BadgeView } from '../view/BadgeView'
   providedIn: 'root',
 })
 class BadgeController {
-
   constructor(
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
     @Inject('LocalStorageService') private localStorage: LocalStorage,
     @Inject('BadgeView') private badgeView: BadgeView,
   ) {
-    this.localStorage.addOnChangedListener(() => this.updateTabCount(tabData.query()))
+    this.localStorage.addOnChangedListener(() =>
+      this.updateTabCount(tabData.query()),
+    )
   }
 
-  async updateTabCount(currentTabsPromise: Promise<chrome.tabs.Tab[]>): Promise<any> {
+  async updateTabCount(
+    currentTabsPromise: Promise<chrome.tabs.Tab[]>,
+  ): Promise<any> {
     const [tabs, localStorageResult] = await Promise.all([
       currentTabsPromise,
       this.localStorage.get(USER_PREFERENCES),
@@ -33,7 +36,7 @@ class BadgeController {
 
     // Set tab number
     const badgeTextPromise = this.getBadgeText(
-      localStorageResult[USER_PREFERENCES.key].badgeTextType
+      localStorageResult[USER_PREFERENCES.key].badgeTextType,
     ).then((text) => this.badgeView.setText(text))
 
     // Set badge color
@@ -43,8 +46,8 @@ class BadgeController {
         this.badgeView.setBackgroundColor(
           this.getBadgeColor(
             tabs.length,
-            localStorageResult[USER_PREFERENCES.key].desiredTabs
-          )
+            localStorageResult[USER_PREFERENCES.key].desiredTabs,
+          ),
         ),
       ])
     }

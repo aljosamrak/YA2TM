@@ -1,15 +1,6 @@
-import {GoogleAnalytics} from './analytics/GoogleAnalytics'
-import {BadgeController} from './controller/BadgeController'
-import {ExperimentsController} from './controller/ExperimentsController'
-import {TabController} from './controller/tab/TabController'
-import {ChromeTabData} from './model/chrome/ChromeTabData'
-import {ChromeWindowData} from './model/chrome/ChromeWindowData'
-import {IndexedDBDatabase} from './model/indexeddb/IndexedDBDatabase'
-import {LocalStorageImpl} from './storage/LocalStorageImpl'
-import {ChromeBadgeView} from './view/chrome/ChromeBadgeView'
-import {DatePipe} from '@angular/common'
-import {HttpBackend, HttpEvent, HttpRequest} from '@angular/common/http'
-import {Injector} from '@angular/core'
+import { DatePipe } from '@angular/common'
+import { HttpBackend, HttpEvent, HttpRequest } from '@angular/common/http'
+import { Injector } from '@angular/core'
 import {
   NGXLogger,
   NGXLoggerConfigEngineFactory,
@@ -24,7 +15,15 @@ import {
   AnalyticsIdConfig,
   NgGoogleAnalyticsTracker,
 } from './app/analytics/ng-google-analytics.service'
+import { BadgeController } from './controller/BadgeController'
+import { ExperimentsController } from './controller/ExperimentsController'
+import { TabController } from './controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
+import { ChromeTabData } from './model/chrome/ChromeTabData'
+import { ChromeWindowData } from './model/chrome/ChromeWindowData'
+import { IndexedDBDatabase } from './model/indexeddb/IndexedDBDatabase'
+import { LocalStorageImpl } from './storage/LocalStorageImpl'
+import { ChromeBadgeView } from './view/chrome/ChromeBadgeView'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
   handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
@@ -35,7 +34,7 @@ const httpBackend = new (class MyRunnable extends HttpBackend {
 })()
 
 const logger = new NGXLogger(
-  {level: 0, serverLogLevel: 0, disableConsoleLogging: false},
+  { level: 0, serverLogLevel: 0, disableConsoleLogging: false },
   new NGXLoggerConfigEngineFactory(),
   new NGXLoggerMetadataService(new DatePipe('', undefined)),
   new NGXLoggerRulesService(),
@@ -46,7 +45,7 @@ const logger = new NGXLogger(
 
 const options = {
   providers: [
-    {provide: NGXLogger, useValue: logger},
+    { provide: NGXLogger, useValue: logger },
 
     {
       provide: AnalyticsIdConfig,
@@ -65,11 +64,11 @@ const options = {
     },
 
     // Models
-    {provide: ChromeTabData, deps: []},
-    {provide: ChromeWindowData, deps: []},
+    { provide: ChromeTabData, deps: [] },
+    { provide: ChromeWindowData, deps: [] },
 
     // Views
-    {provide: ChromeBadgeView, deps: []},
+    { provide: ChromeBadgeView, deps: [] },
 
     // Controllers
     {
@@ -90,7 +89,7 @@ const options = {
         LocalStorageImpl,
         IndexedDBDatabase,
         BadgeController,
-        GoogleAnalytics,
+        NgGoogleAnalyticsTracker,
         ExperimentsController,
       ],
     },

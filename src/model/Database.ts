@@ -8,10 +8,8 @@ export type Record = {
   tabs: number
 }
 
-interface Database {
+export interface Database {
   insert_records(record: Record): Promise<void>
 
   query(startDate: number, endDate: number): Promise<Record[]>
 }
-
-export {Database, Record}

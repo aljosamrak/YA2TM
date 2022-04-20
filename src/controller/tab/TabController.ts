@@ -85,7 +85,7 @@ class TabController {
       chrome.tabs.query({}),
     ])
 
-    chrome.action.setBadgeText({text: tabs.length.toString()})
+    chrome.action.setBadgeText({ text: tabs.length.toString() })
 
     this.database.insert_records({
       timestamp: timeNow,
@@ -100,9 +100,7 @@ class TabController {
     newTab: chrome.tabs.Tab,
     existingTabsPromise: Promise<chrome.tabs.Tab[]>,
   ) {
-    if (!new Experiments().tabDeduplication) {
-      return
-    }
+    return
 
     if (newTab.id === undefined) {
       return
@@ -116,4 +114,4 @@ class TabController {
   }
 }
 
-export {TabController}
+export { TabController }

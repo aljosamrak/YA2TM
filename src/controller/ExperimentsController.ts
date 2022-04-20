@@ -38,10 +38,7 @@ class ExperimentsController {
     // })
 
     return await this.localStorage.get(EXPERIMENTS).then((result: any) => {
-      const a = this
       this.experiments = result[EXPERIMENTS.key]
-      const b = result[EXPERIMENTS.key]
-      const c = result['key']
       return result[EXPERIMENTS.key]
     })
   }
@@ -55,4 +52,4 @@ class ExperimentsController {
   }
 }
 
-export {Experiments, ExperimentsController}
+export { Experiments, ExperimentsController }
