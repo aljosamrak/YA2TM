@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { TabData } from '../TabData'
 import Tab = chrome.tabs.Tab
-import {Injectable} from '@angular/core'
 
 @Injectable({
   providedIn: 'root',
