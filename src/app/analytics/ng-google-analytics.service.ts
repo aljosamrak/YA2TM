@@ -43,41 +43,41 @@ export class NgGoogleAnalyticsTracker {
       console.error(ex)
     }
 
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        ga('set', 'page', event.url)
-        ga('send', 'pageview')
-      }
-    })
+    // router?.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     ga('set', 'page', event.url)
+    //     ga('send', 'pageview')
+    //   }
+    // })
   }
 
   public create(gaTrackingID: string, options?: any) {
-    if (options && options.gaOptions) {
-      ga('create', gaTrackingID, options.gaOptions)
-    } else {
-      ga('create', gaTrackingID, 'auto')
-    }
-
-    ga('set', 'checkProtocolTask', () => {
-      /* nothing */
-    })
+    // if (options && options.gaOptions) {
+    //   ga('create', gaTrackingID, options.gaOptions)
+    // } else {
+    //   ga('create', gaTrackingID, 'auto')
+    // }
+    //
+    // ga('set', 'checkProtocolTask', () => {
+    //   /* nothing */
+    // })
   }
 
   event(eventArgs: EventArgs) {
-    ga('send', 'event', {
-      eventCategory: eventArgs.category,
-      eventLabel: eventArgs.label,
-      eventAction: eventArgs.action,
-      eventValue: eventArgs.value,
-    })
+    // ga('send', 'event', {
+    //   eventCategory: eventArgs.category,
+    //   eventLabel: eventArgs.label,
+    //   eventAction: eventArgs.action,
+    //   eventValue: eventArgs.value,
+    // })
   }
 
   public time(timingArgs: TimingArgs) {
-    ga('send', 'timing', {
-      timingCategory: timingArgs.category,
-      timingVar: timingArgs.value,
-      timingLabel: timingArgs.label,
-      timingValue: timingArgs.value,
-    })
+    // ga('send', 'timing', {
+    //   timingCategory: timingArgs.category,
+    //   timingVar: timingArgs.value,
+    //   timingLabel: timingArgs.label,
+    //   timingValue: timingArgs.value,
+    // })
   }
 }
