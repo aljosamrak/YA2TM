@@ -1,0 +1,40 @@
+<h1 class="text-xs-center">Settings</h1>
+
+<form [formGroup]="settingsForm">
+  <div class="form-group">
+    <input type="checkbox" formControlName="colorful" id="colorful" />
+    <label for="colorful" >colorful</label>
+  </div>
+
+  <div class="form-group">
+    <label for="favoriteColor" >favoriteColor</label>
+    <input class="form-control" type="text" formControlName="favoriteColor" id="favoriteColor" />
+  </div>
+
+  <div class="form-group">
+    <label for="desiredTabs" >desiredTabs</label>
+    <input class="form-control" type="number" formControlName="desiredTabs" id="desiredTabs" />
+  </div>
+
+  <div class="form-group">
+    <input type="checkbox" formControlName="experimentsEnabled" id="experimentsEnabled" />
+    <label for="experimentsEnabled" >experimentsEnabled</label>
+  </div>
+
+  <fieldset class="form-group" *ngIf="experimentsEnabled" formGroupName="experiments">
+    <div class="form-group">
+      <input type="checkbox" formControlName="deduplicateTabs" id="deduplicateTabs" />
+      <label for="deduplicateTabs" >deduplicateTabs</label>
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" formControlName="achievementsEnabled" id="achievementsEnabled" />
+      <label for="achievementsEnabled" >achievementsEnabled</label>
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" formControlName="tabsEnabled" id="tabsEnabled" />
+      <label for="tabsEnabled" >tabsEnabled</label>
+    </div>
+  </fieldset>
+</form>
