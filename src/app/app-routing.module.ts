@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { AchievementsComponent } from './achievements/achievements.component'
 import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
-import { SettingsComponent } from './settings/settings.component'
+import { SettingsComponent } from './settings/component/settings.component'
 import { TabInsightsComponent } from './tab-insights/history/tab-insights-component.component'
 import { TabsComponent } from './tabs/tabs.component'
 

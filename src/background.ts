@@ -15,8 +15,8 @@ import {
   AnalyticsIdConfig,
   NgGoogleAnalyticsTracker,
 } from './app/analytics/ng-google-analytics.service'
+import { SettingsService } from './app/settings/service/settings.service'
 import { BadgeController } from './controller/BadgeController'
-import { ExperimentsController } from './controller/ExperimentsController'
 import { TabController } from './controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 import { ChromeTabData } from './model/chrome/ChromeTabData'
@@ -58,10 +58,8 @@ const options = {
 
     { provide: LocalStorageImpl, deps: [] },
     { provide: IndexedDBDatabase, deps: [NGXLogger, NgGoogleAnalyticsTracker] },
-    {
-      provide: ExperimentsController,
-      deps: [NGXLogger, NgGoogleAnalyticsTracker, LocalStorageImpl],
-    },
+
+    { provide: SettingsService, deps: [LocalStorageImpl] },
 
     // Models
     { provide: ChromeTabData, deps: [] },
@@ -84,13 +82,13 @@ const options = {
       provide: TabController,
       deps: [
         NGXLogger,
+        NgGoogleAnalyticsTracker,
+        SettingsService,
         ChromeTabData,
         ChromeWindowData,
         LocalStorageImpl,
         IndexedDBDatabase,
         BadgeController,
-        NgGoogleAnalyticsTracker,
-        ExperimentsController,
       ],
     },
   ],

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 import { NgGoogleAnalyticsTracker } from '../../app/analytics/ng-google-analytics.service'
+import { SettingsService } from '../../app/settings/service/settings.service'
 import { Database } from '../../model/Database'
 import { TabData } from '../../model/TabData'
 import { TrackedEvent } from '../../model/TrackedEvent'
@@ -20,6 +21,7 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     protected analytics: NgGoogleAnalyticsTracker,
+    protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
     @Inject('LocalStorageService') private localStorage: LocalStorage,
@@ -100,6 +102,11 @@ class TabController {
     newTab: chrome.tabs.Tab,
     existingTabsPromise: Promise<chrome.tabs.Tab[]>,
   ) {
+    if (
+      !this.settingsService.getUserPreferences().experiments.deduplicateTabs
+    ) {
+      return
+    }
     return
 
     if (newTab.id === undefined) {

@@ -19,7 +19,7 @@
     <div class="container-fluid justify-content-between">
       <!-- Left elements -->
       <ul class="navbar-nav flex-row d-none d-md-flex">
-        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='tabsEnabled'>
           <a class="nav-link waves-light" mdbWavesEffect routerLink="/tabs">
             <span>Tabs</span>
           </a>
@@ -31,7 +31,7 @@
           </a>
         </li>
 
-        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='duplicateEnabled'>
           <a
             class="nav-link waves-light"
             mdbWavesEffect
@@ -56,7 +56,7 @@
             />
           </a>
         </li>
-        <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='achievementsEnabled'>
           <a
             class="nav-link waves-light"
             mdbWavesEffect

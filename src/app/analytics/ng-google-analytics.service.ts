@@ -29,7 +29,7 @@ export type TimingArgs = {
   providedIn: 'root',
 })
 export class NgGoogleAnalyticsTracker {
-  constructor(router: Router, @Optional() config: AnalyticsIdConfig) {
+  constructor(config: AnalyticsIdConfig, @Optional() router: Router) {
     try {
       loadGa({
         gaAddress: config.scriptPath,

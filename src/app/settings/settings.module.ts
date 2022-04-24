@@ -5,12 +5,15 @@ import {
   Optional,
   SkipSelf,
 } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  declarations: [],
+  exports: [CommonModule, FormsModule, ReactiveFormsModule],
 })
 export class SettingsModule {
-  static forRoot(): ModuleWithProviders<SettingsModule> {
+  public static forRoot(): ModuleWithProviders<SettingsModule> {
     return {
       ngModule: SettingsModule,
     }

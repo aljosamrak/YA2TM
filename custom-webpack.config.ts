@@ -1,7 +1,7 @@
-import type {Configuration} from 'webpack'
+import type { Configuration } from 'webpack'
 
 module.exports = {
-  entry: {background: 'src/background.ts'},
+  entry: { background: 'src/background.ts' },
   optimization: {
     runtimeChunk: false,
   },

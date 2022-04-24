@@ -5,7 +5,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { NgChartsModule } from 'ng2-charts'
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'
 import { BadgeController } from '../controller/BadgeController'
-import { ExperimentsController } from '../controller/ExperimentsController'
 import { TabController } from '../controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
 import { ChromeTabData } from '../model/chrome/ChromeTabData'
@@ -19,10 +18,10 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
-import { SettingsComponent } from './settings/settings.component'
+import { SettingsComponent } from './settings/component/settings.component'
+import { SettingsModule } from './settings/settings.module'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
-
 
 @NgModule({
   declarations: [
@@ -38,7 +37,8 @@ import { TabsComponent } from './tabs/tabs.component'
     AppRoutingModule,
     NgChartsModule,
     TabInsightsModule,
-    MDBBootstrapModule.forRoot(), // HttpClientModule is only needed if you want to log on server or if you want to inspect sourcemaps
+    MDBBootstrapModule.forRoot(),
+    // HttpClientModule is only needed if you want to log on server or if you want to inspect sourcemaps
     HttpClientModule,
     LoggerModule.forRoot({
       level: NgxLoggerLevel.DEBUG,
@@ -48,11 +48,11 @@ import { TabsComponent } from './tabs/tabs.component'
       id: GOOGLE_ANALYTICS_TRACKING_ID,
       scriptPath: 'analytics/analytics.js',
     }),
+    SettingsModule.forRoot(),
   ],
   providers: [
     { provide: 'LocalStorage', useClass: LocalStorageImpl },
     { provide: 'Database', useClass: IndexedDBDatabase },
-    { provide: 'ExperimentsController', useClass: ExperimentsController },
 
     // Models
     { provide: 'TabData', useClass: ChromeTabData },
