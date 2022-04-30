@@ -1,7 +1,5 @@
 import { Injectable, Optional } from '@angular/core'
-import { NavigationEnd, Router } from '@angular/router'
-// @ts-ignore
-import loadGa from './loadGA'
+import { Router } from '@angular/router'
 
 declare var ga: Function
 
@@ -31,13 +29,12 @@ export type TimingArgs = {
 export class NgGoogleAnalyticsTracker {
   constructor(config: AnalyticsIdConfig, @Optional() router: Router) {
     try {
-      loadGa({
-        gaAddress: config.scriptPath,
-      })
-
-      this.create(config.id, {
-        siteSpeedSampleRate: 100,
-      })
+      // loadGa({
+      //   gaAddress: config.scriptPath,
+      // })
+      // this.create(config.id, {
+      //   siteSpeedSampleRate: 100,
+      // })
     } catch (ex) {
       console.error('Error appending google analytics')
       console.error(ex)
