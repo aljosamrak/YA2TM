@@ -16,7 +16,12 @@ export class SettingsService {
     // TODO replace with a service
     chrome.storage.local.get('USER_PREFERENCES').then((userPreferences) => {
       if (userPreferences) {
-        this.updateUserPreferences(userPreferences['USER_PREFERENCES'])
+        this.updateUserPreferences(
+          Object.assign(
+            new UserPreferences(),
+            userPreferences['USER_PREFERENCES'],
+          ),
+        )
       } else {
         this.updateUserPreferences(new UserPreferences())
       }
