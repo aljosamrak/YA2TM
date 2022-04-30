@@ -17,7 +17,7 @@ export class SettingsService {
     chrome.storage.local.get('USER_PREFERENCES').then((userPreferences) => {
       if (userPreferences) {
         this.updateUserPreferences(
-          Object.assign(
+          this.mergeDeep(
             new UserPreferences(),
             userPreferences['USER_PREFERENCES'],
           ),
@@ -29,12 +29,56 @@ export class SettingsService {
   }
 
   updateUserPreferences(newValue: UserPreferences) {
+    if (
+      JSON.stringify(this.userPreferences.getValue()) ===
+      JSON.stringify(newValue)
+    ) {
+      return
+    }
+
     this.userPreferences.next(newValue)
     // TODO replace with a service
     return chrome.storage.local.set({ USER_PREFERENCES: newValue })
   }
 
   getUserPreferences() {
-    return this.userPreferences.getValue()
+    return JSON.parse(JSON.stringify(this.userPreferences.getValue()))
+  }
+
+  enableExperiments() {
+    const settings: UserPreferences = this.getUserPreferences()
+    settings.experimentsEnabled = true
+    this.updateUserPreferences(settings)
+  }
+
+  /**
+   * Deep merge two objects.
+   * @param target
+   * @param ...sources
+   */
+  private mergeDeep(target: any, ...sources: any): any {
+    if (!sources.length) {
+      return target
+    }
+    const source = sources.shift()
+
+    if (SettingsService.isObject(target) && SettingsService.isObject(source)) {
+      for (const key in source) {
+        if (SettingsService.isObject(source[key])) {
+          if (!target[key]) {
+            Object.assign(target, { [key]: {} })
+          }
+          this.mergeDeep(target[key], source[key])
+        } else {
+          Object.assign(target, { [key]: source[key] })
+        }
+      }
+    }
+
+    return this.mergeDeep(target, ...sources)
+  }
+
+  private static isObject(item: any) {
+    return item && typeof item === 'object' && !Array.isArray(item)
   }
 }

@@ -17,6 +17,7 @@ export class SettingsComponent implements OnInit {
 
   settingsForm: FormGroup
 
+  experimentsEnabled?: boolean
   badgeEnabled?: boolean
 
   public FileType2LabelMapping: Record<any, string> = {
@@ -51,6 +52,7 @@ export class SettingsComponent implements OnInit {
     this.subscription = this.settingsService.userPreferences$
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
+        this.experimentsEnabled = item.experimentsEnabled
         this.settingsForm.patchValue(item)
       })
   }

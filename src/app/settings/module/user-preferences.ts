@@ -3,8 +3,8 @@ export class UserPreferences {
   badgeSettings = new BadgeSettings()
 
   favoriteColor = ''
-  desiredTabs = 30
 
+  experimentsEnabled = false
   experiments = new Experiments()
 }
 
@@ -22,7 +22,9 @@ export enum BadgeTextType {
 }
 
 export class Experiments {
+  tabsEnabled = false
+  drillDownEnabled = false
   deduplicateTabs = false
   achievementsEnabled = false
-  tabsEnabled = false
+  desiredTabs = 30
 }

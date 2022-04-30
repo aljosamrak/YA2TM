@@ -32,4 +32,17 @@ export class AppComponent implements OnInit {
   openFullScreen() {
     window.open(chrome.runtime.getURL('index.html'))
   }
+
+  settingsClick() {
+    if (Date.now() - this.settingsLastClicked < 1000) {
+      this.settingsNumClicked++
+    } else {
+      this.settingsNumClicked = 1
+    }
+    this.settingsLastClicked = Date.now()
+
+    if (this.settingsNumClicked >= 5) {
+      this.settingsService.enableExperiments()
+    }
+  }
 }
