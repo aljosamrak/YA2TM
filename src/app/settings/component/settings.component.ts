@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 import { LocalStorage } from '../../../storage/LocalStorage'
-import { UserPreferences } from '../module/user-preferences'
+import { BadgeTextType, UserPreferences } from '../module/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
 @Component({
@@ -17,7 +17,17 @@ export class SettingsComponent implements OnInit {
 
   settingsForm: FormGroup
 
-  experimentsEnabled?: boolean
+  badgeEnabled?: boolean
+
+  public FileType2LabelMapping: Record<any, string> = {
+    [BadgeTextType.TABS_NUM]: 'Number of tabs',
+    [BadgeTextType.WINDOW_NUM]: 'Number of Windows',
+    [BadgeTextType.DEDUPLICATED_TABS]: 'Number of deduplicated tabs',
+    [BadgeTextType.DAY_DIFF]: 'Tab difference',
+  }
+  public fileTypes = Object.values(BadgeTextType).filter(
+    (value) => typeof value === 'number',
+  )
 
   constructor(
     @Inject('LocalStorage') private localStorage: LocalStorage,
@@ -32,7 +42,7 @@ export class SettingsComponent implements OnInit {
     )
 
     this.settingsForm.valueChanges.subscribe((formValue) => {
-      this.experimentsEnabled = formValue.experimentsEnabled
+      this.badgeEnabled = formValue.badgeEnabled
       settingsService.updateUserPreferences(formValue)
     })
   }

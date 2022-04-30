@@ -1,40 +1,77 @@
-<h1 class="text-xs-center">Settings</h1>
+<form class="p-8" [formGroup]="settingsForm">
 
-<form [formGroup]="settingsForm">
-  <div class="form-group">
-    <input type="checkbox" formControlName="colorful" id="colorful" />
-    <label for="colorful" >colorful</label>
-  </div>
+  <mat-accordion>
+    <mat-expansion-panel hideToggle [expanded]='badgeEnabled' [disabled]='!badgeEnabled'>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Enable badge
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="badgeEnabled" id="badgeEnabled"></mat-slide-toggle>
+      </mat-expansion-panel-header>
 
-  <div class="form-group">
-    <label for="favoriteColor" >favoriteColor</label>
-    <input class="form-control" type="text" formControlName="favoriteColor" id="favoriteColor" />
-  </div>
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="badgeSettings">
+        <mat-panel-title>
+          Enable changing color
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="changingColorEnabled" id="changingColorEnabled"></mat-slide-toggle>
+      </div>
 
-  <div class="form-group">
-    <label for="desiredTabs" >desiredTabs</label>
-    <input class="form-control" type="number" formControlName="desiredTabs" id="desiredTabs" />
-  </div>
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="badgeSettings">
+        <mat-panel-title>
+          Badge shows...
+        </mat-panel-title>
+        <mat-select class="form-control w-25" id="badgeTextType" required formControlName="badgeTextType" >
+          <mat-option *ngFor="let badgeTextType of fileTypes" [value]="badgeTextType">
+            {{FileType2LabelMapping[badgeTextType]}}
+          </mat-option>
+        </mat-select>
+      </div>
+    </mat-expansion-panel>
 
-  <div class="form-group">
-    <input type="checkbox" formControlName="experimentsEnabled" id="experimentsEnabled" />
-    <label for="experimentsEnabled" >experimentsEnabled</label>
-  </div>
+<!--    <mat-expansion-panel expanded>-->
+<!--      <mat-expansion-panel-header>-->
+<!--        <mat-panel-title>-->
+<!--          Other-->
+<!--        </mat-panel-title>-->
+<!--      </mat-expansion-panel-header>-->
 
-  <fieldset class="form-group" *ngIf="experimentsEnabled" formGroupName="experiments">
-    <div class="form-group">
-      <input type="checkbox" formControlName="deduplicateTabs" id="deduplicateTabs" />
-      <label for="deduplicateTabs" >deduplicateTabs</label>
-    </div>
+<!--    </mat-expansion-panel>-->
 
-    <div class="form-group">
-      <input type="checkbox" formControlName="achievementsEnabled" id="achievementsEnabled" />
-      <label for="achievementsEnabled" >achievementsEnabled</label>
-    </div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Experiments
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-    <div class="form-group">
-      <input type="checkbox" formControlName="tabsEnabled" id="tabsEnabled" />
-      <label for="tabsEnabled" >tabsEnabled</label>
-    </div>
-  </fieldset>
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="experiments">
+        <mat-panel-title>
+          tabsEnabled
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="tabsEnabled" id="tabsEnabled"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="experiments">
+        <mat-panel-title>
+          desiredTabs
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="desiredTabs" id="desiredTabs"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="experiments">
+        <mat-panel-title>
+          deduplicateTabs
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateTabs" id="deduplicateTabs"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example" formGroupName="experiments">
+        <mat-panel-title>
+          achievementsEnabled
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="achievementsEnabled" id="achievementsEnabled"></mat-slide-toggle>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 </form>
