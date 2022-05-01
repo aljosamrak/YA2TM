@@ -102,9 +102,10 @@ class TabController {
     newTab: chrome.tabs.Tab,
     existingTabsPromise: Promise<chrome.tabs.Tab[]>,
   ) {
-    if (
-      !this.settingsService.getUserPreferences().experiments.deduplicateTabs
-    ) {
+    // if (!this.settingsService.get(Keys.DEDUPLICATE_TABS)) {
+    //   return
+    // }
+    if (!this.settingsService.getUserPreferences().deduplicateTabs) {
       return
     }
     return

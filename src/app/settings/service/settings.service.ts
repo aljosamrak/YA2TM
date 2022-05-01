@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { LocalStorage } from '../../../storage/LocalStorage'
-import { UserPreferences } from '../module/user-preferences'
+import { UserPreferences } from '../model/user-preferences'
 
 @Injectable({
   providedIn: 'root',

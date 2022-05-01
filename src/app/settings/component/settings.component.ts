@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 import { LocalStorage } from '../../../storage/LocalStorage'
-import { BadgeTextType, UserPreferences } from '../module/user-preferences'
+import { BadgeTextType, UserPreferences } from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
 @Component({
