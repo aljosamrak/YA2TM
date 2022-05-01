@@ -16,6 +16,7 @@ import { AchievementsComponent } from './achievements/achievements.component'
 import { NgGoogleAnalyticsModule } from './analytics/ng-google-analytics.module'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { DrillDownComponent } from './drill-down/drill-down.component'
 import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/component/settings.component'
@@ -31,6 +32,7 @@ import { TabsComponent } from './tabs/tabs.component'
     SettingsComponent,
     AchievementsComponent,
     PageNotFoundComponentComponent,
+    DrillDownComponent,
   ],
   imports: [
     BrowserModule,

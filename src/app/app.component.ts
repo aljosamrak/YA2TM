@@ -13,18 +13,23 @@ export class AppComponent implements OnInit {
 
   title = 'YA2TM'
 
+  tabsEnabled?: boolean
+  drillDownEnabled?: boolean
   duplicateEnabled?: boolean
   achievementsEnabled?: boolean
-  tabsEnabled?: boolean
+
+  settingsLastClicked = 0
+  settingsNumClicked = 0
 
   constructor(private settingsService: SettingsService) {}
 
   ngOnInit() {
     this.subscription = this.settingsService.userPreferences$.subscribe(
       (item: UserPreferences) => {
-        this.duplicateEnabled = item.experiments.deduplicateTabs
-        this.achievementsEnabled = item.experiments.achievementsEnabled
-        this.tabsEnabled = item.experiments.tabsEnabled
+        this.tabsEnabled = item.tabsEnabled
+        this.drillDownEnabled = item.drillDownEnabled
+        this.duplicateEnabled = item.deduplicateTabs
+        this.achievementsEnabled = item.achievementsEnabled
       },
     )
   }

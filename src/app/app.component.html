@@ -31,6 +31,12 @@
           </a>
         </li>
 
+        <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='drillDownEnabled'>
+          <a class="nav-link waves-light" mdbWavesEffect routerLink="/drillDown">
+            <span>Drill Down</span>
+          </a>
+        </li>
+
         <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='duplicateEnabled'>
           <a
             class="nav-link waves-light"

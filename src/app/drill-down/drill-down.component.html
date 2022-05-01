@@ -1,0 +1,10 @@
+<ul>
+  <div *ngFor="let records of recordMap! | keyvalue">
+    <li>{{toDate(records.key)}}</li>
+    <ul>
+      <li *ngFor="let record of records.value">
+        {{record.title}}
+      </li>
+    </ul>
+  </div>
+</ul>
