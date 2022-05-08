@@ -13,7 +13,7 @@ import { IndexedDBDatabase } from '../model/indexeddb/IndexedDBDatabase'
 import { LocalStorageImpl } from '../storage/LocalStorageImpl'
 import { ChromeBadgeView } from '../view/chrome/ChromeBadgeView'
 import { AchievementsComponent } from './achievements/achievements.component'
-import { NgGoogleAnalyticsModule } from './analytics/ng-google-analytics.module'
+import { AnalyticsModule } from './analytics/analytics.module'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { DrillDownComponent } from './drill-down/drill-down.component'
@@ -46,9 +46,8 @@ import { TabsComponent } from './tabs/tabs.component'
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR,
     }),
-    NgGoogleAnalyticsModule.forRoot({
+    AnalyticsModule.forRoot({
       id: GOOGLE_ANALYTICS_TRACKING_ID,
-      scriptPath: 'analytics/analytics.js',
     }),
     SettingsModule.forRoot(),
   ],

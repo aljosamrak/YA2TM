@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
-import { NgGoogleAnalyticsTracker } from '../../app/analytics/ng-google-analytics.service'
+import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
 import { Database } from '../../model/Database'
 import { TabData } from '../../model/TabData'
@@ -20,7 +20,7 @@ import Tab = chrome.tabs.Tab
 class TabController {
   constructor(
     private logger: NGXLogger,
-    protected analytics: NgGoogleAnalyticsTracker,
+    protected analytics: AnalyticsService,
     protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,

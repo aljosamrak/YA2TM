@@ -13,8 +13,8 @@ import {
 import { Observable } from 'rxjs'
 import {
   AnalyticsIdConfig,
-  NgGoogleAnalyticsTracker,
-} from './app/analytics/ng-google-analytics.service'
+  AnalyticsService,
+} from './app/analytics/analytics.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { BadgeController } from './controller/BadgeController'
 import { TabController } from './controller/tab/TabController'
@@ -43,21 +43,25 @@ const logger = new NGXLogger(
   new NGXLoggerServerService(httpBackend),
 )
 
+const analyticsConfiguration: AnalyticsIdConfig = {
+  id: GOOGLE_ANALYTICS_TRACKING_ID,
+}
+
 const options = {
   providers: [
     { provide: NGXLogger, useValue: logger },
+    { provide: LocalStorageImpl, deps: [] },
 
     {
       provide: AnalyticsIdConfig,
-      useValue: {
-        id: GOOGLE_ANALYTICS_TRACKING_ID,
-        scriptPath: 'analytics/analytics.js',
-      },
+      useValue: analyticsConfiguration,
     },
-    { provide: NgGoogleAnalyticsTracker, deps: [AnalyticsIdConfig] },
+    {
+      provide: AnalyticsService,
+      deps: [AnalyticsIdConfig, LocalStorageImpl],
+    },
 
-    { provide: LocalStorageImpl, deps: [] },
-    { provide: IndexedDBDatabase, deps: [NGXLogger, NgGoogleAnalyticsTracker] },
+    { provide: IndexedDBDatabase, deps: [NGXLogger, AnalyticsService] },
 
     { provide: SettingsService, deps: [LocalStorageImpl] },
 
@@ -82,7 +86,7 @@ const options = {
       provide: TabController,
       deps: [
         NGXLogger,
-        NgGoogleAnalyticsTracker,
+        AnalyticsService,
         SettingsService,
         ChromeTabData,
         ChromeWindowData,

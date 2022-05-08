@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
-import { NgGoogleAnalyticsTracker } from '../../app/analytics/ng-google-analytics.service'
+import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { Database, Record } from '../Database'
 import { convert, LEGACY_SORE_NAME_V1, OldRecord } from './LegacyIndexedDb'
 
@@ -17,7 +17,7 @@ class IndexedDBDatabase implements Database {
 
   constructor(
     private logger: NGXLogger,
-    protected analytics: NgGoogleAnalyticsTracker,
+    protected analytics: AnalyticsService,
   ) {
     if (!indexedDB) {
       this.logger.error(
@@ -176,4 +176,4 @@ class IndexedDBDatabase implements Database {
   }
 }
 
-export {IndexedDBDatabase}
+export { IndexedDBDatabase }

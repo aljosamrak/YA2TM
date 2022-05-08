@@ -5,4 +5,10 @@ module.exports = {
   optimization: {
     runtimeChunk: false,
   },
+  resolve: {
+    fallback: {
+      http: false,
+      https: false,
+    },
+  },
 } as Configuration

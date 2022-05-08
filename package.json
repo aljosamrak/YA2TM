@@ -29,11 +29,13 @@
     "chartjs-plugin-zoom": "^1.2.0",
     "git-describe": "^4.1.0",
     "mdb-ui-kit": "^3.10.2",
+    "measurement-protocol": "^0.1.1",
     "moment": "^2.29.1",
     "ng2-charts": "~3.0.8",
     "ngx-logger": "^5.0.9",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -44,6 +46,7 @@
     "@types/chrome": "^0.0.162",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "cross-env": "^5.0.1",

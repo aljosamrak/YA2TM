@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core'
   template: ``,
   styles: [],
 })
-export class NgGoogleAnalyticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}

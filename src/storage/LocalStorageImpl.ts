@@ -14,8 +14,18 @@ class LocalStorageImpl implements LocalStorage {
     })
   }
 
+  async get1<T>(key: string): Promise<any> {
+    return chrome.storage.local.get(key).then((result) => {
+      return result[key] as T
+    })
+  }
+
   async set(key: Key<any>, value: any): Promise<void> {
     return chrome.storage.local.set({ [key.key]: value })
+  }
+
+  set1(key: string, value: any): void {
+    chrome.storage.local.set({ [key]: value })
   }
 
   addOnChangedListener(
