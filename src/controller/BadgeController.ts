@@ -1,52 +1,59 @@
 import { Inject, Injectable } from '@angular/core'
 import 'reflect-metadata'
+import { Subscription } from 'rxjs'
+import { throttleTime } from 'rxjs/operators'
+import {
+  BadgeTextType,
+  UserPreferences,
+} from '../app/settings/model/user-preferences'
+import { SettingsService } from '../app/settings/service/settings.service'
 import { TabData } from '../model/TabData'
 import { WindowData } from '../model/WindowData'
-import { BadgeTextType, USER_PREFERENCES } from '../storage/Key'
-import { LocalStorage } from '../storage/LocalStorage'
 import { BadgeView } from '../view/BadgeView'
 
 @Injectable({
   providedIn: 'root',
 })
 class BadgeController {
+  subscription?: Subscription
+
   constructor(
+    protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
-    @Inject('LocalStorageService') private localStorage: LocalStorage,
     @Inject('BadgeView') private badgeView: BadgeView,
   ) {
-    this.localStorage.addOnChangedListener(() =>
-      this.updateTabCount(tabData.query()),
-    )
+    this.subscription = this.settingsService.userPreferences$
+      .pipe(throttleTime(100))
+      .subscribe((item: UserPreferences) => {
+        // TODO improve
+        this.updateTabCount(tabData.query())
+      })
   }
 
   async updateTabCount(
     currentTabsPromise: Promise<chrome.tabs.Tab[]>,
   ): Promise<any> {
-    const [tabs, localStorageResult] = await Promise.all([
-      currentTabsPromise,
-      this.localStorage.get(USER_PREFERENCES),
-    ])
+    const tabs = await currentTabsPromise
 
     // Badge disabled in user settings
-    if (!localStorageResult[USER_PREFERENCES.key].badgeEnabled) {
+    if (!this.settingsService.getUserPreferences().badgeEnabled) {
       return Promise.resolve()
     }
 
     // Set tab number
     const badgeTextPromise = this.getBadgeText(
-      localStorageResult[USER_PREFERENCES.key].badgeTextType,
+      this.settingsService.getUserPreferences().badgeTextType,
     ).then((text) => this.badgeView.setText(text))
 
     // Set badge color
-    if (localStorageResult[USER_PREFERENCES.key].changingColorEnabled) {
+    if (this.settingsService.getUserPreferences().changingColorEnabled) {
       return Promise.all([
         badgeTextPromise,
         this.badgeView.setBackgroundColor(
           this.getBadgeColor(
             tabs.length,
-            localStorageResult[USER_PREFERENCES.key].desiredTabs,
+            this.settingsService.getUserPreferences().desiredTabs,
           ),
         ),
       ])
@@ -63,12 +70,14 @@ class BadgeController {
 
   private async getBadgeText(badgeTextType: BadgeTextType): Promise<string> {
     switch (badgeTextType) {
-      case BadgeTextType.ALL_TABS:
+      case BadgeTextType.TABS_NUM:
         return this.tabData.query().then((tabs) => tabs.length.toString())
-      case BadgeTextType.ALL_WINDOW:
+      case BadgeTextType.WINDOW_NUM:
         return this.windowData
           .getAll()
           .then((windows) => windows.length.toString())
+      default:
+        throw Error('Unimplemented')
     }
   }
 }

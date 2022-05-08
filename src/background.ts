@@ -75,12 +75,7 @@ const options = {
     // Controllers
     {
       provide: BadgeController,
-      deps: [
-        ChromeTabData,
-        ChromeWindowData,
-        LocalStorageImpl,
-        ChromeBadgeView,
-      ],
+      deps: [SettingsService, ChromeTabData, ChromeWindowData, ChromeBadgeView],
     },
     {
       provide: TabController,

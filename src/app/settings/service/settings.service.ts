@@ -41,7 +41,7 @@ export class SettingsService {
     return chrome.storage.local.set({ USER_PREFERENCES: newValue })
   }
 
-  getUserPreferences() {
+  getUserPreferences(): UserPreferences {
     return JSON.parse(JSON.stringify(this.userPreferences.getValue()))
   }
 
