@@ -1,9 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
-import { LocalStorage } from '../../../storage/LocalStorage'
 import { BadgeTextType, UserPreferences } from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
@@ -31,7 +30,6 @@ export class SettingsComponent implements OnInit {
   )
 
   constructor(
-    @Inject('LocalStorage') private localStorage: LocalStorage,
     private router: Router,
     private formBuilder: FormBuilder,
     private settingsService: SettingsService,

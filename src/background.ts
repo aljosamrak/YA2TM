@@ -16,13 +16,13 @@ import {
   AnalyticsService,
 } from './app/analytics/analytics.service'
 import { SettingsService } from './app/settings/service/settings.service'
+import { LocalstorageService } from './app/storage/service/localstorage.service'
 import { BadgeController } from './controller/BadgeController'
 import { TabController } from './controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 import { ChromeTabData } from './model/chrome/ChromeTabData'
 import { ChromeWindowData } from './model/chrome/ChromeWindowData'
 import { IndexedDBDatabase } from './model/indexeddb/IndexedDBDatabase'
-import { LocalStorageImpl } from './storage/LocalStorageImpl'
 import { ChromeBadgeView } from './view/chrome/ChromeBadgeView'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
@@ -50,7 +50,7 @@ const analyticsConfiguration: AnalyticsIdConfig = {
 const options = {
   providers: [
     { provide: NGXLogger, useValue: logger },
-    { provide: LocalStorageImpl, deps: [] },
+    { provide: LocalstorageService, deps: [] },
 
     {
       provide: AnalyticsIdConfig,
@@ -58,12 +58,12 @@ const options = {
     },
     {
       provide: AnalyticsService,
-      deps: [AnalyticsIdConfig, LocalStorageImpl],
+      deps: [AnalyticsIdConfig, LocalstorageService],
     },
 
     { provide: IndexedDBDatabase, deps: [NGXLogger, AnalyticsService] },
 
-    { provide: SettingsService, deps: [LocalStorageImpl] },
+    { provide: SettingsService, deps: [LocalstorageService] },
 
     // Models
     { provide: ChromeTabData, deps: [] },
@@ -85,7 +85,6 @@ const options = {
         SettingsService,
         ChromeTabData,
         ChromeWindowData,
-        LocalStorageImpl,
         IndexedDBDatabase,
         BadgeController,
       ],

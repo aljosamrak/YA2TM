@@ -3,11 +3,11 @@ import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
+import { LocalstorageService } from '../../app/storage/service/localstorage.service'
 import { Database } from '../../model/Database'
 import { TabData } from '../../model/TabData'
 import { TrackedEvent } from '../../model/TrackedEvent'
 import { WindowData } from '../../model/WindowData'
-import { LocalStorage } from '../../storage/LocalStorage'
 import { BadgeController } from '../BadgeController'
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
@@ -21,10 +21,10 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     protected analytics: AnalyticsService,
+    protected localstorageService: LocalstorageService,
     protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
-    @Inject('LocalStorageService') private localStorage: LocalStorage,
     @Inject('DatabaseService') private database: Database,
     @Inject('BadgeController') private badgeController: BadgeController,
   ) {
