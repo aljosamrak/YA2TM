@@ -1,8 +1,9 @@
-import { Inject, Injectable, Optional } from '@angular/core'
+import { Injectable, Optional } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { measure } from 'measurement-protocol'
 import { v4 as uuidv4 } from 'uuid'
-import { LocalStorage } from '../../storage/LocalStorage'
+import { UUID_KEY } from '../storage/model/Key'
+import { LocalstorageService } from '../storage/service/localstorage.service'
 
 export class AnalyticsIdConfig {
   id = ''
@@ -28,22 +29,20 @@ export type TimingArgs = {
 export class AnalyticsService {
   tracker: any
 
-  UUID_KEY = 'ga'
-
   constructor(
     config: AnalyticsIdConfig,
-    @Inject('LocalStorage') private localStorage: LocalStorage,
+    protected localstorageService: LocalstorageService,
     @Optional() router: Router,
   ) {
     const myuuid = uuidv4()
     console.log('Your uuidv4 is: ' + myuuid)
 
     try {
-      this.localStorage.get1(this.UUID_KEY).then((uuid) => {
+      localstorageService.get(UUID_KEY).then((uuid) => {
         if (!uuid) {
           console.log('undefined')
           uuid = myuuid
-          this.localStorage.set1(this.UUID_KEY, uuid)
+          this.localstorageService.set(UUID_KEY, uuid)
         }
 
         console.log('Your UUID is: ' + uuid)

@@ -3,7 +3,6 @@ import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
-import { LocalstorageService } from '../../app/storage/service/localstorage.service'
 import { Database } from '../../model/Database'
 import { TabData } from '../../model/TabData'
 import { TrackedEvent } from '../../model/TrackedEvent'
@@ -21,7 +20,6 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     protected analytics: AnalyticsService,
-    protected localstorageService: LocalstorageService,
     protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,

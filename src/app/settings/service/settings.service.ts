@@ -1,6 +1,7 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
-import { LocalStorage } from '../../../storage/LocalStorage'
+import { USER_PREFERENCES } from '../../storage/model/Key'
+import { LocalstorageService } from '../../storage/service/localstorage.service'
 import { UserPreferences } from '../model/user-preferences'
 
 @Injectable({
@@ -12,15 +13,11 @@ export class SettingsService {
   )
   userPreferences$ = this.userPreferences.asObservable()
 
-  constructor(@Inject('LocalStorage') private localStorage: LocalStorage) {
-    // TODO replace with a service
-    chrome.storage.local.get('USER_PREFERENCES').then((userPreferences) => {
+  constructor(protected localstorageService: LocalstorageService) {
+    localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
         this.updateUserPreferences(
-          this.mergeDeep(
-            new UserPreferences(),
-            userPreferences['USER_PREFERENCES'],
-          ),
+          this.mergeDeep(new UserPreferences(), userPreferences),
         )
       } else {
         this.updateUserPreferences(new UserPreferences())
@@ -37,8 +34,7 @@ export class SettingsService {
     }
 
     this.userPreferences.next(newValue)
-    // TODO replace with a service
-    return chrome.storage.local.set({ USER_PREFERENCES: newValue })
+    this.localstorageService.set(USER_PREFERENCES, newValue)
   }
 
   getUserPreferences(): UserPreferences {
@@ -51,11 +47,7 @@ export class SettingsService {
     this.updateUserPreferences(settings)
   }
 
-  /**
-   * Deep merge two objects.
-   * @param target
-   * @param ...sources
-   */
+  /** Deep merge two objects. */
   private mergeDeep(target: any, ...sources: any): any {
     if (!sources.length) {
       return target
