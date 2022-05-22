@@ -28,6 +28,28 @@
       </div>
     </mat-expansion-panel>
 
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Data
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Clear stored tab data
+        </mat-panel-title>
+        <button mat-raised-button (click)="clearTabData()">Clear</button>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Reset settings
+        </mat-panel-title>
+        <button mat-raised-button (click)="resetSettings()">Reset</button>
+      </div>
+    </mat-expansion-panel>
+
 <!--    <mat-expansion-panel expanded>-->
 <!--      <mat-expansion-panel-header>-->
 <!--        <mat-panel-title>-->

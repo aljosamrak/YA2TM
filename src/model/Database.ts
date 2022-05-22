@@ -12,4 +12,6 @@ export interface Database {
   insert_records(record: Record): Promise<void>
 
   query(startDate: number, endDate: number): Promise<Record[]>
+
+  deleteData(): void
 }

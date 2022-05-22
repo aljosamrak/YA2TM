@@ -111,6 +111,30 @@ class IndexedDBDatabase implements Database {
     })
   }
 
+  async deleteData(): Promise<void> {
+    return this._databasePromise.then((db: IDBDatabase): Promise<void> => {
+      return new Promise<void>((resolve, reject) => {
+        const transaction = db.transaction(
+          IndexedDBDatabase.OBJECT_STORE,
+          'readwrite',
+        )
+        const objectStore = transaction.objectStore(
+          IndexedDBDatabase.OBJECT_STORE,
+        )
+        transaction.oncomplete = () => {
+          resolve()
+        }
+        transaction.onerror = (event: Event) => {
+          reject(event)
+        }
+        const request = objectStore.clear()
+        request.onsuccess = () => {
+          resolve()
+        }
+      })
+    })
+  }
+
   public insert_records(record: Record): Promise<void> {
     return this._databasePromise.then((db: IDBDatabase): Promise<void> => {
       return new Promise<void>((resolve, reject) => {

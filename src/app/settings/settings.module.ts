@@ -6,6 +6,7 @@ import {
   SkipSelf,
 } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
+import { MatButtonModule } from '@angular/material/button'
 import { MatExpansionModule } from '@angular/material/expansion'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
@@ -17,6 +18,7 @@ const MODULES = [
   CommonModule,
   ReactiveFormsModule,
   BrowserModule,
+  MatButtonModule,
   MatSlideToggleModule,
   MatExpansionModule,
   MatFormFieldModule,
