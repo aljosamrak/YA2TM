@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  Inject,
   Input,
   Output,
   ViewChild,
@@ -12,7 +11,7 @@ import 'chartjs-plugin-zoom'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import 'hammerjs'
 import { BaseChartDirective } from 'ng2-charts'
-import { Database, Record } from '../../../model/Database'
+import { EventRecord } from '../../storage/model/EventRecord'
 import { DateRange } from '../history/tab-insights-component.component'
 
 export const CHART_COLORS = {
@@ -31,8 +30,6 @@ export const CHART_COLORS = {
   templateUrl: 'line-chart.component.html',
 })
 export class BaseTabChartComponent {
-  private database: Database
-
   public lineChartType: ChartType = 'line'
   public lineChartData: ChartConfiguration['data'] = { datasets: [] }
 
@@ -42,7 +39,7 @@ export class BaseTabChartComponent {
   dataRangeOutput = new EventEmitter<DateRange>()
 
   @Input()
-  set data(records: Record[]) {}
+  set data(records: EventRecord[]) {}
 
   @Input()
   set dateRange(dateRange: DateRange) {
@@ -149,9 +146,7 @@ export class BaseTabChartComponent {
     }
   }
 
-  constructor(@Inject('Database') database: Database) {
-    this.database = database
-
+  constructor() {
     // Add zoom plugin
     Chart.register(zoomPlugin)
 

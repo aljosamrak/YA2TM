@@ -3,9 +3,9 @@ import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
-import { Database } from '../../model/Database'
+import { TrackedEvent } from '../../app/storage/model/EventRecord'
+import { DatabaseService } from '../../app/storage/service/database.service'
 import { TabData } from '../../model/TabData'
-import { TrackedEvent } from '../../model/TrackedEvent'
 import { WindowData } from '../../model/WindowData'
 import { BadgeController } from '../BadgeController'
 import WindowEventFilter = chrome.windows.WindowEventFilter
@@ -20,10 +20,10 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     protected analytics: AnalyticsService,
+    private databaseService: DatabaseService,
     protected settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
-    @Inject('DatabaseService') private database: Database,
     @Inject('BadgeController') private badgeController: BadgeController,
   ) {
     chrome.tabs.onCreated.addListener(this.tabCreated.bind(this))
@@ -87,7 +87,7 @@ class TabController {
 
     chrome.action.setBadgeText({ text: tabs.length.toString() })
 
-    this.database.insert_records({
+    this.databaseService.insert_records({
       timestamp: timeNow,
       url: tab === undefined ? '' : tab.url!,
       event: event,

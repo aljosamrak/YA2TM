@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core'
-import { Database, Record } from '../../../model/Database'
-import { TrackedEvent } from '../../../model/TrackedEvent'
+import { Component, OnInit } from '@angular/core'
+import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
+import { DatabaseService } from '../../storage/service/database.service'
 
 const DAYS_7 = 17 * 24 * 3600 * 1000
 
@@ -15,11 +15,11 @@ export type DateRange = {
   styleUrls: ['./tab-insights-component.component.sass'],
 })
 export class TabInsightsComponent implements OnInit {
-  public TrackedEvent = TrackedEvent
-  data: Record[] = []
+  public trackedEvent = TrackedEvent
+  data: EventRecord[] = []
   dateRange: DateRange
 
-  constructor(@Inject('Database') private database: Database) {
+  constructor(private databaseService: DatabaseService) {
     const timeNow = Date.now()
     this.dateRange = {
       min: timeNow - DAYS_7,
@@ -30,7 +30,7 @@ export class TabInsightsComponent implements OnInit {
   //TODO reset zoom button
   ngOnInit(): void {
     const timeNow = Date.now()
-    this.database.query(timeNow - DAYS_7, timeNow).then((_data) => {
+    this.databaseService.query(timeNow - DAYS_7, timeNow).then((_data) => {
       console.log(_data)
       this.data = _data
     })
@@ -52,7 +52,7 @@ export class TabInsightsComponent implements OnInit {
   setDataRange(dateRange: DateRange) {
     this.dateRange = dateRange
 
-    this.database.query(dateRange.min, dateRange.max).then((_data) => {
+    this.databaseService.query(dateRange.min, dateRange.max).then((_data) => {
       if (_data.length === 0) {
         return
       }

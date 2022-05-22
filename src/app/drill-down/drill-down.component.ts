@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core'
-import { Database } from '../../model/Database'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-drill-down',
@@ -10,7 +9,7 @@ export class DrillDownComponent implements OnInit {
   // recordMap?: Record<string, TabRelation[]>
   recordMap?: Record<string, any[]>
 
-  constructor(@Inject('Database') private database: Database) {}
+  constructor() {}
 
   ngOnInit(): void {
     // this.database.getTabs().then((_data) => {

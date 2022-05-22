@@ -1,9 +1,9 @@
-import { Component, Inject, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { LinearScaleOptions } from 'chart.js'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
-import { Database, Record } from '../../../model/Database'
+import { EventRecord } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
 
 @Component({
@@ -15,14 +15,14 @@ export class TotalTabChartComponent
   implements OnInit
 {
   @Input()
-  override set data(records: Record[]) {
+  override set data(records: EventRecord[]) {
     const labels = records.map((record) => new Date(record.timestamp))
     const values = records.map((record) => record.tabs)
     this.setChartData(labels, values)
   }
 
-  constructor(@Inject('Database') database: Database) {
-    super(database)
+  constructor() {
+    super()
     this.setTitle('Total number of tabs')
   }
 

@@ -1,6 +1,7 @@
 import 'reflect-metadata'
+import { BadgeTextType } from '../app/settings/model/user-preferences'
+import { USER_PREFERENCES } from '../app/storage/model/Key'
 import { BadgeController, hslToHex } from '../controller/BadgeController'
-import { BadgeTextType, USER_PREFERENCES } from '../storage/Key'
 import { StubBadgeView } from './stub/StubBadgeView'
 import { StubLocalStorage } from './stub/StubLocalStorage'
 import { StubTabData } from './stub/StubTabData'
@@ -20,9 +21,9 @@ describe('BadgeControllerImpl tests', () => {
     stubLocalStorage = new StubLocalStorage()
     stubBadgeView = new StubBadgeView()
     SUT = new BadgeController(
+      stubLocalStorage,
       stubTabData,
       stubWindowData,
-      stubLocalStorage,
       stubBadgeView,
     )
   })
@@ -56,7 +57,7 @@ describe('BadgeControllerImpl tests', () => {
     test('ALL_TAB preference the same as tab count', async () => {
       stubLocalStorage.set(USER_PREFERENCES, {
         badgeEnabled: true,
-        badgeTextType: BadgeTextType.ALL_TABS,
+        badgeTextType: BadgeTextType.TABS_NUM,
       })
       stubTabData.setTabs(new Array(20))
 
@@ -68,7 +69,7 @@ describe('BadgeControllerImpl tests', () => {
     test('ALL_WINDOW preference the same as window count', async () => {
       stubLocalStorage.set(USER_PREFERENCES, {
         badgeEnabled: true,
-        badgeTextType: BadgeTextType.ALL_WINDOW,
+        badgeTextType: BadgeTextType.WINDOW_NUM,
       })
       stubWindowData.set(new Array(20))
 

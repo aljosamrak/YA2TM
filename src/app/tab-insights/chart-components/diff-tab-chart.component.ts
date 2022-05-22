@@ -1,11 +1,10 @@
-import { Component, Inject, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { Chart } from 'chart.js'
 import 'chartjs-adapter-moment'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
-import { Database, Record } from '../../../model/Database'
-import { TrackedEvent } from '../../../model/TrackedEvent'
+import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent, CHART_COLORS } from './base-tab-chart.component'
 
 @Component({
@@ -16,8 +15,8 @@ export class DiffTabChartComponent
   extends BaseTabChartComponent
   implements OnInit
 {
-  constructor(@Inject('Database') database: Database) {
-    super(database)
+  constructor() {
+    super()
     // Add annotation plugin to teh graph
     Chart.register(annotationPlugin)
     this.setTitle('Open close')
@@ -42,7 +41,7 @@ export class DiffTabChartComponent
   }
 
   @Input()
-  override set data(records: Record[]) {
+  override set data(records: EventRecord[]) {
     const windowTime =
       (records[records.length - 1].timestamp - records[0].timestamp) / 20
     const labels: Date[] = []

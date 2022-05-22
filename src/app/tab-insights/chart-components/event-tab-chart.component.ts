@@ -1,9 +1,8 @@
-import { Component, Inject, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
-import { Database, Record } from '../../../model/Database'
-import { TrackedEvent } from '../../../model/TrackedEvent'
+import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
 
 @Component({
@@ -17,16 +16,12 @@ export class EventTabChartComponent
   @Input() desiredEvent: TrackedEvent = TrackedEvent.TabOpened
   @Input() title = ''
 
-  constructor(@Inject('Database') database: Database) {
-    super(database)
-  }
-
   ngOnInit(): void {
     this.setTitle(this.title)
   }
 
   @Input()
-  override set data(records: Record[]) {
+  override set data(records: EventRecord[]) {
     const windowTime =
       (records[records.length - 1].timestamp - records[0].timestamp) / 100
     const labels: Date[] = []

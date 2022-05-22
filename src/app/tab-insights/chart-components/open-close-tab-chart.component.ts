@@ -1,9 +1,8 @@
-import { Component, Inject, Input } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
-import { Database, Record } from '../../../model/Database'
-import { TrackedEvent } from '../../../model/TrackedEvent'
+import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
 
 export const CHART_COLORS = {
@@ -21,13 +20,13 @@ export const CHART_COLORS = {
   templateUrl: 'line-chart.component.html',
 })
 export class OpenCloseTabChartComponent extends BaseTabChartComponent {
-  constructor(@Inject('Database') database: Database) {
-    super(database)
+  constructor() {
+    super()
     this.setTitle('Open close')
   }
 
   @Input()
-  override set data(records: Record[]) {
+  override set data(records: EventRecord[]) {
     if (records.length === 0) {
       return
     }

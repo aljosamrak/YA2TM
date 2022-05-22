@@ -1,5 +1,4 @@
-import { Record } from '../Database'
-import { TrackedEvent } from '../TrackedEvent'
+import { EventRecord, TrackedEvent } from '../model/EventRecord'
 
 export const LEGACY_SORE_NAME_V1 = 'tabs'
 
@@ -11,7 +10,7 @@ export type OldRecord = {
   tabs: number
 }
 
-export function convert(oldEntry: OldRecord): Record {
+export function convert(oldEntry: OldRecord): EventRecord {
   return {
     timestamp: oldEntry.timestamp,
     event:

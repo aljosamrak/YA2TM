@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
-import 'reflect-metadata'
-import { AnalyticsService } from '../../app/analytics/analytics.service'
-import { Database, Record } from '../Database'
+import { AnalyticsService } from '../../analytics/analytics.service'
+import { EventRecord } from '../model/EventRecord'
 import { convert, LEGACY_SORE_NAME_V1, OldRecord } from './LegacyIndexedDb'
 
 @Injectable({
   providedIn: 'root',
 })
-class IndexedDBDatabase implements Database {
+export class DatabaseService {
   static DATABASE_NAME = 'TabsDB'
   static DATABASE_VERSION = 2
   static OBJECT_STORE = 'tanEvents'
@@ -28,8 +27,8 @@ class IndexedDBDatabase implements Database {
     this._databasePromise = new Promise<IDBDatabase>((resolve, reject) => {
       const start = performance.now()
       const request = indexedDB.open(
-        IndexedDBDatabase.DATABASE_NAME,
-        IndexedDBDatabase.DATABASE_VERSION,
+        DatabaseService.DATABASE_NAME,
+        DatabaseService.DATABASE_VERSION,
       )
       request.onerror = (event) => {
         const openRequest = event.target as IDBOpenDBRequest
@@ -59,8 +58,8 @@ class IndexedDBDatabase implements Database {
         const upgradeStartTime = performance.now()
         const db = request.result
 
-        if (!db.objectStoreNames.contains(IndexedDBDatabase.OBJECT_STORE)) {
-          db.createObjectStore(IndexedDBDatabase.OBJECT_STORE, {
+        if (!db.objectStoreNames.contains(DatabaseService.OBJECT_STORE)) {
+          db.createObjectStore(DatabaseService.OBJECT_STORE, {
             keyPath: 'timestamp',
           })
         }
@@ -88,7 +87,7 @@ class IndexedDBDatabase implements Database {
           const oldObjectStore =
             request.transaction.objectStore(LEGACY_SORE_NAME_V1)
           const newObjectStore = request.transaction.objectStore(
-            IndexedDBDatabase.OBJECT_STORE,
+            DatabaseService.OBJECT_STORE,
           )
           const getAllRequest = oldObjectStore.getAll()
           getAllRequest.onsuccess = (getAllEvent: Event) => {
@@ -115,11 +114,11 @@ class IndexedDBDatabase implements Database {
     return this._databasePromise.then((db: IDBDatabase): Promise<void> => {
       return new Promise<void>((resolve, reject) => {
         const transaction = db.transaction(
-          IndexedDBDatabase.OBJECT_STORE,
+          DatabaseService.OBJECT_STORE,
           'readwrite',
         )
         const objectStore = transaction.objectStore(
-          IndexedDBDatabase.OBJECT_STORE,
+          DatabaseService.OBJECT_STORE,
         )
         transaction.oncomplete = () => {
           resolve()
@@ -135,15 +134,15 @@ class IndexedDBDatabase implements Database {
     })
   }
 
-  public insert_records(record: Record): Promise<void> {
+  public insert_records(record: EventRecord): Promise<void> {
     return this._databasePromise.then((db: IDBDatabase): Promise<void> => {
       return new Promise<void>((resolve, reject) => {
         const transaction = db.transaction(
-          IndexedDBDatabase.OBJECT_STORE,
+          DatabaseService.OBJECT_STORE,
           'readwrite',
         )
         const objectStore = transaction.objectStore(
-          IndexedDBDatabase.OBJECT_STORE,
+          DatabaseService.OBJECT_STORE,
         )
         transaction.oncomplete = () => {
           resolve()
@@ -159,45 +158,48 @@ class IndexedDBDatabase implements Database {
     })
   }
 
-  public async query(startDate: number, endDate: number): Promise<Record[]> {
+  public async query(
+    startDate: number,
+    endDate: number,
+  ): Promise<EventRecord[]> {
     const startTime = performance.now()
-    return this._databasePromise.then((db: IDBDatabase): Promise<Record[]> => {
-      return new Promise<Record[]>((resolve, reject) => {
-        const keyRangeValue = IDBKeyRange.bound(startDate, endDate, true)
+    return this._databasePromise.then(
+      (db: IDBDatabase): Promise<EventRecord[]> => {
+        return new Promise<EventRecord[]>((resolve, reject) => {
+          const keyRangeValue = IDBKeyRange.bound(startDate, endDate, true)
 
-        const transaction = db.transaction(
-          IndexedDBDatabase.OBJECT_STORE,
-          'readonly',
-        )
-        const objectStore = transaction.objectStore(
-          IndexedDBDatabase.OBJECT_STORE,
-        )
-        const request = objectStore.openCursor(keyRangeValue)
+          const transaction = db.transaction(
+            DatabaseService.OBJECT_STORE,
+            'readonly',
+          )
+          const objectStore = transaction.objectStore(
+            DatabaseService.OBJECT_STORE,
+          )
+          const request = objectStore.openCursor(keyRangeValue)
 
-        const data: Record[] = []
-        request.onsuccess = function () {
-          const cursor = this.result
-          if (!cursor) {
-            return
+          const data: EventRecord[] = []
+          request.onsuccess = function () {
+            const cursor = this.result
+            if (!cursor) {
+              return
+            }
+            data.push(cursor.value)
+            cursor.continue()
           }
-          data.push(cursor.value)
-          cursor.continue()
-        }
-        transaction.oncomplete = () => {
-          this.analytics.time({
-            category: 'Database',
-            name: 'Query time',
-            value: performance.now() - startTime,
-            label: `Window: ${endDate - startTime}, size: ${data.length}`,
-          })
-          resolve(data)
-        }
-        transaction.onerror = (event: Event) => {
-          reject(event)
-        }
-      })
-    })
+          transaction.oncomplete = () => {
+            this.analytics.time({
+              category: 'Database',
+              name: 'Query time',
+              value: performance.now() - startTime,
+              label: `Window: ${endDate - startTime}, size: ${data.length}`,
+            })
+            resolve(data)
+          }
+          transaction.onerror = (event: Event) => {
+            reject(event)
+          }
+        })
+      },
+    )
   }
 }
-
-export { IndexedDBDatabase }

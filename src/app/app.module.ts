@@ -9,7 +9,6 @@ import { TabController } from '../controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
 import { ChromeTabData } from '../model/chrome/ChromeTabData'
 import { ChromeWindowData } from '../model/chrome/ChromeWindowData'
-import { IndexedDBDatabase } from '../model/indexeddb/IndexedDBDatabase'
 import { ChromeBadgeView } from '../view/chrome/ChromeBadgeView'
 import { AchievementsComponent } from './achievements/achievements.component'
 import { AnalyticsModule } from './analytics/analytics.module'
@@ -20,6 +19,7 @@ import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/component/settings.component'
 import { SettingsModule } from './settings/settings.module'
+import { DatabaseService } from './storage/service/database.service'
 import { LocalstorageService } from './storage/service/localstorage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
@@ -52,8 +52,8 @@ import { TabsComponent } from './tabs/tabs.component'
     SettingsModule.forRoot(),
   ],
   providers: [
+    DatabaseService,
     LocalstorageService,
-    { provide: 'Database', useClass: IndexedDBDatabase },
 
     // Models
     { provide: 'TabData', useClass: ChromeTabData },
