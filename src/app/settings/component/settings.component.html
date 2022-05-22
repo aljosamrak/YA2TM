@@ -50,14 +50,20 @@
       </div>
     </mat-expansion-panel>
 
-<!--    <mat-expansion-panel expanded>-->
-<!--      <mat-expansion-panel-header>-->
-<!--        <mat-panel-title>-->
-<!--          Other-->
-<!--        </mat-panel-title>-->
-<!--      </mat-expansion-panel-header>-->
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Other
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-<!--    </mat-expansion-panel>-->
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Reset UUID
+        </mat-panel-title>
+        <button mat-raised-button (click)="resetUUID()">Reset</button>
+      </div>
+    </mat-expansion-panel>
 
     <mat-expansion-panel *ngIf='experimentsEnabled'>
       <mat-expansion-panel-header>

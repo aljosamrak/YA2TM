@@ -30,8 +30,8 @@ export class AnalyticsService {
   tracker: any
 
   constructor(
-    config: AnalyticsIdConfig,
-    protected localstorageService: LocalstorageService,
+    private config: AnalyticsIdConfig,
+    private localstorageService: LocalstorageService,
     @Optional() router: Router,
   ) {
     const myuuid = uuidv4()
@@ -68,12 +68,23 @@ export class AnalyticsService {
     )
   }
 
-  public time(timingArgs: TimingArgs) {
+  time(timingArgs: TimingArgs) {
     this.tracker.timing(
       timingArgs.category,
       timingArgs.name,
       timingArgs.value,
       timingArgs.label,
     )
+  }
+
+  resetUuid() {
+    const uuid = uuidv4()
+    try {
+      this.localstorageService.set(UUID_KEY, uuid)
+      this.tracker = measure(this.tracker.id, { cid: uuid })
+    } catch (ex) {
+      console.error('Error appending google analytics')
+      console.error(ex)
+    }
   }
 }

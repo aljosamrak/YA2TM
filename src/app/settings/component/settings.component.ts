@@ -4,6 +4,7 @@ import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 import { IndexedDBDatabase } from '../../../model/indexeddb/IndexedDBDatabase'
+import { AnalyticsService } from '../../analytics/analytics.service'
 import { BadgeTextType, UserPreferences } from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
@@ -32,6 +33,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     @Inject('Database') private database: IndexedDBDatabase,
+    private analytics: AnalyticsService,
     private router: Router,
     private formBuilder: FormBuilder,
     private settingsService: SettingsService,
@@ -88,5 +90,9 @@ export class SettingsComponent implements OnInit {
 
   resetSettings() {
     this.settingsService.updateUserPreferences(new UserPreferences())
+  }
+
+  resetUUID() {
+    this.analytics.resetUuid()
   }
 }
