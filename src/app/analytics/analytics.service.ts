@@ -35,17 +35,14 @@ export class AnalyticsService {
     @Optional() router: Router,
   ) {
     const myuuid = uuidv4()
-    console.log('Your uuidv4 is: ' + myuuid)
 
     try {
       localstorageService.get(UUID_KEY).then((uuid) => {
         if (!uuid) {
-          console.log('undefined')
           uuid = myuuid
           this.localstorageService.set(UUID_KEY, uuid)
         }
 
-        console.log('Your UUID is: ' + uuid)
         this.tracker = measure(config.id, { cid: uuid })
 
         router?.events.subscribe((event) => {

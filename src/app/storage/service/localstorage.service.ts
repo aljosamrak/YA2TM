@@ -5,8 +5,6 @@ import { Key } from '../model/Key'
   providedIn: 'root',
 })
 export class LocalstorageService {
-  UUID_KEY = 'ga'
-
   constructor() {}
 
   async get<T>(key: Key<T>): Promise<T> {
