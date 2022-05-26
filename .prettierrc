@@ -4,5 +4,15 @@
   "useTabs": false,
   "trailingComma": "all",
   "singleQuote": true,
-  "semi": false
+  "semi": false,
+  "importOrder": [
+    "^zone.js(.*)$",
+    "^@core/(.*)$",
+    "<THIRD_PARTY_MODULES>",
+    "^@server/(.*)$",
+    "^@ui/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
