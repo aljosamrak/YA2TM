@@ -27,14 +27,38 @@ defaults: &defaults
   parallelism: 4
 
 jobs:
-  sonar:
-    docker:
-      - image: 'node:latest'
+  build:
+    <<: *defaults
+
     steps:
       - checkout
-      - sonarcloud/scan
 
-  build:
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          pkg-manager: npm
+          include-branch-in-cache-key: false
+
+      # Run build command
+      - run:
+          name: "Build"
+          command: npm run build
+
+      # Zip the build folder to create a Chrome extension package
+      - run:
+          name: "Zip package"
+          command: (cd dist; zip -r ../build.zip .)
+
+      # Store the build result as an artefact
+      - store_artifacts:
+          path: build.zip
+
+      # Persist the build result for further steps
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build.zip
+
+  test:
     <<: *defaults
 
     steps:
@@ -55,12 +79,6 @@ jobs:
           pkg-manager: npm
           include-branch-in-cache-key: false
 
-# TODO Re-enable after fixing test
-#      # Run tests
-#      - run:
-#          name: "Build"
-#          command: npm run test
-
       # Run build command
       - run:
           name: "Build"
@@ -71,20 +89,13 @@ jobs:
           name: 'Test Chrome extension installation'
           command: ./scripts/extension_install_test.sh
 
-      # Zip the build folder to create a Chrome extension package
+      # Run tests
       - run:
-          name: "Zip package"
-          command: (cd dist; zip -r ../build.zip .)
+          name: "Build"
+          command: npm run test -- --code-coverage
 
-      # Store the build result as an artefact
-      - store_artifacts:
-          path: build.zip
-
-      # Persist the build result for further steps
-      - persist_to_workspace:
-          root: .
-          paths:
-            - build.zip
+      # Run sonar scan
+      - sonarcloud/scan
 
   publish:
     docker:
@@ -109,9 +120,10 @@ workflows:
     jobs:
       - shellcheck/check
       - build
-      - sonar:
+      - test:
           context: SonarCloud
       - publish:
           requires:
             - shellcheck/check
+            - test
             - build
