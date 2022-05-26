@@ -27,12 +27,13 @@ export class TabInsightsComponent implements OnInit {
     }
   }
 
-  //TODO reset zoom button
+  // TODO reset zoom button
   ngOnInit(): void {
     const timeNow = Date.now()
     this.databaseService.query(timeNow - DAYS_7, timeNow).then((_data) => {
-      console.log(_data)
-      this.data = _data
+      if (_data.length > 0) {
+        this.data = _data
+      }
     })
 
     // let tabs = 100
@@ -53,12 +54,9 @@ export class TabInsightsComponent implements OnInit {
     this.dateRange = dateRange
 
     this.databaseService.query(dateRange.min, dateRange.max).then((_data) => {
-      if (_data.length === 0) {
-        return
+      if (_data.length > 0) {
+        this.data = _data
       }
-
-      console.log(_data)
-      this.data = _data
     })
   }
 }

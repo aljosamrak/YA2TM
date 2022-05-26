@@ -27,7 +27,7 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
 
   @Input()
   override set data(records: EventRecord[]) {
-    if (records.length === 0) {
+    if (records.length <= 0) {
       return
     }
 

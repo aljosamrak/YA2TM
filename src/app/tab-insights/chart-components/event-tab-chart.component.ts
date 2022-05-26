@@ -22,6 +22,10 @@ export class EventTabChartComponent
 
   @Input()
   override set data(records: EventRecord[]) {
+    if (records.length <= 0) {
+      return
+    }
+
     const windowTime =
       (records[records.length - 1].timestamp - records[0].timestamp) / 100
     const labels: Date[] = []
