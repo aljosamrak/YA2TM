@@ -91,11 +91,12 @@ jobs:
 
       # Run tests
       - run:
-          name: "Build"
+          name: "Test"
           command: npm run test -- --code-coverage
 
       # Run sonar scan
-      - sonarcloud/scan
+      - sonarcloud/scan:
+          when: always
 
   publish:
     docker:
