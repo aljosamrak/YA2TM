@@ -109,7 +109,8 @@ workflows:
     jobs:
       - shellcheck/check
       - build
-      - sonar
+      - sonar:
+          context: SonarCloud
       - publish:
           requires:
             - shellcheck/check
