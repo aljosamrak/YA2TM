@@ -92,7 +92,7 @@ jobs:
       # Run tests
       - run:
           name: "Test"
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI || true
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
 
       # Run sonar scan
       - sonarcloud/scan

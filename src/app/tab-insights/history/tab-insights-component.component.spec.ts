@@ -1,13 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { LoggerTestingModule } from 'ngx-logger/testing'
+
+import { AnalyticsService } from '../../analytics/analytics.service'
 import { TabInsightsComponent } from './tab-insights-component.component'
 
-describe('HistoryComponent', () => {
+describe('tab-insights', () => {
   let component: TabInsightsComponent
   let fixture: ComponentFixture<TabInsightsComponent>
 
+  const analyticSpy = jasmine.createSpyObj('AnalyticsService', ['event'])
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TabInsightsComponent],
+      imports: [LoggerTestingModule],
+
+      providers: [
+        TabInsightsComponent,
+        { provide: AnalyticsService, useValue: analyticSpy },
+      ],
     }).compileComponents()
   })
 

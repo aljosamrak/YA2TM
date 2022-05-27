@@ -1,13 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ReactiveFormsModule } from '@angular/forms'
+import { LoggerTestingModule } from 'ngx-logger/testing'
+
+import { AnalyticsService } from '../../analytics/analytics.service'
 import { SettingsComponent } from './settings.component'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
   let fixture: ComponentFixture<SettingsComponent>
 
+  const analyticsSpy = jasmine.createSpyObj('AnalyticsService', ['event'])
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SettingsComponent],
+      imports: [LoggerTestingModule, ReactiveFormsModule],
+      providers: [
+        SettingsComponent,
+        { provide: AnalyticsService, useValue: analyticsSpy },
+      ],
     }).compileComponents()
   })
 

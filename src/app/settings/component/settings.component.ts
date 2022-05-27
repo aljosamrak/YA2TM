@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
-import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 import { AnalyticsService } from '../../analytics/analytics.service'
@@ -34,7 +33,6 @@ export class SettingsComponent implements OnInit {
   constructor(
     private analytics: AnalyticsService,
     private databaseService: DatabaseService,
-    private router: Router,
     private formBuilder: FormBuilder,
     private settingsService: SettingsService,
   ) {

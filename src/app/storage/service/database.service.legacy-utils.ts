@@ -40,10 +40,6 @@ export function createAndFillDbVersion1(...objects: any[]) {
       // Populate data with the data in that version
       const transaction = db.transaction(LEGACY_SORE_NAME_V1, 'readwrite')
 
-      objects.forEach((object) => {
-        transaction.objectStore(LEGACY_SORE_NAME_V1).add(object)
-      })
-
       transaction.oncomplete = () => {
         db.close()
         resolve()
@@ -52,6 +48,13 @@ export function createAndFillDbVersion1(...objects: any[]) {
         db.close()
         reject()
       }
+
+      const objectStore = transaction.objectStore(LEGACY_SORE_NAME_V1)
+      objects.forEach((object) => {
+        const request = objectStore.add(object)
+        request.onsuccess = () => resolve()
+        request.onerror = () => reject()
+      })
     })
   })
 }

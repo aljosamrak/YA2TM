@@ -1,11 +1,18 @@
 import { TestBed } from '@angular/core/testing'
-import { AnalyticsService } from './analytics.service'
 
-describe('NgGoogleAnalyticsService', () => {
+import { AnalyticsIdConfig, AnalyticsService } from './analytics.service'
+
+describe('AnalyticsService', () => {
   let service: AnalyticsService
 
   beforeEach(() => {
-    TestBed.configureTestingModule({})
+    TestBed.configureTestingModule({
+      providers: [
+        AnalyticsService,
+        { provide: AnalyticsIdConfig, useValue: { id: 'UA-XXX-X' } },
+      ],
+    })
+
     service = TestBed.inject(AnalyticsService)
   })
 

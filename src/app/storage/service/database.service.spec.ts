@@ -1,34 +1,41 @@
 import { TestBed } from '@angular/core/testing'
+import { LoggerTestingModule } from 'ngx-logger/testing'
+
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
-import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService', () => {
+  const analyticSpy = jasmine.createSpyObj('AnalyticsService', [
+    'event',
+    'time',
+  ])
+
   let service: DatabaseService
 
-  beforeEach(() => {
-    const spy = jasmine.createSpyObj('ValueService', ['getValue'])
-
+  beforeEach(async () => {
     TestBed.configureTestingModule({
-      // Provide both the service-to-test and its (spy) dependency
+      imports: [LoggerTestingModule],
       providers: [
         DatabaseService,
-        { provide: AnalyticsService, useValue: spy },
+        { provide: AnalyticsService, useValue: analyticSpy },
       ],
     })
 
-    TestBed.configureTestingModule({})
     service = TestBed.inject(DatabaseService)
-
-    // // Clear database
-    // indexedDB = new FDBFactory()
-    // // dbDatabase = new IndexedDBDatabase(logger, new StubAnalytics())
-    //
-    // mockNavigationStorage()
   })
 
-  it('should be created', () => {
+  afterEach(async () => {
+    await service.ngOnDestroy()
+
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
+      request.onsuccess = () => resolve()
+      request.onerror = (event) => reject(event)
+    })
+  })
+
+  it('should be created', async () => {
     expect(service).toBeTruthy()
   })
 
@@ -45,6 +52,6 @@ describe('DatabaseService', () => {
     const result = await service.query(0, 2)
 
     expect(result.length).toBe(1)
-    expect(result).toContain(arrayContaining([record]))
+    expect(result).toContain(record)
   })
 })

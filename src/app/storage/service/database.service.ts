@@ -31,9 +31,8 @@ export class DatabaseService {
         DatabaseService.DATABASE_VERSION,
       )
       request.onerror = (event) => {
-        const openRequest = event.target as IDBOpenDBRequest
-        logger.error('Database error: ' + openRequest.error)
-        reject('error opening database ' + openRequest.error)
+        logger.error('Database error: ' + request.error)
+        reject('error opening database ' + request.error)
       }
       request.onsuccess = () => {
         navigator.storage.estimate().then((estimate: StorageEstimate) => {
@@ -108,6 +107,10 @@ export class DatabaseService {
         }
       }
     })
+  }
+
+  ngOnDestroy() {
+    this._databasePromise.then((db: IDBDatabase) => db.close())
   }
 
   async deleteData(): Promise<void> {
