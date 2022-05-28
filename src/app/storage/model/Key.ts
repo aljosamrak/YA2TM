@@ -11,6 +11,6 @@ export const UUID_KEY: Key<string | undefined> = {
 }
 
 export const USER_PREFERENCES: Key<UserPreferences> = {
-  key: 'ga',
+  key: 'preferences',
   defaultValue: () => new UserPreferences(),
 }

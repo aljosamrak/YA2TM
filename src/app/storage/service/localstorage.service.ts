@@ -10,23 +10,17 @@ export class LocalstorageService {
   async get<T>(key: Key<T>): Promise<T> {
     try {
       // TODO chrome.storage.sync
-      const result = await chrome.storage.local.get({
-        [key.key]: key.defaultValue,
-      })
+      const result = await chrome.storage.local.get(key.key)
 
       if (result[key.key]) {
         return result[key.key]
+      } else {
+        return key.defaultValue()
       }
     } catch (e) {
       console.log(e)
       throw e
     }
-
-    if (chrome.runtime.lastError) {
-      throw new Error('Encountered error: ' + chrome.runtime.lastError)
-    }
-
-    return key.defaultValue()
   }
 
   async set(key: Key<any>, value: any): Promise<void> {
