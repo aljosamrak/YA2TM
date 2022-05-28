@@ -94,6 +94,24 @@ jobs:
           name: "Test"
           command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
 
+      # Persist the code coverage
+      - persist_to_workspace:
+          root: .
+          paths:
+            - coverage/YA2TM/lcov.info
+
+  sonar:
+    docker:
+      - image: cimg/node:17.1
+
+    steps:
+      # Checkout the code as the first step.
+      - checkout
+
+      # Attach the build result build.zip
+      - attach_workspace:
+          at: .
+
       # Run sonar scan
       - sonarcloud/scan
 
@@ -122,8 +140,12 @@ workflows:
       - build
       - test:
           context: SonarCloud
-      - publish:
+      - sonar:
+          context: SonarCloud
           requires:
-            - shellcheck/check
             - test
-            - build
+#      - publish:
+#          requires:
+#            - shellcheck/check
+#            - test
+#            - build
