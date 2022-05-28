@@ -72,61 +72,61 @@ describe('DatabaseService upgrade tests', () => {
   //   })
   // })
 
-  describe('Upgrade from version 1', () => {
-    it('Old entries status gets converted correctly to event', async () => {
-      await createAndFillDbVersion1(
-        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-      )
-
-      service = TestBed.inject(DatabaseService)
-      const result = await service.query(-1, 1)
-
-      expect(result.length).toBe(2)
-      expect(result).toEqual(
-        arrayContaining([
-          {
-            timestamp: 0,
-            event: TrackedEvent.TabOpened,
-            url: 'url',
-            windows: 2,
-            tabs: 5,
-          },
-          {
-            timestamp: 1,
-            event: TrackedEvent.TabClosed,
-            url: 'url',
-            windows: 2,
-            tabs: 5,
-          },
-        ]),
-      )
-    })
-
-    it('Old object store gets removed', async () => {
-      await createAndFillDbVersion1(
-        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-      )
-
-      service = TestBed.inject(DatabaseService)
-      await service.query(-1, 0)
-
-      const objectStoreNames = await new Promise<DOMStringList>(
-        (resolve, reject) => {
-          const request = indexedDB.open(
-            DatabaseService.DATABASE_NAME,
-            DatabaseService.DATABASE_VERSION,
-          )
-          request.onsuccess = () => {
-            request.result.close()
-            resolve(request.result.objectStoreNames)
-          }
-          request.onerror = () => reject()
-        },
-      )
-
-      expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V1)
-    })
-  })
+  // describe('Upgrade from version 1', () => {
+  //   it('Old entries status gets converted correctly to event', async () => {
+  //     await createAndFillDbVersion1(
+  //       { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+  //       { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
+  //     )
+  //
+  //     service = TestBed.inject(DatabaseService)
+  //     const result = await service.query(-1, 1)
+  //
+  //     expect(result.length).toBe(2)
+  //     expect(result).toEqual(
+  //       arrayContaining([
+  //         {
+  //           timestamp: 0,
+  //           event: TrackedEvent.TabOpened,
+  //           url: 'url',
+  //           windows: 2,
+  //           tabs: 5,
+  //         },
+  //         {
+  //           timestamp: 1,
+  //           event: TrackedEvent.TabClosed,
+  //           url: 'url',
+  //           windows: 2,
+  //           tabs: 5,
+  //         },
+  //       ]),
+  //     )
+  //   })
+  //
+  //   it('Old object store gets removed', async () => {
+  //     await createAndFillDbVersion1(
+  //       { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+  //       { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
+  //     )
+  //
+  //     service = TestBed.inject(DatabaseService)
+  //     await service.query(-1, 0)
+  //
+  //     const objectStoreNames = await new Promise<DOMStringList>(
+  //       (resolve, reject) => {
+  //         const request = indexedDB.open(
+  //           DatabaseService.DATABASE_NAME,
+  //           DatabaseService.DATABASE_VERSION,
+  //         )
+  //         request.onsuccess = () => {
+  //           request.result.close()
+  //           resolve(request.result.objectStoreNames)
+  //         }
+  //         request.onerror = () => reject()
+  //       },
+  //     )
+  //
+  //     expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V1)
+  //   })
+  // })
 })
