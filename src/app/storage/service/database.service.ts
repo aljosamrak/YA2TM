@@ -20,7 +20,7 @@ export class DatabaseService {
   ) {
     if (!indexedDB) {
       this.logger.error(
-        "Your browser doesn't support a stable version of IndexedDB. Unable to save tab usages.",
+        'Your browser doesn\'t support a stable version of IndexedDB. Unable to save tab usages.',
       )
     }
 
@@ -153,10 +153,7 @@ export class DatabaseService {
         transaction.onerror = (event: Event) => {
           reject(event)
         }
-        const request = objectStore.add(record)
-        request.onsuccess = () => {
-          resolve()
-        }
+        objectStore.add(record)
       })
     })
   }
