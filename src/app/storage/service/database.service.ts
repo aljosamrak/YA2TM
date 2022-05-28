@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { EventRecord } from '../model/EventRecord'
-import { convert, LEGACY_SORE_NAME_V1, OldRecord } from './LegacyIndexedDb'
+import { convert, LEGACY_SORE_NAME_V1, OldRecord } from './database.service.legacy-utils'
 
 @Injectable({
   providedIn: 'root',
