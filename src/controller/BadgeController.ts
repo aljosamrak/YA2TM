@@ -38,6 +38,7 @@ class BadgeController {
 
     // Badge disabled in user settings
     if (!this.settingsService.getUserPreferences().badgeEnabled) {
+      this.badgeView.setText('')
       return Promise.resolve()
     }
 
