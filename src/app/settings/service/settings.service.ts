@@ -23,6 +23,13 @@ export class SettingsService {
         this.updateUserPreferences(new UserPreferences())
       }
     })
+
+    localstorageService.addOnChangedListener((changes) => {
+      if (changes.hasOwnProperty(USER_PREFERENCES.key)) {
+        // @ts-ignore
+        this.updateUserPreferences(changes[USER_PREFERENCES.key].newValue as UserPreferences)
+      }
+    })
   }
 
   updateUserPreferences(newValue: UserPreferences) {
