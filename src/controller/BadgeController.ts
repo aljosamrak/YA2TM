@@ -48,22 +48,22 @@ class BadgeController {
     ).then((text) => this.badgeView.setText(text))
 
     // Set badge color
-    if (this.settingsService.getUserPreferences().changingColorEnabled) {
-      return Promise.all([
-        badgeTextPromise,
-        this.badgeView.setBackgroundColor(
-          this.getBadgeColor(
-            tabs.length,
-            this.settingsService.getUserPreferences().desiredTabs,
-          ),
+    return Promise.all([
+      badgeTextPromise,
+      this.badgeView.setBackgroundColor(
+        this.getBadgeColor(
+          tabs.length,
+          this.settingsService.getUserPreferences().desiredTabs,
         ),
-      ])
-    }
-
-    return badgeTextPromise
+      ),
+    ])
   }
 
   getBadgeColor(tabsNum: number, desiredTabs: number) {
+    if (!this.settingsService.getUserPreferences().changingColorEnabled) {
+      return 'blue'
+    }
+
     // Map number of tabs to a color so that below desired tabs is blue, around is yellow, and above is red.
     const hue = clamp(-3 * (tabsNum - desiredTabs) + 60, 0, 120)
     return hslToHex(hue, 50, 50)
