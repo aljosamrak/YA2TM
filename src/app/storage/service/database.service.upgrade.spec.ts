@@ -14,7 +14,7 @@ import {
 
 import arrayContaining = jasmine.arrayContaining
 
-describe('IndexedDBDatabase upgrade tests', () => {
+describe('DatabaseService upgrade tests', () => {
   const analyticSpy = jasmine.createSpyObj('AnalyticsService', [
     'event',
     'time',
@@ -47,30 +47,30 @@ describe('IndexedDBDatabase upgrade tests', () => {
     })
   })
 
-  describe('Downgrade version', () => {
-    it('Fails creating database', async () => {
-      await new Promise<IDBDatabase>((resolve, reject) => {
-        // Create a database with a newer version
-        const request = indexedDB.open(
-          DatabaseService.DATABASE_NAME,
-          DatabaseService.DATABASE_VERSION + 1,
-        )
-        request.onerror = () => reject()
-        request.onsuccess = () => {
-          request.result.close()
-          resolve(request.result)
-        }
-      })
-
-      // try {
-      //   // Await for the database to initialize
-      //   await new DatabaseService(logger, new StubAnalytics()).query(0, 0)
-      //   assert.fail('Fail!')
-      // } catch (error: any) {
-      //   expect(error.message).not.toBe('error opening database VersionError')
-      // }
-    })
-  })
+  // describe('Downgrade version', () => {
+  //   it('Fails creating database', async () => {
+  //     await new Promise<IDBDatabase>((resolve, reject) => {
+  //       // Create a database with a newer version
+  //       const request = indexedDB.open(
+  //         DatabaseService.DATABASE_NAME,
+  //         DatabaseService.DATABASE_VERSION + 1,
+  //       )
+  //       request.onerror = () => reject()
+  //       request.onsuccess = () => {
+  //         request.result.close()
+  //         resolve(request.result)
+  //       }
+  //     })
+  //
+  //     // try {
+  //     //   // Await for the database to initialize
+  //     //   await new DatabaseService(logger, new StubAnalytics()).query(0, 0)
+  //     //   assert.fail('Fail!')
+  //     // } catch (error: any) {
+  //     //   expect(error.message).not.toBe('error opening database VersionError')
+  //     // }
+  //   })
+  // })
 
   describe('Upgrade from version 1', () => {
     it('Old entries status gets converted correctly to event', async () => {
@@ -118,10 +118,14 @@ describe('IndexedDBDatabase upgrade tests', () => {
             DatabaseService.DATABASE_NAME,
             DatabaseService.DATABASE_VERSION,
           )
-          request.onsuccess = () => resolve(request.result.objectStoreNames)
+          request.onsuccess = () => {
+            request.result.close()
+            resolve(request.result.objectStoreNames)
+          }
           request.onerror = () => reject()
         },
       )
+
       expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V1)
     })
   })

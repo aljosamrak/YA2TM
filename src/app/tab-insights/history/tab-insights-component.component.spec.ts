@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
 import { AnalyticsService } from '../../analytics/analytics.service'
+import { DatabaseService } from '../../storage/service/database.service'
 import { TabInsightsComponent } from './tab-insights-component.component'
 
 describe('tab-insights', () => {
@@ -24,6 +25,10 @@ describe('tab-insights', () => {
     fixture = TestBed.createComponent(TabInsightsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+  })
+
+  afterEach(async () => {
+    await TestBed.inject(DatabaseService).ngOnDestroy()
   })
 
   it('should create', () => {

@@ -51,9 +51,7 @@ export function createAndFillDbVersion1(...objects: any[]) {
 
       const objectStore = transaction.objectStore(LEGACY_SORE_NAME_V1)
       objects.forEach((object) => {
-        const request = objectStore.add(object)
-        request.onsuccess = () => resolve()
-        request.onerror = () => reject()
+        objectStore.add(object)
       })
     })
   })
