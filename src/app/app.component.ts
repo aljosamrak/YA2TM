@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
+import { environment } from '../environments/environment'
 import { UserPreferences } from './settings/model/user-preferences'
 import { SettingsService } from './settings/service/settings.service'
 
@@ -49,5 +50,9 @@ export class AppComponent implements OnInit {
     if (this.settingsNumClicked >= 5) {
       this.settingsService.enableExperiments()
     }
+  }
+
+  isDevelopMode() {
+    return !environment.production
   }
 }

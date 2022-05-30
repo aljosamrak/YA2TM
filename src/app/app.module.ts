@@ -23,6 +23,7 @@ import { DatabaseService } from './storage/service/database.service'
 import { LocalstorageService } from './storage/service/localstorage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
+import { TestingComponent } from './testing/testing.component'
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TabsComponent } from './tabs/tabs.component'
     AchievementsComponent,
     PageNotFoundComponentComponent,
     DrillDownComponent,
+    TestingComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,7 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import { SettingsComponent } from './settings/component/settings.component'
 import { TabInsightsComponent } from './tab-insights/history/tab-insights-component.component'
 import { TabsComponent } from './tabs/tabs.component'
+import { TestingComponent } from './testing/testing.component'
 
 const routes: Routes = [
   { path: 'tabs', component: TabsComponent },
@@ -15,6 +16,10 @@ const routes: Routes = [
   { path: 'duplicates', component: DuplicatesComponent },
   { path: 'achievements', component: AchievementsComponent },
   { path: 'settings', component: SettingsComponent },
+
+  // For testing purposes in development mode
+  { path: 'testing', component: TestingComponent },
+
   // Default to graphs
   { path: '', redirectTo: '/graphs', pathMatch: 'full' },
   // Wildcard route for a 404 page
