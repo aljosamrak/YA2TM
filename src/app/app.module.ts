@@ -20,7 +20,7 @@ import { PageNotFoundComponentComponent } from './page-not-found-component/page-
 import { SettingsComponent } from './settings/component/settings.component'
 import { SettingsModule } from './settings/settings.module'
 import { DatabaseService } from './storage/service/database.service'
-import { LocalstorageService } from './storage/service/localstorage.service'
+import { LocalStorageService } from './storage/service/local-storage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
 import { TestingComponent } from './testing/testing.component'
@@ -55,7 +55,7 @@ import { TestingComponent } from './testing/testing.component'
   ],
   providers: [
     DatabaseService,
-    LocalstorageService,
+    LocalStorageService,
 
     // Models
     { provide: 'TabData', useClass: ChromeTabData },

@@ -4,7 +4,7 @@ import { Key } from '../model/Key'
 @Injectable({
   providedIn: 'root',
 })
-export class LocalstorageService {
+export class LocalStorageService {
   constructor() {}
 
   async get<T>(key: Key<T>): Promise<T> {

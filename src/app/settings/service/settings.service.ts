@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { USER_PREFERENCES } from '../../storage/model/Key'
-import { LocalstorageService } from '../../storage/service/localstorage.service'
+import { LocalStorageService } from '../../storage/service/local-storage.service'
 import { UserPreferences } from '../model/user-preferences'
 
 @Injectable({
@@ -13,7 +13,7 @@ export class SettingsService {
   )
   userPreferences$ = this.userPreferences.asObservable()
 
-  constructor(protected localstorageService: LocalstorageService) {
+  constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
         this.updateUserPreferences(

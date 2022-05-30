@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { LocalstorageService } from '../storage/service/localstorage.service'
+import { LocalStorageService } from '../storage/service/local-storage.service'
 
 @Component({
   selector: 'app-testing',
@@ -9,7 +9,7 @@ import { LocalstorageService } from '../storage/service/localstorage.service'
 export class TestingComponent  {
   localStorageResult: Status = Status.NOT_RUN
 
-  constructor(private localstorageService: LocalstorageService) { }
+  constructor(private localstorageService: LocalStorageService) { }
 
   async testLocalStorage() {
     const value = 'value'

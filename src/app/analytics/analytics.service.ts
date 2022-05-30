@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router'
 import { measure } from 'measurement-protocol'
 import { v4 as uuidv4 } from 'uuid'
 import { UUID_KEY } from '../storage/model/Key'
-import { LocalstorageService } from '../storage/service/localstorage.service'
+import { LocalStorageService } from '../storage/service/local-storage.service'
 
 export class AnalyticsIdConfig {
   id = ''
@@ -31,7 +31,7 @@ export class AnalyticsService {
 
   constructor(
     private config: AnalyticsIdConfig,
-    private localstorageService: LocalstorageService,
+    private localstorageService: LocalStorageService,
     @Optional() router: Router,
   ) {
     const myuuid = uuidv4()

@@ -11,13 +11,14 @@ import {
   NGXLoggerWriterService,
 } from 'ngx-logger'
 import { Observable } from 'rxjs'
+
 import {
   AnalyticsIdConfig,
   AnalyticsService,
 } from './app/analytics/analytics.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
-import { LocalstorageService } from './app/storage/service/localstorage.service'
+import { LocalStorageService } from './app/storage/service/local-storage.service'
 import { BadgeController } from './controller/BadgeController'
 import { TabController } from './controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
@@ -50,7 +51,7 @@ const analyticsConfiguration: AnalyticsIdConfig = {
 const options = {
   providers: [
     { provide: NGXLogger, useValue: logger },
-    { provide: LocalstorageService, deps: [] },
+    { provide: LocalStorageService, deps: [] },
 
     {
       provide: AnalyticsIdConfig,
@@ -58,12 +59,12 @@ const options = {
     },
     {
       provide: AnalyticsService,
-      deps: [AnalyticsIdConfig, LocalstorageService],
+      deps: [AnalyticsIdConfig, LocalStorageService],
     },
 
     { provide: DatabaseService, deps: [NGXLogger, AnalyticsService] },
 
-    { provide: SettingsService, deps: [LocalstorageService] },
+    { provide: SettingsService, deps: [LocalStorageService] },
 
     // Models
     { provide: ChromeTabData, deps: [] },
