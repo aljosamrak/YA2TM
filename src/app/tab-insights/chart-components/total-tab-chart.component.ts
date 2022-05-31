@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { LinearScaleOptions } from 'chart.js'
+import { Component, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
@@ -12,7 +11,6 @@ import { BaseTabChartComponent } from './base-tab-chart.component'
 })
 export class TotalTabChartComponent
   extends BaseTabChartComponent
-  implements OnInit
 {
   @Input()
   override set data(records: EventRecord[]) {
@@ -24,13 +22,5 @@ export class TotalTabChartComponent
   constructor() {
     super()
     this.setTitle('Total number of tabs')
-  }
-
-  ngOnInit(): void {
-    // Start graph at zero
-    if (this.lineChartOptions?.scales) {
-      const lineScale = this.lineChartOptions.scales['y'] as LinearScaleOptions
-      lineScale.beginAtZero = true
-    }
   }
 }
