@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
+
 import { Key } from '../model/Key'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
-  constructor() {}
-
   async get<T>(key: Key<T>): Promise<T> {
     try {
       // TODO chrome.storage.sync
@@ -27,9 +26,13 @@ export class LocalStorageService {
     return chrome.storage.local.set({ [key.key]: value })
   }
 
-  addOnChangedListener(
-    callback: (changes: object, areaName: string) => void,
-  ): void {
+  addOnChangedListener(callback: (changes: object, areaName: string) => void) {
     chrome.storage.onChanged.addListener(callback)
+  }
+
+  removeOnChangeListener(
+    callback: (changes: object, areaName: string) => void,
+  ) {
+    chrome.storage.onChanged.removeListener(callback)
   }
 }
