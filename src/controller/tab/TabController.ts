@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
+
 import { AnalyticsService } from '../../app/analytics/analytics.service'
+import { DeduplicationService } from '../../app/background/deduplication.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
 import { TrackedEvent } from '../../app/storage/model/EventRecord'
 import { DatabaseService } from '../../app/storage/service/database.service'
 import { TabData } from '../../model/TabData'
 import { WindowData } from '../../model/WindowData'
 import { BadgeController } from '../BadgeController'
+
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
 import TabChangeInfo = chrome.tabs.TabChangeInfo
@@ -19,9 +22,10 @@ import Tab = chrome.tabs.Tab
 class TabController {
   constructor(
     private logger: NGXLogger,
-    protected analytics: AnalyticsService,
+    private analytics: AnalyticsService,
     private databaseService: DatabaseService,
-    protected settingsService: SettingsService,
+    private deduplicationService: DeduplicationService,
+    private settingsService: SettingsService,
     @Inject('TabData') private tabData: TabData,
     @Inject('WindowData') private windowData: WindowData,
     @Inject('BadgeController') private badgeController: BadgeController,
@@ -48,9 +52,7 @@ class TabController {
   }
 
   private async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
-    const currentTabsPromise = this.tabData.query()
-
-    this.deduplicate(tab, currentTabsPromise)
+    this.deduplicationService.deduplicate(tab)
   }
 
   private windowCreated(
@@ -93,29 +95,6 @@ class TabController {
       event: event,
       windows: windows.length,
       tabs: tabs.length,
-    })
-  }
-
-  private deduplicate(
-    newTab: chrome.tabs.Tab,
-    existingTabsPromise: Promise<chrome.tabs.Tab[]>,
-  ) {
-    // if (!this.settingsService.get(Keys.DEDUPLICATE_TABS)) {
-    //   return
-    // }
-    if (!this.settingsService.getUserPreferences().deduplicateTabs) {
-      return
-    }
-    return
-
-    if (newTab.id === undefined) {
-      return
-    }
-
-    existingTabsPromise.then((existingTabs) => {
-      if (existingTabs.includes(newTab)) {
-        this.tabData.remove(newTab.id!)
-      }
     })
   }
 }

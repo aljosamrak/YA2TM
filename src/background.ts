@@ -16,6 +16,7 @@ import {
   AnalyticsIdConfig,
   AnalyticsService,
 } from './app/analytics/analytics.service'
+import { DeduplicationService } from './app/background/deduplication.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'
@@ -66,24 +67,28 @@ const options = {
 
     { provide: SettingsService, deps: [LocalStorageService] },
 
-    // Models
     { provide: ChromeTabData, deps: [] },
     { provide: ChromeWindowData, deps: [] },
 
-    // Views
     { provide: ChromeBadgeView, deps: [] },
 
-    // Controllers
     {
       provide: BadgeController,
       deps: [SettingsService, ChromeTabData, ChromeWindowData, ChromeBadgeView],
     },
+
+    {
+      provide: DeduplicationService,
+      deps: [SettingsService, ChromeTabData, ChromeWindowData],
+    },
+
     {
       provide: TabController,
       deps: [
         NGXLogger,
         AnalyticsService,
         DatabaseService,
+        DeduplicationService,
         SettingsService,
         ChromeTabData,
         ChromeWindowData,
