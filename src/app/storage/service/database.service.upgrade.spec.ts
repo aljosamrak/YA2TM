@@ -34,7 +34,7 @@ describe('DatabaseService upgrade tests', () => {
 
   afterEach(async () => {
     if (service) {
-      service.ngOnDestroy()
+      service.close()
     }
 
     await new Promise<void>((resolve, reject) => {

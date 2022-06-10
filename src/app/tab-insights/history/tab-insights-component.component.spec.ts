@@ -28,7 +28,7 @@ describe('tab-insights', () => {
   })
 
   afterEach(async () => {
-    await TestBed.inject(DatabaseService).ngOnDestroy()
+    await TestBed.inject(DatabaseService).close()
   })
 
   it('should create', () => {

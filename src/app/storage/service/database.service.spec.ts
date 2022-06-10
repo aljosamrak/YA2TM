@@ -26,7 +26,7 @@ describe('DatabaseService', () => {
   // })
   //
   // afterEach(async () => {
-  //   await service.ngOnDestroy()
+  //   service.close()
   //
   //   await new Promise<void>((resolve, reject) => {
   //     const request = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
