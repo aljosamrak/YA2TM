@@ -54,10 +54,7 @@ const options = {
     { provide: NGXLogger, useValue: logger },
     { provide: LocalStorageService, deps: [] },
 
-    {
-      provide: AnalyticsIdConfig,
-      useValue: analyticsConfiguration,
-    },
+    { provide: AnalyticsIdConfig, useValue: analyticsConfiguration },
     {
       provide: AnalyticsService,
       deps: [AnalyticsIdConfig, LocalStorageService],
@@ -79,7 +76,7 @@ const options = {
 
     {
       provide: DeduplicationService,
-      deps: [SettingsService, ChromeTabData, ChromeWindowData],
+      deps: [DatabaseService, SettingsService, ChromeTabData, ChromeWindowData],
     },
 
     {
