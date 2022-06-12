@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
+import { SettingsServiceStub } from '../../test/SettingsServiceStub'
 import { ChromeApiService } from '../chrome-api.service'
-import { UserPreferences } from '../settings/model/user-preferences'
 import { SettingsService } from '../settings/service/settings.service'
 import { DatabaseService } from '../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
@@ -13,13 +13,11 @@ import Tab = chrome.tabs.Tab
 describe('DeduplicationService', () => {
   let service: DeduplicationService
 
-  let userPreferences: UserPreferences
   let chromeApiSpy: jasmine.SpyObj<ChromeApiService>
   let databaseSpy: jasmine.SpyObj<DatabaseService>
-  let settingsSpy: jasmine.SpyObj<SettingsService>
+  let settingsStub: SettingsServiceStub
 
   beforeEach(async () => {
-    userPreferences = new UserPreferences()
     chromeApiSpy = createSpyObj('ChromeApiService', {
       getTabs: () => Promise.resolve([]),
       getWindows: () => Promise.resolve([]),
@@ -28,9 +26,6 @@ describe('DeduplicationService', () => {
       removeTab: () => {},
     })
     databaseSpy = jasmine.createSpyObj('DatabaseService', ['insert_records'])
-    settingsSpy = jasmine.createSpyObj('SettingsService', [
-      'getUserPreferences',
-    ])
 
     await TestBed.configureTestingModule({
       imports: [LoggerTestingModule],
@@ -39,11 +34,14 @@ describe('DeduplicationService', () => {
         DeduplicationService,
         { provide: ChromeApiService, useValue: chromeApiSpy },
         { provide: DatabaseService, useValue: databaseSpy },
-        { provide: SettingsService, useValue: settingsSpy },
+        { provide: SettingsService, useClass: SettingsServiceStub },
       ],
     }).compileComponents()
 
     service = TestBed.inject(DeduplicationService)
+    settingsStub = TestBed.inject(
+      SettingsService,
+    ) as unknown as SettingsServiceStub
   })
 
   it('should be created', () => {
@@ -51,8 +49,7 @@ describe('DeduplicationService', () => {
   })
 
   it('should do nothing on disabled', async () => {
-    userPreferences.deduplicateTabs = false
-    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    settingsStub.userPreferences.deduplicateTabs = false
     const tab = createTab('url')
     chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
 
@@ -62,8 +59,7 @@ describe('DeduplicationService', () => {
   })
 
   it('should remove tabs with same URL', async () => {
-    userPreferences.deduplicateTabs = true
-    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    settingsStub.userPreferences.deduplicateTabs = true
     const tab = createTab('url', 1)
     chromeApiSpy.getTabs.and.returnValue(Promise.resolve([createTab('url', 2)]))
 
@@ -73,8 +69,7 @@ describe('DeduplicationService', () => {
   })
 
   it('should not remove tabs with different URL', async () => {
-    userPreferences.deduplicateTabs = true
-    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    settingsStub.userPreferences.deduplicateTabs = true
     const tab = createTab('url')
     chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
 
