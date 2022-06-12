@@ -1,30 +1,45 @@
 import { TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
-import { TabData } from '../../model/TabData'
-import { StubTabData } from '../../test/stub/StubTabData'
-import { StubWindowData } from '../../test/stub/StubWindowData'
+import { ChromeApiService } from '../chrome-api.service'
+import { UserPreferences } from '../settings/model/user-preferences'
 import { SettingsService } from '../settings/service/settings.service'
+import { DatabaseService } from '../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
+
+import createSpyObj = jasmine.createSpyObj
+import Tab = chrome.tabs.Tab
 
 describe('DeduplicationService', () => {
   let service: DeduplicationService
 
-  const settingsSpy = jasmine.createSpyObj('SettingsService', [
-    'getUserPreferences',
-  ])
-  const stubTabData = new StubTabData()
-  const stubWindowData = new StubWindowData()
+  let userPreferences: UserPreferences
+  let chromeApiSpy: jasmine.SpyObj<ChromeApiService>
+  let databaseSpy: jasmine.SpyObj<DatabaseService>
+  let settingsSpy: jasmine.SpyObj<SettingsService>
 
   beforeEach(async () => {
+    userPreferences = new UserPreferences()
+    chromeApiSpy = createSpyObj('ChromeApiService', {
+      getTabs: () => Promise.resolve([]),
+      getWindows: () => Promise.resolve([]),
+      updateTab: () => {},
+      updateWindow: () => {},
+      removeTab: () => {},
+    })
+    databaseSpy = jasmine.createSpyObj('DatabaseService', ['insert_records'])
+    settingsSpy = jasmine.createSpyObj('SettingsService', [
+      'getUserPreferences',
+    ])
+
     await TestBed.configureTestingModule({
       imports: [LoggerTestingModule],
 
       providers: [
         DeduplicationService,
+        { provide: ChromeApiService, useValue: chromeApiSpy },
+        { provide: DatabaseService, useValue: databaseSpy },
         { provide: SettingsService, useValue: settingsSpy },
-        { provide: 'TabData', useValue: stubTabData },
-        { provide: 'WindowData', useValue: stubWindowData },
       ],
     }).compileComponents()
 
@@ -36,33 +51,51 @@ describe('DeduplicationService', () => {
   })
 
   it('should do nothing on disabled', async () => {
-    settingsSpy.getUserPreferences.and.returnValue({ deduplicateTabs: false })
-    const tab = stubTabData.createTab('url')
-    stubTabData.setTabs([tab])
+    userPreferences.deduplicateTabs = false
+    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    const tab = createTab('url')
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
 
     await service.deduplicate(tab)
 
-    const result = await stubTabData.query()
-    expect(result).toContain(tab)
+    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
   })
 
-  it('should remove tabs with same URL', () => {
-    settingsSpy.getUserPreferences.and.returnValue({ deduplicateTabs: true })
-    const tab = stubTabData.createTab('url')
-    stubTabData.setTabs([tab])
+  it('should remove tabs with same URL', async () => {
+    userPreferences.deduplicateTabs = true
+    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    const tab = createTab('url', 1)
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([createTab('url', 2)]))
 
-    service.deduplicate(tab)
+    await service.deduplicate(tab)
 
-    expect(stubTabData.query).not.toContain(tab)
+    expect(chromeApiSpy.removeTab).toHaveBeenCalledWith(tab.id!)
   })
 
-  it('should not remove tabs with different URL', () => {
-    settingsSpy.getUserPreferences.and.returnValue({ deduplicateTabs: true })
-    const tab = stubTabData.createTab('url')
-    stubTabData.setTabs([tab])
+  it('should not remove tabs with different URL', async () => {
+    userPreferences.deduplicateTabs = true
+    settingsSpy.getUserPreferences.and.returnValue(userPreferences)
+    const tab = createTab('url')
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
 
-    service.deduplicate(stubTabData.createTab('differentUrl'))
+    await service.deduplicate(createTab('differentUrl'))
 
-    expect(stubTabData.query).toContain(tab)
+    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
   })
 })
+function createTab(url: string, id = 1): Tab {
+  return {
+    id: id,
+    index: 1,
+    url: url,
+    pinned: false,
+    highlighted: false,
+    windowId: 1,
+    active: true,
+    incognito: false,
+    selected: false,
+    discarded: false,
+    autoDiscardable: false,
+    groupId: -1,
+  }
+}

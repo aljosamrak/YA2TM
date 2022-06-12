@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
+
 import { USER_PREFERENCES } from '../../storage/model/Key'
 import { LocalStorageService } from '../../storage/service/local-storage.service'
 import { UserPreferences } from '../model/user-preferences'
@@ -26,8 +27,10 @@ export class SettingsService {
 
     localstorageService.addOnChangedListener((changes) => {
       if (changes.hasOwnProperty(USER_PREFERENCES.key)) {
-        // @ts-ignore
-        this.updateUserPreferences(changes[USER_PREFERENCES.key].newValue as UserPreferences)
+        this.updateUserPreferences(
+          // @ts-ignore
+          changes[USER_PREFERENCES.key].newValue as UserPreferences,
+        )
       }
     })
   }

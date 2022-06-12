@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
+
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { BadgeTextType, UserPreferences } from '../model/user-preferences'

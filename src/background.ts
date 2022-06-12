@@ -17,11 +17,11 @@ import {
   AnalyticsService,
 } from './app/analytics/analytics.service'
 import { DeduplicationService } from './app/background/deduplication.service'
+import { BadgeService } from './app/badge.service'
 import { ChromeApiService } from './app/chrome-api.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'
-import { BadgeController } from './controller/BadgeController'
 import { TabController } from './controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 
@@ -64,10 +64,7 @@ const options = {
 
     { provide: SettingsService, deps: [LocalStorageService] },
 
-    {
-      provide: BadgeController,
-      deps: [ChromeApiService, SettingsService],
-    },
+    { provide: BadgeService, deps: [ChromeApiService, SettingsService] },
 
     {
       provide: DeduplicationService,
@@ -79,11 +76,11 @@ const options = {
       deps: [
         NGXLogger,
         AnalyticsService,
+        BadgeService,
         ChromeApiService,
         DatabaseService,
         DeduplicationService,
         SettingsService,
-        BadgeController,
       ],
     },
   ],

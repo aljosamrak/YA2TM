@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 
 import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { DeduplicationService } from '../../app/background/deduplication.service'
+import { BadgeService } from '../../app/badge.service'
 import { ChromeApiService } from '../../app/chrome-api.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
 import { TrackedEvent } from '../../app/storage/model/EventRecord'
 import { DatabaseService } from '../../app/storage/service/database.service'
-import { BadgeController } from '../BadgeController'
 
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
@@ -22,18 +22,18 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     private analytics: AnalyticsService,
+    private badgeService: BadgeService,
     private chromeApiService: ChromeApiService,
     private databaseService: DatabaseService,
     private deduplicationService: DeduplicationService,
     private settingsService: SettingsService,
-    @Inject('BadgeController') private badgeController: BadgeController,
   ) {
     chrome.tabs.onCreated.addListener(this.tabCreated.bind(this))
     chrome.tabs.onUpdated.addListener(this.tabUpdated.bind(this))
     chrome.tabs.onRemoved.addListener(this.tabRemoved.bind(this))
     chrome.windows.onCreated.addListener(this.windowCreated.bind(this))
     chrome.windows.onRemoved.addListener(this.windowRemoved.bind(this))
-    this.badgeController.updateTabCount(this.chromeApiService.getTabs())
+    this.badgeService.updateTabCount()
   }
 
   private async tabCreated(tab: Tab) {
@@ -75,7 +75,7 @@ class TabController {
     currentTabsPromise: Promise<chrome.tabs.Tab[]>,
     tab?: chrome.tabs.Tab,
   ) {
-    this.badgeController.updateTabCount(currentTabsPromise)
+    this.badgeService.updateTabCount()
 
     // Query opened tabs and windows
     const timeNow = Date.now()

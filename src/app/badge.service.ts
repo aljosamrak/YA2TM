@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core'
-import 'reflect-metadata'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 
-import { ChromeApiService } from '../app/chrome-api.service'
+import { ChromeApiService } from './chrome-api.service'
 import {
   BadgeTextType,
   UserPreferences,
-} from '../app/settings/model/user-preferences'
-import { SettingsService } from '../app/settings/service/settings.service'
+} from './settings/model/user-preferences'
+import { SettingsService } from './settings/service/settings.service'
 
 @Injectable({
   providedIn: 'root',
 })
-class BadgeController {
+export class BadgeService {
   subscription?: Subscription
 
   constructor(
@@ -24,14 +23,12 @@ class BadgeController {
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
         // TODO improve
-        this.updateTabCount(this.chromeApiService.getTabs())
+        this.updateTabCount()
       })
   }
 
-  async updateTabCount(
-    currentTabsPromise: Promise<chrome.tabs.Tab[]>,
-  ): Promise<any> {
-    const tabs = await currentTabsPromise
+  async updateTabCount(): Promise<any> {
+    const tabs = await this.chromeApiService.getTabs()
 
     // Badge disabled in user settings
     if (!this.settingsService.getUserPreferences().badgeEnabled) {
@@ -82,7 +79,7 @@ class BadgeController {
   }
 }
 
-function hslToHex(h: number, s: number, l: number) {
+export function hslToHex(h: number, s: number, l: number) {
   h /= 360
   s /= 100
   l /= 100
@@ -138,5 +135,3 @@ function hslToHex(h: number, s: number, l: number) {
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
-
-export { BadgeController, hslToHex }

@@ -5,7 +5,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { NgChartsModule } from 'ng2-charts'
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'
 
-import { BadgeController } from '../controller/BadgeController'
 import { TabController } from '../controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
 import { AchievementsComponent } from './achievements/achievements.component'
@@ -58,7 +57,6 @@ import { TestingComponent } from './testing/testing.component'
     LocalStorageService,
 
     // Controllers
-    { provide: 'BadgeController', useClass: BadgeController },
     { provide: 'TabController', useClass: TabController },
   ],
   bootstrap: [AppComponent],

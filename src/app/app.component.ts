@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Subscription } from 'rxjs'
+
 import { environment } from '../environments/environment'
 import { UserPreferences } from './settings/model/user-preferences'
 import { SettingsService } from './settings/service/settings.service'
