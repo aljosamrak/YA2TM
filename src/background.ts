@@ -22,7 +22,7 @@ import { ChromeApiService } from './app/chrome-api.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'
-import { TabController } from './controller/tab/TabController'
+import { TabService } from './app/tab.service'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
@@ -72,7 +72,7 @@ const options = {
     },
 
     {
-      provide: TabController,
+      provide: TabService,
       deps: [
         NGXLogger,
         AnalyticsService,
@@ -87,4 +87,4 @@ const options = {
 }
 
 const injector = Injector.create(options)
-const tabController = injector.get(TabController)
+const tabService = injector.get(TabService)

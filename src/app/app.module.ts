@@ -5,7 +5,6 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { NgChartsModule } from 'ng2-charts'
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'
 
-import { TabController } from '../controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
 import { AchievementsComponent } from './achievements/achievements.component'
 import { AnalyticsModule } from './analytics/analytics.module'
@@ -51,14 +50,7 @@ import { TestingComponent } from './testing/testing.component'
     }),
     SettingsModule.forRoot(),
   ],
-  providers: [
-    ChromeApiService,
-    DatabaseService,
-    LocalStorageService,
-
-    // Controllers
-    { provide: 'TabController', useClass: TabController },
-  ],
+  providers: [ChromeApiService, DatabaseService, LocalStorageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

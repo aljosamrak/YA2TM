@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
 import 'reflect-metadata'
 
-import { AnalyticsService } from '../../app/analytics/analytics.service'
-import { DeduplicationService } from '../../app/background/deduplication.service'
-import { BadgeService } from '../../app/badge.service'
-import { ChromeApiService } from '../../app/chrome-api.service'
-import { SettingsService } from '../../app/settings/service/settings.service'
-import { TrackedEvent } from '../../app/storage/model/EventRecord'
-import { DatabaseService } from '../../app/storage/service/database.service'
+import { AnalyticsService } from './analytics/analytics.service'
+import { DeduplicationService } from './background/deduplication.service'
+import { BadgeService } from './badge.service'
+import { ChromeApiService } from './chrome-api.service'
+import { SettingsService } from './settings/service/settings.service'
+import { TrackedEvent } from './storage/model/EventRecord'
+import { DatabaseService } from './storage/service/database.service'
 
 import WindowEventFilter = chrome.windows.WindowEventFilter
 import Window = chrome.windows.Window
@@ -18,7 +18,7 @@ import Tab = chrome.tabs.Tab
 @Injectable({
   providedIn: 'root',
 })
-class TabController {
+export class TabService {
   constructor(
     private logger: NGXLogger,
     private analytics: AnalyticsService,
@@ -96,5 +96,3 @@ class TabController {
     })
   }
 }
-
-export { TabController }
