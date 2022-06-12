@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
-import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { TabInsightsComponent } from './tab-insights-component.component'
 
@@ -9,14 +8,17 @@ describe('tab-insights', () => {
   let component: TabInsightsComponent
   let fixture: ComponentFixture<TabInsightsComponent>
 
-  const analyticSpy = jasmine.createSpyObj('AnalyticsService', ['event'])
+  const databaseSpy = jasmine.createSpyObj('DatabaseService', ['query'])
+
   beforeEach(async () => {
+    databaseSpy.query.and.returnValue(Promise.resolve([]))
+
     await TestBed.configureTestingModule({
       imports: [LoggerTestingModule],
 
       providers: [
         TabInsightsComponent,
-        { provide: AnalyticsService, useValue: analyticSpy },
+        { provide: DatabaseService, useValue: databaseSpy },
       ],
     }).compileComponents()
   })
@@ -25,10 +27,6 @@ describe('tab-insights', () => {
     fixture = TestBed.createComponent(TabInsightsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-  })
-
-  afterEach(async () => {
-    await TestBed.inject(DatabaseService).close()
   })
 
   it('should create', () => {

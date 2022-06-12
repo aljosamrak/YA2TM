@@ -1,11 +1,26 @@
 import { TestBed } from '@angular/core/testing'
+
+import { LocalStorageService } from '../../storage/service/local-storage.service'
+import { UserPreferences } from '../model/user-preferences'
 import { SettingsService } from './settings.service'
 
 describe('SettingsService', () => {
   let service: SettingsService
 
+  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', [
+    'get',
+    'addOnChangedListener',
+  ])
+
   beforeEach(() => {
-    TestBed.configureTestingModule({})
+    localStorageSpy.get.and.returnValue(Promise.resolve(new UserPreferences()))
+
+    TestBed.configureTestingModule({
+      providers: [
+        SettingsService,
+        { provide: LocalStorageService, useValue: localStorageSpy },
+      ],
+    })
     service = TestBed.inject(SettingsService)
   })
 
