@@ -4,16 +4,15 @@ import { BrowserModule } from '@angular/platform-browser'
 import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { NgChartsModule } from 'ng2-charts'
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'
+
 import { BadgeController } from '../controller/BadgeController'
 import { TabController } from '../controller/tab/TabController'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from '../environments/environment-generated'
-import { ChromeTabData } from '../model/chrome/ChromeTabData'
-import { ChromeWindowData } from '../model/chrome/ChromeWindowData'
-import { ChromeBadgeView } from '../view/chrome/ChromeBadgeView'
 import { AchievementsComponent } from './achievements/achievements.component'
 import { AnalyticsModule } from './analytics/analytics.module'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
+import { ChromeApiService } from './chrome-api.service'
 import { DrillDownComponent } from './drill-down/drill-down.component'
 import { DuplicatesComponent } from './duplicates/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
@@ -54,15 +53,9 @@ import { TestingComponent } from './testing/testing.component'
     SettingsModule.forRoot(),
   ],
   providers: [
+    ChromeApiService,
     DatabaseService,
     LocalStorageService,
-
-    // Models
-    { provide: 'TabData', useClass: ChromeTabData },
-    { provide: 'WindowData', useClass: ChromeWindowData },
-
-    // Views
-    { provide: 'BadgeView', useClass: ChromeBadgeView },
 
     // Controllers
     { provide: 'BadgeController', useClass: BadgeController },

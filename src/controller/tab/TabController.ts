@@ -4,11 +4,10 @@ import 'reflect-metadata'
 
 import { AnalyticsService } from '../../app/analytics/analytics.service'
 import { DeduplicationService } from '../../app/background/deduplication.service'
+import { ChromeApiService } from '../../app/chrome-api.service'
 import { SettingsService } from '../../app/settings/service/settings.service'
 import { TrackedEvent } from '../../app/storage/model/EventRecord'
 import { DatabaseService } from '../../app/storage/service/database.service'
-import { TabData } from '../../model/TabData'
-import { WindowData } from '../../model/WindowData'
 import { BadgeController } from '../BadgeController'
 
 import WindowEventFilter = chrome.windows.WindowEventFilter
@@ -23,11 +22,10 @@ class TabController {
   constructor(
     private logger: NGXLogger,
     private analytics: AnalyticsService,
+    private chromeApiService: ChromeApiService,
     private databaseService: DatabaseService,
     private deduplicationService: DeduplicationService,
     private settingsService: SettingsService,
-    @Inject('TabData') private tabData: TabData,
-    @Inject('WindowData') private windowData: WindowData,
     @Inject('BadgeController') private badgeController: BadgeController,
   ) {
     chrome.tabs.onCreated.addListener(this.tabCreated.bind(this))
@@ -35,11 +33,11 @@ class TabController {
     chrome.tabs.onRemoved.addListener(this.tabRemoved.bind(this))
     chrome.windows.onCreated.addListener(this.windowCreated.bind(this))
     chrome.windows.onRemoved.addListener(this.windowRemoved.bind(this))
-    this.badgeController.updateTabCount(this.tabData.query())
+    this.badgeController.updateTabCount(this.chromeApiService.getTabs())
   }
 
   private async tabCreated(tab: Tab) {
-    const currentTabsPromise = this.tabData.query()
+    const currentTabsPromise = this.chromeApiService.getTabs()
 
     this.saveEventToDatabase(TrackedEvent.TabOpened, currentTabsPromise, tab)
   }
@@ -47,7 +45,7 @@ class TabController {
   private async tabRemoved(tabId: number) {
     return this.saveEventToDatabase(
       TrackedEvent.TabClosed,
-      this.tabData.query(),
+      this.chromeApiService.getTabs(),
     )
   }
 
@@ -61,14 +59,14 @@ class TabController {
   ) {
     return this.saveEventToDatabase(
       TrackedEvent.WindowOpened,
-      this.tabData.query(),
+      this.chromeApiService.getTabs(),
     )
   }
 
   private windowRemoved(windowId: number) {
     return this.saveEventToDatabase(
       TrackedEvent.WindowClosed,
-      this.tabData.query(),
+      this.chromeApiService.getTabs(),
     )
   }
 

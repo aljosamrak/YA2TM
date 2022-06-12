@@ -1,15 +1,14 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import 'reflect-metadata'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
+
+import { ChromeApiService } from '../app/chrome-api.service'
 import {
   BadgeTextType,
   UserPreferences,
 } from '../app/settings/model/user-preferences'
 import { SettingsService } from '../app/settings/service/settings.service'
-import { TabData } from '../model/TabData'
-import { WindowData } from '../model/WindowData'
-import { BadgeView } from '../view/BadgeView'
 
 @Injectable({
   providedIn: 'root',
@@ -18,16 +17,14 @@ class BadgeController {
   subscription?: Subscription
 
   constructor(
-    protected settingsService: SettingsService,
-    @Inject('TabData') private tabData: TabData,
-    @Inject('WindowData') private windowData: WindowData,
-    @Inject('BadgeView') private badgeView: BadgeView,
+    private chromeApiService: ChromeApiService,
+    private settingsService: SettingsService,
   ) {
     this.subscription = this.settingsService.userPreferences$
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
         // TODO improve
-        this.updateTabCount(tabData.query())
+        this.updateTabCount(this.chromeApiService.getTabs())
       })
   }
 
@@ -38,19 +35,19 @@ class BadgeController {
 
     // Badge disabled in user settings
     if (!this.settingsService.getUserPreferences().badgeEnabled) {
-      this.badgeView.setText('')
+      this.chromeApiService.setBadgeText('')
       return Promise.resolve()
     }
 
     // Set tab number
     const badgeTextPromise = this.getBadgeText(
       this.settingsService.getUserPreferences().badgeTextType,
-    ).then((text) => this.badgeView.setText(text))
+    ).then((text) => this.chromeApiService.setBadgeText(text))
 
     // Set badge color
     return Promise.all([
       badgeTextPromise,
-      this.badgeView.setBackgroundColor(
+      this.chromeApiService.setBadgeBackgroundColor(
         this.getBadgeColor(
           tabs.length,
           this.settingsService.getUserPreferences().desiredTabs,
@@ -72,10 +69,12 @@ class BadgeController {
   private async getBadgeText(badgeTextType: BadgeTextType): Promise<string> {
     switch (badgeTextType) {
       case BadgeTextType.TABS_NUM:
-        return this.tabData.query().then((tabs) => tabs.length.toString())
+        return this.chromeApiService
+          .getTabs()
+          .then((tabs) => tabs.length.toString())
       case BadgeTextType.WINDOW_NUM:
-        return this.windowData
-          .getAll()
+        return this.chromeApiService
+          .getWindows()
           .then((windows) => windows.length.toString())
       default:
         throw Error('Unimplemented')

@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 
-import { TabData } from '../../model/TabData'
-import { WindowData } from '../../model/WindowData'
+import { ChromeApiService } from '../chrome-api.service'
 import { SettingsService } from '../settings/service/settings.service'
 import { TrackedEvent } from '../storage/model/EventRecord'
 import { DatabaseService } from '../storage/service/database.service'
@@ -13,10 +12,9 @@ import Tab = chrome.tabs.Tab
 })
 export class DeduplicationService {
   constructor(
+    private chromeSpiService: ChromeApiService,
     private databaseService: DatabaseService,
     private settingsService: SettingsService,
-    @Inject('TabData') private tabData: TabData,
-    @Inject('WindowData') private windowData: WindowData,
   ) {}
 
   extractGreatSuspenderUrl(url: string) {
@@ -40,8 +38,8 @@ export class DeduplicationService {
       return
     }
 
-    const allTabs = await this.tabData.query()
-    const allWindows = await this.windowData.getAll()
+    const allTabs = await this.chromeSpiService.getTabs()
+    const allWindows = await this.chromeSpiService.getWindows()
 
     let deduplicatedTabs = 0
     allTabs.forEach((otherTab) => {
@@ -57,9 +55,9 @@ export class DeduplicationService {
         !tab.pinned &&
         (!tab.openerTabId || tab.openerTabId !== otherTab.id)
       ) {
-        this.tabData.update(otherTab.id, { selected: true })
-        this.windowData.update(otherTab.windowId, { focused: true })
-        this.tabData.remove(tab.id)
+        this.chromeSpiService.updateTab(otherTab.id, { selected: true })
+        this.chromeSpiService.updateWindow(otherTab.windowId, { focused: true })
+        this.chromeSpiService.removeTab(tab.id)
 
         deduplicatedTabs++
         const timeNow = Date.now()
