@@ -19,6 +19,9 @@ orbs:
   # Detect bugs and vulnerabilities in your repository.
   sonarcloud: sonarsource/sonarcloud@1.1.0
 
+  # A Chrome Web Store Manager.
+  chrome-webstore: sugarshin/chrome-webstore@0.0.3
+
 defaults: &defaults
   # Define a Node docker executor - https://circleci.com/developer/images/image/cimg/node
   docker:
@@ -144,6 +147,18 @@ workflows:
           context: SonarCloud
           requires:
             - test
+      - cws/upload:
+          attach-workspace: true
+          auto-publish: true
+          checkout: false
+          executor: nodejs
+          extension-id: $APP_ID
+          requires:
+            - test
+            - build
+          source: build.zip
+          workspace-root: .
+
 #      - publish:
 #          requires:
 #            - shellcheck/check
