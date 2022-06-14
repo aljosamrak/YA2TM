@@ -151,7 +151,6 @@ workflows:
           attach-workspace: true
           auto-publish: true
           checkout: false
-          executor: nodejs
           extension-id: $APP_ID
           requires:
             - test
