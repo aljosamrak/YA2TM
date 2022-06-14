@@ -147,7 +147,7 @@ workflows:
           context: SonarCloud
           requires:
             - test
-      - cws/upload:
+      - chrome-webstore/upload:
           attach-workspace: true
           auto-publish: true
           checkout: false
