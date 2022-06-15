@@ -152,7 +152,7 @@ workflows:
           context: SonarCloud
           requires:
             - test
-      - publish
+      - publish:
           requires:
             - shellcheck/check
             - test
