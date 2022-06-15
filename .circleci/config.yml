@@ -138,7 +138,7 @@ jobs:
       # Publish the zip file to the Chrome Web Store Developer Dashboard
       - run:
           name: "Publish to the Google Chrome Store"
-          command: chrome-webstore-upload publish --source build.zip
+          command: $(npm bin)/chrome-webstore-upload publish --source build.zip
 
 workflows:
   version: 2
