@@ -126,6 +126,11 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          pkg-manager: npm
+          include-branch-in-cache-key: false
+
       # Attach the build result build.zip
       - attach_workspace:
           at: .
@@ -133,7 +138,7 @@ jobs:
       # Publish the zip file to the Chrome Web Store Developer Dashboard
       - run:
           name: "Publish to the Google Chrome Store"
-          command: ./scripts/publish_on_web_store.sh build.zip
+          command: chrome-webstore-upload publish --source build.zip
 
 workflows:
   version: 2
@@ -147,19 +152,8 @@ workflows:
           context: SonarCloud
           requires:
             - test
-      - chrome-webstore/upload:
-          attach-workspace: true
-          auto-publish: true
-          checkout: false
-          extension-id: $APP_ID
+      - publish
           requires:
+            - shellcheck/check
             - test
             - build
-          source: build.zip
-          workspace-root: .
-
-#      - publish:
-#          requires:
-#            - shellcheck/check
-#            - test
-#            - build
