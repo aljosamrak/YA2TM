@@ -120,7 +120,7 @@ jobs:
 
   publish:
     docker:
-      - image: cibuilds/chrome-extension:latest
+      - image: cimg/node:17.1
 
     steps:
       # Checkout the code as the first step.
