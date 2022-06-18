@@ -7,12 +7,12 @@ VERSION=$(jq -r '.version' package.json)
 version_match="^([0-9]+\.[0-9]+\.[0-9]+)"
 [[ $VERSION =~ $version_match ]] && VERSION="${BASH_REMATCH[1]}"
 
-if [[ -z "${CIRCLE_BUILD_NUM}" ]]; then
-  # If 'CIRCLE_BUILD_NUM' is empty append 'dev' to the version
+if [[ -z "${CIRCLE_WORKFLOW_ID}" ]]; then
+  # If 'CIRCLE_WORKFLOW_ID' is empty append 'dev' to the version
   VERSION="${VERSION}-dev"
 else
-  # If 'CIRCLE_BUILD_NUM' is not empty append it to teh version
-  VERSION="${VERSION}.${CIRCLE_BUILD_NUM}"
+  # If 'CIRCLE_WORKFLOW_ID' is not empty append it to teh version
+  VERSION="${VERSION}.${CIRCLE_WORKFLOW_ID}"
 fi
 
 echo "Updating version to: '$VERSION'"
