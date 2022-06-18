@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eo pipefail
+
 # Get the current version from package.json
 VERSION=$(jq -r '.version' package.json)
 

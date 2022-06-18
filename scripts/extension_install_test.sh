@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eo pipefail
+
 BUILD_DIR="dist/YA2TM"
 EXTENSION_SEARCH_PATTERN="Extension error: "
 RUN_DIR="build"
