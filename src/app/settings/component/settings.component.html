@@ -108,5 +108,18 @@
       </div>
     </mat-expansion-panel>
 
+    <mat-expansion-panel *ngIf='experimentsEnabled'>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          About
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>Version</mat-panel-title>
+        {{applicationVersion}}
+      </div>
+    </mat-expansion-panel>
+
   </mat-accordion>
 </form>

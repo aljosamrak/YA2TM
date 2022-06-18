@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 
+import { environment } from '../../../environments/environment'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { BadgeTextType, UserPreferences } from '../model/user-preferences'
@@ -18,6 +19,7 @@ export class SettingsComponent implements OnInit {
 
   settingsForm: FormGroup
 
+  applicationVersion = environment.version
   experimentsEnabled?: boolean
   badgeEnabled?: boolean
 
