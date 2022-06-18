@@ -6,7 +6,6 @@ import {
   SkipSelf,
 } from '@angular/core'
 import { AnalyticsComponent } from './analytics.component'
-//Service
 import { AnalyticsIdConfig, AnalyticsService } from './analytics.service'
 
 @NgModule({

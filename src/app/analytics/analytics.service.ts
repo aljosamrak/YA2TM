@@ -29,26 +29,22 @@ export type TimingArgs = {
   providedIn: 'root',
 })
 export class AnalyticsService {
-  tracker: any
+  tracker?: any
 
   constructor(
     private config: AnalyticsIdConfig,
     private localstorageService: LocalStorageService,
     @Optional() router: Router,
   ) {
-    const myuuid = uuidv4()
-
-    try {
-      localstorageService.get(UUID_KEY).then((uuid) => {
+    localstorageService
+      .get(UUID_KEY)
+      .then((uuid) => {
         if (!uuid) {
-          uuid = myuuid
+          uuid = uuidv4()
           this.localstorageService.set(UUID_KEY, uuid)
         }
 
-        this.tracker = measure(config.id, {
-          cid: uuid,
-          av: environment.version,
-        })
+        this.tracker = createTracker(config.id, uuid)
 
         router?.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
@@ -58,10 +54,10 @@ export class AnalyticsService {
           }
         })
       })
-    } catch (ex) {
-      console.error('Error appending google analytics')
-      console.error(ex)
-    }
+      .catch((exception) => {
+        console.error('Error appending google analytics')
+        console.error(exception)
+      })
   }
 
   event(eventArgs: EventArgs) {
@@ -84,12 +80,20 @@ export class AnalyticsService {
 
   resetUuid() {
     const uuid = uuidv4()
-    try {
-      this.localstorageService.set(UUID_KEY, uuid)
-      this.tracker = measure(this.tracker.id, { cid: uuid })
-    } catch (ex) {
-      console.error('Error appending google analytics')
-      console.error(ex)
-    }
+    this.tracker = createTracker(this.tracker.id, uuid)
+    return this.localstorageService.set(UUID_KEY, uuid)
+  }
+}
+
+function createTracker(trackingId: string, uuid: string) {
+  try {
+    return measure(trackingId, {
+      cid: uuid,
+      av: environment.version,
+    })
+  } catch (ex) {
+    console.error('Error appending google analytics')
+    console.error(ex)
+    return undefined
   }
 }
