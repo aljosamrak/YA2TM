@@ -3,11 +3,9 @@
 # Get the current version from package.json
 VERSION=$(jq -r '.version' package.json)
 
-# Check if version need to be updated - matching 'xx.xx.xx'
-version_match="^[0-9]+\.[0-9]+\.[0-9]+$"
-if ! [[ $VERSION =~ $version_match ]]; then
-  exit 0
-fi
+# Extract the original version without the appended part - matching 'xx.xx.xx'
+version_match="^([0-9]+\.[0-9]+\.[0-9]+)"
+[[ $VERSION =~ $version_match ]] && VERSION="${BASH_REMATCH[1]}"
 
 if [[ -z "${CIRCLE_BUILD_NUM}" ]]; then
   # If 'CIRCLE_BUILD_NUM' is empty append 'dev' to the version
