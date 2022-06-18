@@ -2,6 +2,8 @@ import { Injectable, Optional } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { measure } from 'measurement-protocol'
 import { v4 as uuidv4 } from 'uuid'
+
+import { environment } from '../../environments/environment'
 import { UUID_KEY } from '../storage/model/Key'
 import { LocalStorageService } from '../storage/service/local-storage.service'
 
@@ -43,7 +45,10 @@ export class AnalyticsService {
           this.localstorageService.set(UUID_KEY, uuid)
         }
 
-        this.tracker = measure(config.id, { cid: uuid })
+        this.tracker = measure(config.id, {
+          cid: uuid,
+          av: environment.version,
+        })
 
         router?.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
