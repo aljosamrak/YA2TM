@@ -17,7 +17,7 @@ export class DeduplicationService {
     private settingsService: SettingsService,
   ) {}
 
-  extractGreatSuspenderUrl(url: string) {
+  static extractGreatSuspenderUrl(url: string) {
     // The Great Suspender encodes URLs when it suspends pages.
     const suspenderPrefix =
       'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#'
@@ -26,6 +26,10 @@ export class DeduplicationService {
     } else {
       return url
     }
+  }
+
+  static extractUrl(url: string): string {
+    return this.extractGreatSuspenderUrl(url)
   }
 
   async deduplicate(tab: Tab) {
@@ -47,7 +51,7 @@ export class DeduplicationService {
         return
       }
 
-      const otherTabUrl = this.extractGreatSuspenderUrl(otherTab.url)
+      const otherTabUrl = DeduplicationService.extractUrl(otherTab.url)
       if (
         tab.id !== otherTab.id &&
         tab.url === otherTabUrl &&

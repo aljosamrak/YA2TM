@@ -78,7 +78,8 @@ describe('DeduplicationService', () => {
     expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
   })
 })
-function createTab(url: string, id = 1): Tab {
+
+export function createTab(url: string, id = 1): Tab {
   return {
     id: id,
     index: 1,
