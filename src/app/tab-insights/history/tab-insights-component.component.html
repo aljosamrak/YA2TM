@@ -6,25 +6,9 @@
     grid-template-rows: 50% 50%;
   "
 >
-  <!--    <CustomChart data={dataForPeriod} operationFunction={openClosed} />-->
-  <!--    {/*<CustomChart data={dataForPeriod} operationFunction={diff} />*/}-->
-  <!--    <DiffTabChart groupByDate={dataForPeriod} />-->
-  <!---->
-  <!--    <CustomChart data={dataForPeriod} operationFunction={sumSum} />-->
-  <!--    {/*<CustomChart data={dataForPeriod} operationFunction={tabs} />*/}-->
-
-<!--  <total-tab-chart-component-->
-<!--    [dateRange]="dateRange"-->
-<!--    [data]="data"-->
-<!--    (dataRange)="setDataRange($event)"-->
-<!--  ></total-tab-chart-component>-->
-<!--  <total-tab-chart-component-->
-<!--    [dateRange]="dateRange"-->
-<!--    [data]="data"-->
-<!--  ></total-tab-chart-component>-->
 
   <event-tab-chart-component
-    [title]='"Deduplicated tabs"'
+    [title]='"Number of deduplicated tabs"'
     [desiredEvent]='trackedEvent.TabDeduplicated'
     [dateRange]="dateRange"
     [data]="data"
@@ -36,8 +20,6 @@
     [data]="data"
     (dataRangeOutput)='setDataRange($event)'
   ></diff-tab-chart-component>
-
-
 
   <open-close-tab-chart-component
     [dateRange]="dateRange"

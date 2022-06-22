@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
+
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
 
@@ -22,7 +23,7 @@ export const CHART_COLORS = {
 export class OpenCloseTabChartComponent extends BaseTabChartComponent {
   constructor() {
     super()
-    this.setTitle('Open close')
+    this.setTitle('Number of opened and closed tabs')
   }
 
   @Input()
@@ -86,8 +87,6 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
 
     // TODO
     if (this.chart && this.chart.chart) {
-      // this.chart.chart.data.datasets[0].data = values
-      // this.chart.chart.data.labels = labels
       this.chart.chart.stop() // make sure animations are not running
       this.chart.chart.update('none')
     }

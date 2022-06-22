@@ -4,6 +4,7 @@ import 'chartjs-adapter-moment'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
+
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent, CHART_COLORS } from './base-tab-chart.component'
 
@@ -19,7 +20,7 @@ export class DiffTabChartComponent
     super()
     // Add annotation plugin to teh graph
     Chart.register(annotationPlugin)
-    this.setTitle('Open close')
+    this.setTitle('Tab number difference')
   }
 
   ngOnInit(): void {
