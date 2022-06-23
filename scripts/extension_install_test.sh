@@ -6,8 +6,11 @@ BUILD_DIR="dist/YA2TM"
 EXTENSION_SEARCH_PATTERN="Extension error: "
 RUN_DIR="build"
 
-# Load extension to Chrome and run Chrome as fresh start
+# Load extension to Chrome and run Chrome as fresh start.
+# Runs Chrome in headless mode. Temporarily needed if running on Windows.
 google-chrome \
+  --headless \
+  --disable-gpu \
   --user-data-dir="$RUN_DIR" \
   --load-extension="$BUILD_DIR" \
   --no-first-run \
