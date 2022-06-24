@@ -16,6 +16,7 @@ export class EventTabChartComponent
 {
   @Input() desiredEvent: TrackedEvent = TrackedEvent.TabOpened
   @Input() title = ''
+  @Input() label = ''
 
   ngOnInit(): void {
     this.setTitle(this.title)
@@ -31,6 +32,6 @@ export class EventTabChartComponent
       return value + (record.event === this.desiredEvent ? 1 : 0)
     })
 
-    this.setChartData(labels, values)
+    this.setChartData(labels, values, this.label)
   }
 }

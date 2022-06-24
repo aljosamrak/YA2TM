@@ -23,7 +23,7 @@ export class TotalTabChartComponent extends BaseTabChartComponent {
       (value, record) => record.tabs,
     )
 
-    this.setChartData(labels, values)
+    this.setChartData(labels, values, 'Tabs')
   }
 
   constructor() {

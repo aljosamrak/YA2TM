@@ -57,6 +57,6 @@ export class DiffTabChartComponent
       return value
     })
 
-    this.setChartData(labels, values)
+    this.setChartData(labels, values, 'Tab difference')
   }
 }

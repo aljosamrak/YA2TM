@@ -48,22 +48,14 @@ export class BaseTabChartComponent {
     }
   }
 
-  setChartData(labels: Date[], values: number[]) {
+  setChartData(labels: Date[], values: number[], label: string) {
     if (this.chart && this.chart.chart) {
       this.chart.chart.data.datasets[0].data = values
+      this.chart.chart.data.datasets[0].label = label
       this.chart.chart.data.labels = labels
       this.chart.chart.stop() // make sure animations are not running
       this.chart.chart.update('none')
     }
-  }
-
-  footer = (tooltipItems: TooltipItem<any>[]) => {
-    let sum = 0
-
-    tooltipItems.forEach(function (tooltipItem) {
-      sum += tooltipItem.parsed.y
-    })
-    return 'Sum: ' + sum
   }
 
   onZoomPanChange(context: { chart: Chart }) {
@@ -111,11 +103,6 @@ export class BaseTabChartComponent {
           enabled: true,
           mode: 'x',
           onPanComplete: this.onZoomPanChange.bind(this),
-        },
-      },
-      tooltip: {
-        callbacks: {
-          footer: this.footer.bind(this),
         },
       },
     },
@@ -186,7 +173,6 @@ export class BaseTabChartComponent {
       datasets: [
         {
           data: [],
-          label: 'Series A',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: CHART_COLORS.green,
           borderWidth: 1,
