@@ -17,18 +17,11 @@ export class TotalTabChartComponent extends BaseTabChartComponent {
       return
     }
 
-    const windowTime =
-      (records[records.length - 1].timestamp - records[0].timestamp) / 20
-    const labels: Date[] = []
-    const values: number[] = []
-    let nextWindowTime = records[0].timestamp + windowTime
-    records.forEach((record) => {
-      if (record.timestamp > nextWindowTime) {
-        labels.push(new Date(nextWindowTime))
-        values.push(record.tabs)
-        nextWindowTime += windowTime
-      }
-    })
+    const [labels, values] = this.window(
+      records,
+      0,
+      (value, record) => record.tabs,
+    )
 
     this.setChartData(labels, values)
   }

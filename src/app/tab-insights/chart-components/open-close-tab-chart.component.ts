@@ -32,37 +32,21 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
       return
     }
 
-    const windowTime =
-      (records[records.length - 1].timestamp - records[0].timestamp) / 20
-    const labels: Date[] = []
-    const openValues: number[] = []
-    const closeValues: number[] = []
-    let nextWindowTime = records[0].timestamp + windowTime
-    let openAggregation = 0
-    let closeAggregation = 0
-    records.forEach((record) => {
-      if (record.timestamp > nextWindowTime) {
-        labels.push(new Date(nextWindowTime))
-        openValues.push(openAggregation)
-        closeValues.push(closeAggregation)
-        nextWindowTime += windowTime
-        openAggregation = 0
-        closeAggregation = 0
-      }
-
-      // TODO maybe get from total tabs
-      if (record.event === TrackedEvent.TabOpened) {
-        openAggregation += 1
-      }
-      if (record.event === TrackedEvent.TabClosed) {
-        closeAggregation += 1
-      }
-    })
+    const [labels, values] = this.window<[number, number]>(
+      records,
+      [0, 0],
+      ([opened, closed], record) => {
+        return [
+          opened + (record.event === TrackedEvent.TabOpened ? 1 : 0),
+          closed + (record.event === TrackedEvent.TabClosed ? 1 : 0),
+        ]
+      },
+    )
 
     this.lineChartData = {
       datasets: [
         {
-          data: openValues,
+          data: values.map(([opened, closed]) => opened),
           label: 'Series A',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: CHART_COLORS.red,
@@ -72,7 +56,7 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
           spanGaps: true,
         },
         {
-          data: closeValues,
+          data: values.map(([opened, closed]) => closed),
           label: 'Series A',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgb(75, 192, 192)',

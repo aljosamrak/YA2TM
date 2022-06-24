@@ -18,7 +18,7 @@ export class DiffTabChartComponent
 {
   constructor() {
     super()
-    // Add annotation plugin to teh graph
+    // Add annotation plugin to the graph
     Chart.register(annotationPlugin)
     this.setTitle('Tab number difference')
   }
@@ -47,26 +47,14 @@ export class DiffTabChartComponent
       return
     }
 
-    const windowTime =
-      (records[records.length - 1].timestamp - records[0].timestamp) / 20
-    const labels: Date[] = []
-    const values: number[] = []
-    let nextWindowTime = records[0].timestamp + windowTime
-    let aggregation = 0
-    records.forEach((record) => {
-      if (record.timestamp > nextWindowTime) {
-        labels.push(new Date(nextWindowTime))
-        values.push(aggregation)
-        nextWindowTime += windowTime
-        aggregation = 0
-      }
-
+    const [labels, values] = this.window(records, 0, (value, record) => {
       // TODO maybe get from total tabs
       if (record.event === TrackedEvent.TabOpened) {
-        aggregation += 1
+        return value + 1
       } else if (record.event === TrackedEvent.TabClosed) {
-        aggregation -= 1
+        return value - 1
       }
+      return value
     })
 
     this.setChartData(labels, values)

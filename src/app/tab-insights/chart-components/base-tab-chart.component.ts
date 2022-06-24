@@ -7,10 +7,10 @@ import {
 } from '@angular/core'
 import { Chart, ChartConfiguration, ChartType, TooltipItem } from 'chart.js'
 import 'chartjs-adapter-moment'
-import 'chartjs-plugin-zoom'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import 'hammerjs'
 import { BaseChartDirective } from 'ng2-charts'
+
 import { EventRecord } from '../../storage/model/EventRecord'
 import { DateRange } from '../history/tab-insights-component.component'
 
@@ -78,7 +78,7 @@ export class BaseTabChartComponent {
       point: {
         borderWidth: 0,
         radius: 0,
-        hitRadius: 3, // Extra radius added to point radius for hit detection.
+        hitRadius: 5, // Extra radius added to point radius for hit detection.
       },
     },
     plugins: {
@@ -144,6 +144,38 @@ export class BaseTabChartComponent {
     if (this.lineChartOptions?.plugins?.title) {
       this.lineChartOptions.plugins.title.text = title
     }
+  }
+
+  window<Type>(
+    records: EventRecord[],
+    initialValue: Type,
+    aggregationFunction: (value: Type, record: EventRecord) => Type,
+  ) {
+    const windowTime =
+      (records[records.length - 1].timestamp - records[0].timestamp) / 20
+
+    const labels: Date[] = []
+    const values: Type[] = []
+
+    let nextWindowTime = records[0].timestamp + windowTime
+    // TODO how to handle the first window?
+    let currentWindowValue = initialValue // TODO what should be the initial value
+    let prev = records[0]
+
+    records.forEach((record) => {
+      if (record.timestamp > nextWindowTime) {
+        labels.push(new Date(prev.timestamp))
+        values.push(currentWindowValue)
+        nextWindowTime += windowTime
+        currentWindowValue = initialValue
+      }
+      currentWindowValue = aggregationFunction(currentWindowValue, record)
+      prev = record
+    })
+    labels.push(new Date(prev.timestamp))
+    values.push(currentWindowValue)
+
+    return [labels, values] as const
   }
 
   constructor() {
