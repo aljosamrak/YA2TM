@@ -137,9 +137,11 @@ export class BaseTabChartComponent {
     records: EventRecord[],
     initialValue: Type,
     aggregationFunction: (value: Type, record: EventRecord) => Type,
+    divisionParts = 20,
   ) {
     const windowTime =
-      (records[records.length - 1].timestamp - records[0].timestamp) / 20
+      (records[records.length - 1].timestamp - records[0].timestamp) /
+      divisionParts
 
     const labels: Date[] = []
     const values: Type[] = []
@@ -153,7 +155,11 @@ export class BaseTabChartComponent {
       if (record.timestamp > nextWindowTime) {
         labels.push(new Date(prev.timestamp))
         values.push(currentWindowValue)
-        nextWindowTime += windowTime
+        // Calculate the next window containing next record. If there is a long
+        // period of inactivity, we won't plot anything.
+        while (record.timestamp > nextWindowTime) {
+          nextWindowTime += windowTime
+        }
         currentWindowValue = initialValue
       }
       currentWindowValue = aggregationFunction(currentWindowValue, record)
