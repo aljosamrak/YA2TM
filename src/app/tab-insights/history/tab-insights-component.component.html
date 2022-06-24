@@ -6,14 +6,11 @@
     grid-template-rows: 50% 50%;
   "
 >
-
-  <event-tab-chart-component
-    [title]='"Number of deduplicated tabs"'
-    [desiredEvent]='trackedEvent.TabDeduplicated'
+  <total-window-chart-component
     [dateRange]="dateRange"
     [data]="data"
     (dataRangeOutput)='setDataRange($event)'
-  ></event-tab-chart-component>
+  ></total-window-chart-component>
 
   <diff-tab-chart-component
     [dateRange]="dateRange"
