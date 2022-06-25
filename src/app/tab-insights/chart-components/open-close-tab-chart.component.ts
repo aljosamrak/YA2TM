@@ -43,36 +43,17 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
       },
     )
 
-    this.lineChartData = {
-      datasets: [
-        {
-          data: values.map(([opened]) => opened),
-          label: 'Opened',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: CHART_COLORS.red,
-          borderWidth: 1,
-          tension: 0.2,
-          normalized: true,
-          spanGaps: true,
-        },
-        {
-          data: values.map(([, closed]) => closed),
-          label: 'Closed',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgb(75, 192, 192)',
-          borderWidth: 1,
-          tension: 0.2,
-          normalized: true,
-          spanGaps: true,
-        },
-      ],
-      labels: labels,
-    }
-
-    // TODO
-    if (this.chart && this.chart.chart) {
-      this.chart.chart.stop() // make sure animations are not running
-      this.chart.chart.update('none')
-    }
+    this.setChartData(labels, [
+      {
+        values: values.map(([opened]) => opened),
+        label: 'Opened',
+        color: CHART_COLORS.red,
+      },
+      {
+        values: values.map(([, closed]) => closed),
+        label: 'Closed',
+        color: CHART_COLORS.green,
+      },
+    ])
   }
 }

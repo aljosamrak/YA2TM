@@ -32,6 +32,6 @@ export class EventTabChartComponent
       return value + (record.event === this.desiredEvent ? 1 : 0)
     })
 
-    this.setChartData(labels, values, this.label)
+    this.setChartData(labels, [{ values, label: this.label }])
   }
 }

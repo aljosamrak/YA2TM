@@ -18,9 +18,16 @@ export class TotalWindowChartComponent extends BaseTabChartComponent {
 
   @Input()
   override set data(records: EventRecord[]) {
-    const labels = records.map((record) => new Date(record.timestamp))
-    const values = records.map((record) => record.windows)
+    if (records.length <= 0) {
+      return
+    }
 
-    this.setChartData(labels, values, 'Windows')
+    const [labels, values] = this.window(
+      records,
+      0,
+      (_, record) => record.windows,
+    )
+
+    this.setChartData(labels, [{ values, label: 'Windows' }])
   }
 }

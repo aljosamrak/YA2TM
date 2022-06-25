@@ -25,6 +25,12 @@ export const CHART_COLORS = {
   black: 'rgb(0, 0, 0)',
 }
 
+export type Dataset = {
+  values: number[]
+  label: string
+  color?: string
+}
+
 @Component({
   selector: 'base-tab-chart-component',
   templateUrl: 'line-chart.component.html',
@@ -48,12 +54,24 @@ export class BaseTabChartComponent {
     }
   }
 
-  setChartData(labels: Date[], values: number[], label: string) {
+  setChartData(labels: Date[], datasets: Dataset[]) {
     if (this.chart && this.chart.chart) {
-      this.chart.chart.data.datasets[0].data = values
-      this.chart.chart.data.datasets[0].label = label
-      this.chart.chart.data.labels = labels
-      this.chart.chart.stop() // make sure animations are not running
+      this.lineChartData = {
+        datasets: datasets.map((dataset) => ({
+          data: dataset.values,
+          label: dataset.label,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: dataset.color ?? CHART_COLORS.green,
+          borderWidth: 1,
+          tension: 0.1,
+          normalized: true,
+          spanGaps: true,
+        })),
+        labels: labels,
+      }
+
+      // Make sure animations are not running
+      this.chart.chart.stop()
       this.chart.chart.update('none')
     }
   }
@@ -174,20 +192,5 @@ export class BaseTabChartComponent {
   constructor() {
     // Add zoom plugin
     Chart.register(zoomPlugin)
-
-    this.lineChartData = {
-      datasets: [
-        {
-          data: [],
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: CHART_COLORS.green,
-          borderWidth: 1,
-          tension: 0.2,
-          normalized: true,
-          spanGaps: true,
-        },
-      ],
-      labels: [],
-    }
   }
 }
