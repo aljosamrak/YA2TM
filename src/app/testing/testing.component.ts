@@ -59,7 +59,9 @@ export class TestingComponent {
     await chrome.storage.local.set({ ['testKey2']: value })
 
     await new Promise<void>((resolve) => {
-      while (!returnedValue4) {}
+      while (!returnedValue4) {
+        // Wait for the value to be returned.
+      }
       resolve()
     })
 

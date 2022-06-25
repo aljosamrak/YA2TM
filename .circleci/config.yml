@@ -49,7 +49,7 @@ jobs:
       # Zip the build folder to create a Chrome extension package
       - run:
           name: "Zip package"
-          command: (cd dist; zip -r ../build.zip .)
+          command: (cd dist && zip -r ../build.zip . && cd ..)
 
       # Store the build result as an artefact
       - store_artifacts:

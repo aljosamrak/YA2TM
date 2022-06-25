@@ -35,19 +35,6 @@ export class TabInsightsComponent implements OnInit {
         this.data = _data
       }
     })
-
-    // let tabs = 100
-    // for (let i = timeNow - 1 * 3600 * 1000; i < timeNow; i += 1000) {
-    //   let a = Math.random()
-    //   tabs += a < 0.5 ? -1 : +1
-    //   this.database.insert_records({
-    //     timestamp: i,
-    //     event: a < 0.5 ? TrackedEvent.TabClosed : TrackedEvent.TabOpened,
-    //     url: 'url',
-    //     windows: 5,
-    //     tabs: tabs,
-    //   })
-    // }
   }
 
   setDataRange(dateRange: DateRange) {

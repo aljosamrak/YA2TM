@@ -50,7 +50,7 @@ export class TabService {
   }
 
   private async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
-    this.deduplicationService.deduplicate(tab)
+    return this.deduplicationService.deduplicate(tab)
   }
 
   private windowCreated(

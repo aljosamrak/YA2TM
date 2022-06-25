@@ -9,8 +9,6 @@ import UpdateInfo = chrome.windows.UpdateInfo
   providedIn: 'root',
 })
 export class ChromeApiService {
-  constructor() {}
-
   async getTabs(): Promise<Tab[]> {
     return chrome.tabs.query({})
   }
