@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 
-import { ChromeApiService } from './chrome-api.service'
+import { ChromeApiService } from '../chrome/chrome-api.service'
 import {
   BadgeTextType,
   UserPreferences,
-} from './settings/model/user-preferences'
-import { SettingsService } from './settings/service/settings.service'
+} from '../settings/model/user-preferences'
+import { SettingsService } from '../settings/service/settings.service'
 
 @Injectable({
   providedIn: 'root',

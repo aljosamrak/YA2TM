@@ -16,13 +16,13 @@ import {
   AnalyticsIdConfig,
   AnalyticsService,
 } from './app/analytics/analytics.service'
+import { BadgeService } from './app/background/badge.service'
 import { DeduplicationService } from './app/background/deduplication.service'
-import { BadgeService } from './app/badge.service'
-import { ChromeApiService } from './app/chrome-api.service'
+import { TabService } from './app/background/tab.service'
+import { ChromeApiService } from './app/chrome/chrome-api.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'
-import { TabService } from './app/tab.service'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {

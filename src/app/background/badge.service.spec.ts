@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing'
 
-import { SettingsServiceStub } from '../test/SettingsServiceStub'
+import { SettingsServiceStub } from '../../test/SettingsServiceStub'
+import { ChromeApiService } from '../chrome/chrome-api.service'
+import { BadgeTextType } from '../settings/model/user-preferences'
+import { SettingsService } from '../settings/service/settings.service'
 import { BadgeService, hslToHex } from './badge.service'
-import { ChromeApiService } from './chrome-api.service'
-import { BadgeTextType } from './settings/model/user-preferences'
-import { SettingsService } from './settings/service/settings.service'
 
 import createSpyObj = jasmine.createSpyObj
 
