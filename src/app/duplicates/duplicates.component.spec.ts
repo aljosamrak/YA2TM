@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ChromeApiStub } from '../../test/ChromeApiStub'
-import { ChromeApiService } from '../chrome-api.service'
+import { ChromeApiService } from '../chrome/chrome-api.service'
 import { DuplicatesComponent } from './duplicates.component'
 
 describe('DuplicatesComponent', () => {
