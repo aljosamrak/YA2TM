@@ -27,21 +27,22 @@ describe('BaseTabChartComponentComponent', () => {
 
   describe('window', () => {
     it('no data should return no data', () => {
-      const result = component.window([], 0, FUN)
+      const [dates, values] = component.window([], 0, FUN)
 
-      expect(result).toBe([])
+      expect(dates).toEqual([])
+      expect(values).toEqual([])
     })
 
     it('equally spaced data should be split equally', () => {
       const [dates] = component.window(createTabTimes(1, 2, 3, 4), 0, FUN, 2)
 
-      expect(dates.map((date) => date.getTime())).toBe([2, 4])
+      expect(dates.map((date) => date.getTime())).toEqual([2, 4])
     })
 
     it('unequal spaced data should be split equally', () => {
       const [dates] = component.window(createTabTimes(1, 3, 4, 10), 0, FUN, 2)
 
-      expect(dates.map((date) => date.getTime())).toBe([4, 10])
+      expect(dates.map((date) => date.getTime())).toEqual([4, 10])
     })
 
     it('pause longer then window length should       be split equally', () => {

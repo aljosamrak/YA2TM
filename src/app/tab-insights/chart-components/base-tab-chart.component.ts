@@ -5,7 +5,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
-import { Chart, ChartConfiguration, ChartType, TooltipItem } from 'chart.js'
+import { Chart, ChartConfiguration, ChartType } from 'chart.js'
 import 'chartjs-adapter-moment'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import 'hammerjs'
@@ -157,6 +157,9 @@ export class BaseTabChartComponent {
     aggregationFunction: (value: Type, record: EventRecord) => Type,
     divisionParts = 20,
   ) {
+    if (records.length === 0) {
+      return [[], []]
+    }
     const windowTime =
       (records[records.length - 1].timestamp - records[0].timestamp) /
       divisionParts
