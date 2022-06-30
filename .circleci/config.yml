@@ -158,3 +158,7 @@ workflows:
             - shellcheck/check
             - test
             - build
+          filters:
+            branches:
+              only:
+                - main
