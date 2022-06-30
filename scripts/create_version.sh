@@ -9,10 +9,7 @@ VERSION=$(jq -r '.version' package.json)
 version_match="^([0-9]+\.[0-9]+\.[0-9]+)"
 [[ $VERSION =~ $version_match ]] && VERSION="${BASH_REMATCH[1]}"
 
-if [[ -z "${CIRCLE_BUILD_NUM}" ]]; then
-  # If 'CIRCLE_BUILD_NUM' is empty append 'dev' to the version
-  VERSION="${VERSION}-dev"
-else
+if [[ -n "${CIRCLE_BUILD_NUM}" ]]; then
   # If 'CIRCLE_BUILD_NUM' is not empty append it to the version
   VERSION="${VERSION}.${CIRCLE_BUILD_NUM}"
 fi
