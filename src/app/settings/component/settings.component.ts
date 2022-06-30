@@ -20,8 +20,7 @@ export class SettingsComponent implements OnInit {
   settingsForm: FormGroup
 
   applicationVersion = environment.version
-  experimentsEnabled?: boolean
-  badgeEnabled?: boolean
+  userPreferences?: UserPreferences
 
   public FileType2LabelMapping: Record<any, string> = {
     [BadgeTextType.TABS_NUM]: 'Number of tabs',
@@ -46,7 +45,7 @@ export class SettingsComponent implements OnInit {
     )
 
     this.settingsForm.valueChanges.subscribe((formValue) => {
-      this.badgeEnabled = formValue.badgeEnabled
+      this.userPreferences = formValue
       settingsService.updateUserPreferences(formValue)
     })
   }
@@ -55,7 +54,7 @@ export class SettingsComponent implements OnInit {
     this.subscription = this.settingsService.userPreferences$
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
-        this.experimentsEnabled = item.experimentsEnabled
+        this.userPreferences = item
         this.settingsForm.patchValue(item)
       })
   }

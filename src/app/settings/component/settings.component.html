@@ -1,7 +1,7 @@
 <form class="p-8" [formGroup]="settingsForm">
 
   <mat-accordion>
-    <mat-expansion-panel hideToggle [expanded]='badgeEnabled' [disabled]='!badgeEnabled'>
+    <mat-expansion-panel hideToggle [expanded]='userPreferences?.badgeEnabled' [disabled]='!userPreferences?.badgeEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Enable badge
@@ -25,6 +25,22 @@
             {{FileType2LabelMapping[badgeTextType]}}
           </mat-option>
         </mat-select>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel hideToggle [expanded]='userPreferences?.deduplicateTabs' [disabled]='!userPreferences?.deduplicateTabs' *ngIf='userPreferences?.experimentsEnabled'>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Deduplicate tabs
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateTabs" id="deduplicateTabs"></mat-slide-toggle>
+      </mat-expansion-panel-header>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Deduplicate new tab
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateNewTab" id="deduplicateNewTab"></mat-slide-toggle>
       </div>
     </mat-expansion-panel>
 
@@ -65,7 +81,7 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf='experimentsEnabled'>
+    <mat-expansion-panel *ngIf='userPreferences?.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Experiments
@@ -95,20 +111,13 @@
 
       <div class="d-flex p-2 pr-0 col-example">
         <mat-panel-title>
-          deduplicateTabs
-        </mat-panel-title>
-        <mat-slide-toggle formControlName="deduplicateTabs" id="deduplicateTabs"></mat-slide-toggle>
-      </div>
-
-      <div class="d-flex p-2 pr-0 col-example">
-        <mat-panel-title>
           achievementsEnabled
         </mat-panel-title>
         <mat-slide-toggle formControlName="achievementsEnabled" id="achievementsEnabled"></mat-slide-toggle>
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf='experimentsEnabled'>
+    <mat-expansion-panel *ngIf='userPreferences?.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           About

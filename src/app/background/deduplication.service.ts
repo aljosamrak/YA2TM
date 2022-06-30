@@ -42,6 +42,14 @@ export class DeduplicationService {
       return
     }
 
+    // If disabled, don't deduplicate new tab
+    if (
+      !this.settingsService.getUserPreferences().deduplicateNewTab &&
+      tab.url === 'chrome://newtab/'
+    ) {
+      return
+    }
+
     const allTabs = await this.chromeSpiService.getTabs()
     const allWindows = await this.chromeSpiService.getWindows()
 

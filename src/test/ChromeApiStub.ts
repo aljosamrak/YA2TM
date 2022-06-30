@@ -10,7 +10,6 @@ export class ChromeApiStub {
   }
 
   setTabs(urls: string[]) {
-    let id = 1
-    this.tabs = urls.map((url) => createTab(url, id++))
+    this.tabs = urls.map((url) => createTab(url))
   }
 }

@@ -16,7 +16,11 @@ export class UserPreferences {
   experimentsEnabled = false
   tabsEnabled = false
   drillDownEnabled = false
+
+  // Tab deduplication settings
   deduplicateTabs = false
+  deduplicateNewTab = true
+
   achievementsEnabled = false
   desiredTabs = 30
 }

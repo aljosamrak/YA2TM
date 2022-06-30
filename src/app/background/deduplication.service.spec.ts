@@ -60,8 +60,8 @@ describe('DeduplicationService', () => {
 
   it('should remove tabs with same URL', async () => {
     settingsStub.userPreferences.deduplicateTabs = true
-    const tab = createTab('url', 1)
-    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([createTab('url', 2)]))
+    const tab = createTab('url')
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([createTab('url')]))
 
     await service.deduplicate(tab)
 
@@ -77,11 +77,38 @@ describe('DeduplicationService', () => {
 
     expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
   })
+
+  describe('deduplicate empty tab', () => {
+    it('disabled, should not deduplicate empty tabs', async () => {
+      settingsStub.userPreferences.deduplicateTabs = true
+      settingsStub.userPreferences.deduplicateNewTab = false
+      chromeApiSpy.getTabs.and.returnValue(
+        Promise.resolve([createTab('chrome://newtab/')]),
+      )
+
+      await service.deduplicate(createTab('chrome://newtab/'))
+
+      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
+    })
+
+    it('enabled, should not deduplicate empty tabs', async () => {
+      settingsStub.userPreferences.deduplicateTabs = true
+      settingsStub.userPreferences.deduplicateNewTab = true
+      chromeApiSpy.getTabs.and.returnValue(
+        Promise.resolve([createTab('chrome://newtab/')]),
+      )
+
+      await service.deduplicate(createTab('chrome://newtab/'))
+
+      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+    })
+  })
 })
 
-export function createTab(url: string, id = 1): Tab {
+let id = 1
+export function createTab(url: string): Tab {
   return {
-    id: id,
+    id: id++,
     index: 1,
     url: url,
     pinned: false,
