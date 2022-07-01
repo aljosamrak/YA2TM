@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { NGXLogger } from 'ngx-logger'
-import 'reflect-metadata'
 
 import { AnalyticsService } from '../analytics/analytics.service'
 import { ChromeApiService } from '../chrome/chrome-api.service'

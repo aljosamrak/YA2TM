@@ -8,7 +8,6 @@ import {
 import { Chart, ChartConfiguration, ChartType } from 'chart.js'
 import 'chartjs-adapter-moment'
 import zoomPlugin from 'chartjs-plugin-zoom'
-import 'hammerjs'
 import { BaseChartDirective } from 'ng2-charts'
 
 import { EventRecord } from '../../storage/model/EventRecord'
