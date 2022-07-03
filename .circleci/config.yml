@@ -27,7 +27,6 @@ defaults: &defaults
   docker:
     - image: cimg/node:17.1-browsers
   resource_class: large
-  parallelism: 4
 
 jobs:
   build:
@@ -82,21 +81,18 @@ jobs:
           pkg-manager: npm
           include-branch-in-cache-key: false
 
-      # Run build command
+      # Run tests in parallel, split by timing
       - run:
-          name: "Build"
-          command: npm run build
+          name: Run tests
+          command: |
+            TEST=$(circleci tests glob "src/app/**/*.spec.ts" | circleci tests split --split-by=timings)
+            npm run test $TEST
 
-      # Test if the extension can be installed
-#      TODO readable installation test after fixing it
-#      - run:
-#          name: 'Test Chrome extension installation'
-#          command: ./scripts/extension_install_test.sh
-
-      # Run tests
-      - run:
-          name: "Test"
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
+      # Store test results
+      - store_test_results:
+          path: junit
+      - store_artifacts:
+          path: ~/junit
 
       # Persist the code coverage
       - persist_to_workspace:
