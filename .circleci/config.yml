@@ -86,13 +86,9 @@ jobs:
       - run:
           name: Run tests
           command: |
-            TEST=$(circleci tests glob "src/app/**/*.spec.ts" | circleci tests split --split-by=timings)
-            echo $TEST
-            echo ${TEST[1]}
-            echo ${TEST[@]}
-            args=()
-            for T in "$TEST"; do args+=(--include "$T"); done
-            npm run test -- "${args[@]}"
+            TESTS=$(circleci tests glob "src/app/**/*.spec.ts" | circleci tests split --split-by=timings)
+            ARGS=(); for TEST in $TESTS; do ARGS+=" --include "; ARGS+=$TEST; done;
+            npm run test -- ${ARGS[@]}
 
       # Store test results
       - store_test_results:
