@@ -22,6 +22,8 @@ const chrome = {
   },
 }
 
+;(window as any).global = window
+
 describe('TabService', () => {
   let service: TabService
 
