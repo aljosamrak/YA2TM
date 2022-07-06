@@ -148,17 +148,16 @@ jobs:
       - run:
           name: "Publish Nightly Release on GitHub"
           command: |
-            VERSION='nightly'
+            VERSION='Pre-release'
             ghr \
                 -t ${GITHUB_TOKEN} \
                 -u ${CIRCLE_PROJECT_USERNAME} \
                 -r ${CIRCLE_PROJECT_REPONAME} \
                 -c ${CIRCLE_SHA1} \
-                -n 'Latest build' \
-                -b 'Nightly build of the latest code in master. Download the static binary [gg](https://github.com/u-quark/gg/releases/download/nightly/gg) and `chmod +x` it.' \
+                -n 'Pre-release' \
                 -delete -replace \
                 -prerelease \
-                ${VERSION} ./build.zip
+                ${VERSION} build.zip
 
 workflows:
   version: 2
