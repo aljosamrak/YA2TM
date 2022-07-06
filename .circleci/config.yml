@@ -139,6 +139,27 @@ jobs:
           name: "Publish to the Google Chrome Store"
           command: $(npm bin)/chrome-webstore-upload upload --source build.zip --auto-publish
 
+  publish-github-nightly:
+    docker:
+      - image: cibuilds/github:0.13
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: "Publish Nightly Release on GitHub"
+          command: |
+            VERSION='nightly'
+            ghr \
+                -t ${GITHUB_TOKEN} \
+                -u ${CIRCLE_PROJECT_USERNAME} \
+                -r ${CIRCLE_PROJECT_REPONAME} \
+                -c ${CIRCLE_SHA1} \
+                -n 'Latest build' \
+                -b 'Nightly build of the latest code in master. Download the static binary [gg](https://github.com/u-quark/gg/releases/download/nightly/gg) and `chmod +x` it.' \
+                -delete -replace \
+                -prerelease \
+                ${VERSION} ./build.zip
+
 workflows:
   version: 2
   main:
@@ -151,6 +172,15 @@ workflows:
           context: SonarCloud
           requires:
             - test
+      - publish-github-nightly:
+          requires:
+            - shellcheck/check
+            - test
+            - build
+          filters:
+            branches:
+              only:
+                - develop
       - publish:
           requires:
             - shellcheck/check
