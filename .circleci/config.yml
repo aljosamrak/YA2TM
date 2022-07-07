@@ -146,18 +146,18 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Publish Nightly Release on GitHub"
+          name: Publish Continuous Build to GitHub
           command: |
-            VERSION='Pre-release'
             ghr \
                 -t ${GITHUB_TOKEN} \
                 -u ${CIRCLE_PROJECT_USERNAME} \
                 -r ${CIRCLE_PROJECT_REPONAME} \
                 -c ${CIRCLE_SHA1} \
-                -n 'Pre-release' \
+                -n 'Development Build' \
+                -b 'Built from the latest changes on the development branch. Not all changes might be stable.' \
                 -delete -replace \
                 -prerelease \
-                ${VERSION} build.zip
+                'devel-build' build.zip
 
 workflows:
   version: 2
