@@ -12,6 +12,7 @@ import { BaseChartDirective } from 'ng2-charts'
 
 import { EventRecord } from '../../storage/model/EventRecord'
 import { DateRange } from '../history/tab-insights-component.component'
+import { SettingsService } from '../../settings/service/settings.service'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -154,14 +155,13 @@ export class BaseTabChartComponent {
     records: EventRecord[],
     initialValue: Type,
     aggregationFunction: (value: Type, record: EventRecord) => Type,
-    divisionParts = 20,
   ) {
     if (records.length === 0) {
       return [[], []]
     }
     const windowTime =
       (records[records.length - 1].timestamp - records[0].timestamp) /
-      divisionParts
+      this.settingsService.getUserPreferences().decimationNumPoints
 
     const labels: Date[] = []
     const values: Type[] = []
@@ -191,7 +191,7 @@ export class BaseTabChartComponent {
     return [labels, values] as const
   }
 
-  constructor() {
+  constructor(private settingsService: SettingsService) {
     // Add zoom plugin
     Chart.register(zoomPlugin)
   }

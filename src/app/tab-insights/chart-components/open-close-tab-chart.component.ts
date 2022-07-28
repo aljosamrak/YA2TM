@@ -5,6 +5,7 @@ import 'hammerjs'
 
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
+import { SettingsService } from '../../settings/service/settings.service'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -21,8 +22,8 @@ export const CHART_COLORS = {
   templateUrl: 'line-chart.component.html',
 })
 export class OpenCloseTabChartComponent extends BaseTabChartComponent {
-  constructor() {
-    super()
+  constructor(settingsService: SettingsService) {
+    super(settingsService)
     this.setTitle('Number of opened and closed tabs')
   }
 

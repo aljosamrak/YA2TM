@@ -28,6 +28,25 @@
       </div>
     </mat-expansion-panel>
 
+<!--  Graph setting  -->
+  <mat-accordion>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Graph settings
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Decimation
+        </mat-panel-title>
+        <input type="tel" matInput formControlName="decimationNumPoints" id="decimationNumPoints">
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+<!--  Graph setting  -->
+
     <mat-expansion-panel hideToggle [expanded]='userPreferences?.deduplicateTabs' [disabled]='!userPreferences?.deduplicateTabs' *ngIf='userPreferences?.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>

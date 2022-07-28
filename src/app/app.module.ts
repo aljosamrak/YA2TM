@@ -21,6 +21,7 @@ import { LocalStorageService } from './storage/service/local-storage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
 import { TabsComponent } from './tabs/tabs.component'
 import { TestingComponent } from './testing/testing.component'
+import { MatInputModule } from '@angular/material/input'
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { TestingComponent } from './testing/testing.component'
       id: GOOGLE_ANALYTICS_TRACKING_ID,
     }),
     SettingsModule.forRoot(),
+    MatInputModule,
   ],
   providers: [ChromeApiService, DatabaseService, LocalStorageService],
   bootstrap: [AppComponent],

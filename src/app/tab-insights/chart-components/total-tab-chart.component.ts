@@ -5,6 +5,7 @@ import 'hammerjs'
 
 import { EventRecord } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
+import { SettingsService } from '../../settings/service/settings.service'
 
 @Component({
   selector: 'total-tab-chart-component',
@@ -26,8 +27,8 @@ export class TotalTabChartComponent extends BaseTabChartComponent {
     this.setChartData(labels, [{ values, label: 'Tabs' }])
   }
 
-  constructor() {
-    super()
+  constructor(settingsService: SettingsService) {
+    super(settingsService)
     this.setTitle('Total number of tabs')
   }
 }

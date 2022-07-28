@@ -11,6 +11,8 @@ export class UserPreferences {
   badgeTextType = BadgeTextType.TABS_NUM
   changingColorEnabled = true
 
+  decimationNumPoints = 20
+
   favoriteColor = ''
 
   experimentsEnabled = false

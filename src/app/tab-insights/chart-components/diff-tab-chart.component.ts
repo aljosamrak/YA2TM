@@ -7,6 +7,7 @@ import 'hammerjs'
 
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent, CHART_COLORS } from './base-tab-chart.component'
+import { SettingsService } from '../../settings/service/settings.service'
 
 @Component({
   selector: 'diff-tab-chart-component',
@@ -16,8 +17,8 @@ export class DiffTabChartComponent
   extends BaseTabChartComponent
   implements OnInit
 {
-  constructor() {
-    super()
+  constructor(settingsService: SettingsService) {
+    super(settingsService)
     // Add annotation plugin to the graph
     Chart.register(annotationPlugin)
     this.setTitle('Tab number difference')
