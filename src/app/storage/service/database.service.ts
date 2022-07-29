@@ -26,28 +26,6 @@ export class DatabaseService extends Dexie {
       tanEvents: 'timestamp',
       tabs: null,
     })
-
-    // Open the database
-    this.open()
-      .then(() => {
-        this.analytics.time({
-          category: 'Database',
-          name: 'Open time',
-          value: performance.now() - start,
-        })
-
-        navigator.storage.estimate().then((estimate: StorageEstimate) => {
-          if (estimate.usage && estimate.quota) {
-            analytics.event({
-              category: 'Database',
-              action: 'Open size',
-              value: (estimate?.usage / estimate?.quota) * 100,
-              label: `usage: ${estimate.usage}, quota: ${estimate.quota}`,
-            })
-          }
-        })
-      })
-      .catch((err) => this.logger.error(err.message))
   }
 
   async deleteData(): Promise<void> {
