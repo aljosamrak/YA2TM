@@ -6,9 +6,10 @@
     "start": "ng serve",
     "prebuild": "./scripts/create_version.sh",
     "build": "ng build",
+    "prewatch": "./scripts/create_version.sh",
     "watch": "ng build --verbose --configuration development --progress --watch",
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
-    "test-watch": "ng test --watch --configuration development",
+    "test-watch": "ng test --watch",
     "format": "prettier --write \"./**/*.{ts,tsx,json}\"",
     "postinstall": "node scripts/environment.js"
   },
