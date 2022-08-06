@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { environment } from '../../environments/environment'
 import { UUID_KEY } from '../storage/model/Key'
+import { DatabaseService } from '../storage/service/database.service'
 import { LocalStorageService } from '../storage/service/local-storage.service'
 
 export class AnalyticsIdConfig {
@@ -90,6 +91,9 @@ function createTracker(trackingId: string, uuid: string) {
     return measure(trackingId, {
       cid: uuid,
       av: environment.version,
+
+      // https://cynoteck.com/blog-post/google-analytics-measurement-protocol-overview
+      cd1: DatabaseService.DATABASE_VERSION.toString(),
     })
   } catch (ex) {
     console.error('Error appending google analytics')
