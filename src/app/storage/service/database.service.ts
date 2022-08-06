@@ -4,6 +4,7 @@ import { NGXLogger } from 'ngx-logger'
 
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { EventRecord } from '../model/EventRecord'
+import { convert, OldRecord } from './database.service.legacy-utils'
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class DatabaseService extends Dexie {
   static DATABASE_VERSION = 2
 
   tanEvents!: Table<EventRecord, number>
+  tabs!: Table<EventRecord, number>
 
   constructor(
     private logger: NGXLogger,
@@ -20,12 +22,23 @@ export class DatabaseService extends Dexie {
   ) {
     super(DatabaseService.DATABASE_NAME)
 
-    const start = performance.now()
-
-    this.version(2).stores({
-      tanEvents: 'timestamp',
-      tabs: null,
+    this.version(1).stores({
+      tabs: 'timestamp',
     })
+    this.version(DatabaseService.DATABASE_VERSION)
+      .stores({
+        tanEvents: 'timestamp',
+      })
+      .upgrade(() => {
+        return this.tabs
+          .toArray()
+          .then((records) => {
+            return this.tanEvents.bulkPut(
+              records.map((record) => convert(record as unknown as OldRecord)),
+            )
+          })
+          .then((_) => this.tabs.clear())
+      })
   }
 
   async deleteData(): Promise<void> {
