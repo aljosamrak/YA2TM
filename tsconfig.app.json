@@ -3,12 +3,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["chrome", "node"],
+    "types": ["chrome", "node"]
   },
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/background.ts"
+    "src/background.ts",
+    "node_modules/@types/jasmine/index.d.ts"
   ],
   "include": [
     "src/**/*.d.ts"
