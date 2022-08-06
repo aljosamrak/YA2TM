@@ -40,93 +40,85 @@ describe('DatabaseService upgrade tests', () => {
     await new Promise<void>((resolve, reject) => {
       const delRequest = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
       delRequest.onsuccess = () => resolve()
-      delRequest.onerror = function (event) {
-        console.log('Unable to clear Database, error: ', event)
-        reject(event)
-      }
+      delRequest.onerror = () =>
+        fail(`Unable to clear Database, error: ${delRequest.error}`)
     })
   })
 
-  // describe('Downgrade version', () => {
-  //   it('Fails creating database', async () => {
-  //     await new Promise<IDBDatabase>((resolve, reject) => {
-  //       // Create a database with a newer version
-  //       const request = indexedDB.open(
-  //         DatabaseService.DATABASE_NAME,
-  //         DatabaseService.DATABASE_VERSION + 1,
-  //       )
-  //       request.onerror = () => reject()
-  //       request.onsuccess = () => {
-  //         request.result.close()
-  //         resolve(request.result)
-  //       }
-  //     })
-  //
-  //     // try {
-  //     //   // Await for the database to initialize
-  //     //   await new DatabaseService(logger, new StubAnalytics()).query(0, 0)
-  //     //   assert.fail('Fail!')
-  //     // } catch (error: any) {
-  //     //   expect(error.message).not.toBe('error opening database VersionError')
-  //     // }
-  //   })
-  // })
+  describe('Upgrade from version 1', () => {
+    it('Old entries status gets converted correctly to event', async () => {
+      await createAndFillDbVersion1(
+        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
+      )
 
-  // describe('Upgrade from version 1', () => {
-  //   it('Old entries status gets converted correctly to event', async () => {
-  //     await createAndFillDbVersion1(
-  //       { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-  //       { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-  //     )
-  //
-  //     service = TestBed.inject(DatabaseService)
-  //     const result = await service.query(-1, 1)
-  //
-  //     expect(result.length).toBe(2)
-  //     expect(result).toEqual(
-  //       arrayContaining([
-  //         {
-  //           timestamp: 0,
-  //           event: TrackedEvent.TabOpened,
-  //           url: 'url',
-  //           windows: 2,
-  //           tabs: 5,
-  //         },
-  //         {
-  //           timestamp: 1,
-  //           event: TrackedEvent.TabClosed,
-  //           url: 'url',
-  //           windows: 2,
-  //           tabs: 5,
-  //         },
-  //       ]),
-  //     )
-  //   })
-  //
-  //   it('Old object store gets removed', async () => {
-  //     await createAndFillDbVersion1(
-  //       { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-  //       { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-  //     )
-  //
-  //     service = TestBed.inject(DatabaseService)
-  //     await service.query(-1, 0)
-  //
-  //     const objectStoreNames = await new Promise<DOMStringList>(
-  //       (resolve, reject) => {
-  //         const request = indexedDB.open(
-  //           DatabaseService.DATABASE_NAME,
-  //           DatabaseService.DATABASE_VERSION,
-  //         )
-  //         request.onsuccess = () => {
-  //           request.result.close()
-  //           resolve(request.result.objectStoreNames)
-  //         }
-  //         request.onerror = () => reject()
-  //       },
-  //     )
-  //
-  //     expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V1)
-  //   })
-  // })
+      service = TestBed.inject(DatabaseService)
+      const result = await service.query(-1, 2)
+
+      expect(result.length).toBe(2)
+      expect(result).toEqual(
+        arrayContaining([
+          {
+            timestamp: 0,
+            event: TrackedEvent.TabOpened,
+            url: 'url',
+            windows: 2,
+            tabs: 5,
+          },
+          {
+            timestamp: 1,
+            event: TrackedEvent.TabClosed,
+            url: 'url',
+            windows: 2,
+            tabs: 5,
+          },
+        ]),
+      )
+    })
+
+    it('Old object store gets cleared', async () => {
+      // We can't delete the data store at the next version, we can just clear it.
+      await createAndFillDbVersion1(
+        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
+        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
+      )
+
+      service = TestBed.inject(DatabaseService)
+      await service.query(-1, 0)
+
+      // Dixie sets very high version above the version set. At the time of writing it was 20.
+      const dbVersion = await getDatabaseVersion(DatabaseService.DATABASE_NAME)
+
+      const objectStoreNames = await new Promise<any>((resolve) => {
+        const request = indexedDB.open(DatabaseService.DATABASE_NAME, dbVersion)
+        request.onerror = () => fail(request.error)
+        request.onsuccess = () => {
+          const transaction = request.result.transaction(
+            LEGACY_SORE_NAME_V1,
+            'readonly',
+          )
+
+          const getAllRequest = transaction
+            .objectStore(LEGACY_SORE_NAME_V1)
+            .getAll()
+          getAllRequest.onerror = () => fail(request.error)
+          getAllRequest.onsuccess = () => {
+            resolve(getAllRequest.result)
+            request.result.close()
+          }
+        }
+      })
+
+      expect(objectStoreNames).toEqual([])
+    })
+  })
 })
+
+async function getDatabaseVersion(databaseName: string) {
+  return indexedDB
+    .databases()
+    .then(
+      (databaseInfos) =>
+        databaseInfos.find((info) => info.name === databaseName)?.version,
+    )
+}

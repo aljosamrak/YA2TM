@@ -32,9 +32,8 @@ export function createAndFillDbVersion1(...objects: any[]) {
       const db = request.result
       db.createObjectStore(LEGACY_SORE_NAME_V1, { keyPath: 'timestamp' })
     }
-    request.onsuccess = () => {
-      resolve(request.result)
-    }
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => fail(request.error)
   }).then((db: IDBDatabase): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
       // Populate data with the data in that version
@@ -53,6 +52,7 @@ export function createAndFillDbVersion1(...objects: any[]) {
       objects.forEach((object) => {
         objectStore.add(object)
       })
+      transaction.commit()
     })
   })
 }
