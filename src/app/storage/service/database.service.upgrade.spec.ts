@@ -8,10 +8,9 @@ import { AnalyticsService } from '../../analytics/analytics.service'
 import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
 import {
+  createAndFillDbWithEventRecord,
   LEGACY_SORE_NAME_V1,
-  createAndFillDbVersion1,
 } from './database.service.legacy-utils'
-
 import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService upgrade tests', () => {
@@ -37,7 +36,7 @@ describe('DatabaseService upgrade tests', () => {
       service.close()
     }
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve) => {
       const delRequest = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
       delRequest.onsuccess = () => resolve()
       delRequest.onerror = () =>
@@ -47,18 +46,21 @@ describe('DatabaseService upgrade tests', () => {
 
   describe('Upgrade from version 1', () => {
     it('Old entries status gets converted correctly to event', async () => {
-      await createAndFillDbVersion1(
+      await createAndFillDbWithEventRecord(
+        1,
+        LEGACY_SORE_NAME_V1,
         { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
         { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
       )
 
-      service = TestBed.inject(DatabaseService)
+      service = await TestBed.inject(DatabaseService)
       const result = await service.query(-1, 2)
 
       expect(result.length).toBe(2)
       expect(result).toEqual(
         arrayContaining([
           {
+            id: 1,
             timestamp: 0,
             event: TrackedEvent.TabOpened,
             url: 'url',
@@ -66,6 +68,7 @@ describe('DatabaseService upgrade tests', () => {
             tabs: 5,
           },
           {
+            id: 2,
             timestamp: 1,
             event: TrackedEvent.TabClosed,
             url: 'url',
@@ -78,12 +81,14 @@ describe('DatabaseService upgrade tests', () => {
 
     it('Old object store gets cleared', async () => {
       // We can't delete the data store at the next version, we can just clear it.
-      await createAndFillDbVersion1(
+      await createAndFillDbWithEventRecord(
+        1,
+        LEGACY_SORE_NAME_V1,
         { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
         { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
       )
 
-      service = TestBed.inject(DatabaseService)
+      service = await TestBed.inject(DatabaseService)
       await service.query(-1, 0)
 
       // Dixie sets very high version above the version set. At the time of writing it was 20.

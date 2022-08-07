@@ -2,6 +2,7 @@ import { EventRecord, TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
 
 export const LEGACY_SORE_NAME_V1 = 'tabs'
+export const LEGACY_SORE_NAME_V2 = 'tanEvents'
 
 export type OldRecord = {
   timestamp: number
@@ -24,20 +25,30 @@ export function convert(oldEntry: OldRecord): EventRecord {
   }
 }
 
-export function createAndFillDbVersion1(...objects: any[]) {
+/**
+ * Creates tht database with one object store with key timestamp and fills it with the given entries.
+ */
+export function createAndFillDbWithEventRecord(
+  databaseVersion: number,
+  storeName: string,
+  ...objects: any[]
+) {
   return new Promise<IDBDatabase>((resolve) => {
-    // Create database as it was in version 1
-    const request = indexedDB.open(DatabaseService.DATABASE_NAME, 1)
+    // Create database
+    const request = indexedDB.open(
+      DatabaseService.DATABASE_NAME,
+      databaseVersion,
+    )
     request.onupgradeneeded = () => {
       const db = request.result
-      db.createObjectStore(LEGACY_SORE_NAME_V1, { keyPath: 'timestamp' })
+      db.createObjectStore(storeName, { keyPath: 'timestamp' })
     }
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => fail(request.error)
   }).then((db: IDBDatabase): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
       // Populate data with the data in that version
-      const transaction = db.transaction(LEGACY_SORE_NAME_V1, 'readwrite')
+      const transaction = db.transaction(storeName, 'readwrite')
 
       transaction.oncomplete = () => {
         db.close()
@@ -48,7 +59,7 @@ export function createAndFillDbVersion1(...objects: any[]) {
         reject()
       }
 
-      const objectStore = transaction.objectStore(LEGACY_SORE_NAME_V1)
+      const objectStore = transaction.objectStore(storeName)
       objects.forEach((object) => {
         objectStore.add(object)
       })

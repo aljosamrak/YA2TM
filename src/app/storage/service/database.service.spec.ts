@@ -4,6 +4,7 @@ import { LoggerTestingModule } from 'ngx-logger/testing'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
+import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService', () => {
   const analyticSpy = jasmine.createSpyObj('AnalyticsService', [
@@ -53,5 +54,22 @@ describe('DatabaseService', () => {
 
     expect(result.length).toBe(1)
     expect(result).toContain(record)
+  })
+
+  it('should be able to store two events with same timestamp', async () => {
+    const record = {
+      timestamp: 1,
+      event: TrackedEvent.TabOpened,
+      url: 'url',
+      windows: 1,
+      tabs: 5,
+    }
+
+    await service.insert_records(record)
+    await service.insert_records(record)
+    const result = await service.query(0, 2)
+
+    expect(result.length).toBe(2)
+    expect(result).toEqual(arrayContaining([record, record]))
   })
 })

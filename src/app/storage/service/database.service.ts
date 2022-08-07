@@ -4,17 +4,18 @@ import { NGXLogger } from 'ngx-logger'
 
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { EventRecord } from '../model/EventRecord'
-import { convert, OldRecord } from './database.service.legacy-utils'
+import { TabRelation } from '../model/TabRelations'
+import { convert } from './database.service.legacy-utils'
 
 @Injectable({
   providedIn: 'root',
 })
 export class DatabaseService extends Dexie {
   static DATABASE_NAME = 'TabsDB'
-  static DATABASE_VERSION = 2
+  static DATABASE_VERSION = 3
 
-  tanEvents!: Table<EventRecord, number>
-  tabs!: Table<EventRecord, number>
+  history!: Table<EventRecord, number>
+  openedTabs!: Table<TabRelation, number>
 
   constructor(
     private logger: NGXLogger,
@@ -25,20 +26,34 @@ export class DatabaseService extends Dexie {
     this.version(1).stores({
       tabs: 'timestamp',
     })
-    this.version(DatabaseService.DATABASE_VERSION)
+    this.version(2)
       .stores({
         tanEvents: 'timestamp',
       })
-      .upgrade(() => {
-        return this.tabs
+      .upgrade((tx) => {
+        tx.table('tabs')
           .toArray()
-          .then((records) => {
-            return this.tanEvents.bulkPut(
-              records.map((record) => convert(record as unknown as OldRecord)),
-            )
-          })
-          .then((_) => this.tabs.clear())
+          .then((records) =>
+            tx
+              .table('tanEvents')
+              .bulkPut(records.map((record) => convert(record))),
+          )
+          .then(() => tx.table('tabs').clear())
+          .catch((e) => console.log(e))
       })
+    this.version(DatabaseService.DATABASE_VERSION)
+      .stores({
+        history: '++id, timestamp, event',
+        openedTabs: 'id&, windowId&, openerTabId, index, groupId, title',
+      })
+      .upgrade((tx) =>
+        tx
+          .table('tanEvents')
+          .toArray()
+          .then((records) => this.history.bulkPut(records))
+          .then((_) => tx.table('tanEvents').clear())
+          .catch((e) => console.log(e)),
+      )
   }
 
   async deleteData(): Promise<void> {
@@ -46,7 +61,7 @@ export class DatabaseService extends Dexie {
   }
 
   public insert_records(record: EventRecord) {
-    this.tanEvents.add(record).catch((err) => console.log(err.message))
+    this.history.add(record).catch((err) => this.logger.error(err.message))
   }
 
   public async query(
@@ -55,9 +70,9 @@ export class DatabaseService extends Dexie {
   ): Promise<EventRecord[]> {
     const startTime = performance.now()
 
-    const dataPromise = this.tanEvents
+    const dataPromise = this.history
       .where('timestamp')
-      .between(startDate, endDate)
+      .between(startDate, endDate, true, true)
       .toArray()
 
     dataPromise.then((records) => {
