@@ -64,8 +64,7 @@ export class DeduplicationService {
         tab.id !== otherTab.id &&
         tab.url === otherTabUrl &&
         tab.incognito === otherTab.incognito &&
-        !tab.pinned &&
-        (!tab.openerTabId || tab.openerTabId !== otherTab.id)
+        !tab.pinned
       ) {
         this.chromeSpiService.updateTab(otherTab.id, { selected: true })
         this.chromeSpiService.updateWindow(otherTab.windowId, { focused: true })
