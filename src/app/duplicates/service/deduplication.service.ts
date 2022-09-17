@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core'
 
-import { ChromeApiService } from '../chrome/chrome-api.service'
-import { SettingsService } from '../settings/service/settings.service'
-import { TrackedEvent } from '../storage/model/EventRecord'
-import { DatabaseService } from '../storage/service/database.service'
+import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { SettingsService } from '../../settings/service/settings.service'
+import { TrackedEvent } from '../../storage/model/EventRecord'
+import { DatabaseService } from '../../storage/service/database.service'
 
 import Tab = chrome.tabs.Tab
 

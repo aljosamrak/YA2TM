@@ -17,9 +17,9 @@ import {
   AnalyticsService,
 } from './app/analytics/analytics.service'
 import { BadgeService } from './app/background/badge.service'
-import { DeduplicationService } from './app/background/deduplication.service'
 import { TabService } from './app/background/tab.service'
 import { ChromeApiService } from './app/chrome/chrome-api.service'
+import { DeduplicationService } from './app/duplicates/service/deduplication.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'

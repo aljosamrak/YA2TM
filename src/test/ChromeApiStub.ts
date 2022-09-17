@@ -1,4 +1,4 @@
-import { createTab } from '../app/background/deduplication.service.spec'
+import { createTab } from '../app/duplicates/service/deduplication.service.spec'
 
 import Tab = chrome.tabs.Tab
 

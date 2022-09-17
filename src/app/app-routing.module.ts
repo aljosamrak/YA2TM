@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+
 import { AchievementsComponent } from './achievements/achievements.component'
 import { DrillDownComponent } from './drill-down/drill-down.component'
-import { DuplicatesComponent } from './duplicates/duplicates.component'
+import { DuplicatesComponent } from './duplicates/component/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/component/settings.component'
 import { TabInsightsComponent } from './tab-insights/history/tab-insights-component.component'

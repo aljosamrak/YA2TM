@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
-import { DeduplicationService } from '../background/deduplication.service'
-import { ChromeApiService } from '../chrome/chrome-api.service'
+import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { DeduplicationService } from '../service/deduplication.service'
 
 import Tab = chrome.tabs.Tab
 

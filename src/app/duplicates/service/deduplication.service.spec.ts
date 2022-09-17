@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
-import { SettingsServiceStub } from '../../test/SettingsServiceStub'
-import { ChromeApiService } from '../chrome/chrome-api.service'
-import { SettingsService } from '../settings/service/settings.service'
-import { DatabaseService } from '../storage/service/database.service'
+import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
+import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { SettingsService } from '../../settings/service/settings.service'
+import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
 
 import createSpyObj = jasmine.createSpyObj

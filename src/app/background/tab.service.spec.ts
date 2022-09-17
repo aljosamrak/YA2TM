@@ -4,10 +4,10 @@ import { LoggerTestingModule } from 'ngx-logger/testing'
 import { SettingsServiceStub } from '../../test/SettingsServiceStub'
 import { AnalyticsService } from '../analytics/analytics.service'
 import { ChromeApiService } from '../chrome/chrome-api.service'
+import { DeduplicationService } from '../duplicates/service/deduplication.service'
 import { SettingsService } from '../settings/service/settings.service'
 import { DatabaseService } from '../storage/service/database.service'
 import { BadgeService } from './badge.service'
-import { DeduplicationService } from './deduplication.service'
 import { TabService } from './tab.service'
 
 const chrome = {
