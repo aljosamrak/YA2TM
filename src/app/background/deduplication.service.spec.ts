@@ -78,6 +78,19 @@ describe('DeduplicationService', () => {
     expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
   })
 
+  it('should deduplicate tabs with different openerTabId', async () => {
+    settingsStub.userPreferences.deduplicateTabs = true
+    const tab = createTab('url')
+    tab.openerTabId = 1
+    const differentTabWithSameUrl = createTab('url')
+    differentTabWithSameUrl.openerTabId = 2
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
+
+    await service.deduplicate(differentTabWithSameUrl)
+
+    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+  })
+
   describe('deduplicate empty tab', () => {
     it('disabled, should not deduplicate empty tabs', async () => {
       settingsStub.userPreferences.deduplicateTabs = true
