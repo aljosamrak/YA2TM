@@ -12,7 +12,7 @@ import Tab = chrome.tabs.Tab
 })
 export class DeduplicationService {
   constructor(
-    private chromeSpiService: ChromeApiService,
+    private chromeApiService: ChromeApiService,
     private databaseService: DatabaseService,
     private settingsService: SettingsService,
   ) {}
@@ -50,8 +50,8 @@ export class DeduplicationService {
       return
     }
 
-    const allTabs = await this.chromeSpiService.getTabs()
-    const allWindows = await this.chromeSpiService.getWindows()
+    const allTabs = await this.chromeApiService.getTabs()
+    const allWindows = await this.chromeApiService.getWindows()
 
     let deduplicatedTabs = 0
     allTabs.forEach((otherTab) => {
@@ -66,9 +66,9 @@ export class DeduplicationService {
         tab.incognito === otherTab.incognito &&
         !tab.pinned
       ) {
-        this.chromeSpiService.updateTab(otherTab.id, { selected: true })
-        this.chromeSpiService.updateWindow(otherTab.windowId, { focused: true })
-        this.chromeSpiService.removeTab(tab.id)
+        this.chromeApiService.updateTab(otherTab.id, { selected: true })
+        this.chromeApiService.updateWindow(otherTab.windowId, { focused: true })
+        this.chromeApiService.removeTab(tab.id)
 
         deduplicatedTabs++
         const timeNow = Date.now()
