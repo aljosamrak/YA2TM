@@ -49,6 +49,11 @@ export class TabService {
   }
 
   private async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
+    // URL field will be present on URL change. Skip if not present.
+    if (!changeInfo.url) {
+      return
+    }
+
     return this.deduplicationService.deduplicate(tab)
   }
 
