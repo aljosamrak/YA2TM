@@ -54,7 +54,7 @@ export class DeduplicationService {
     const allWindows = await this.chromeApiService.getWindows()
 
     let deduplicatedTabs = 0
-    allTabs.forEach((otherTab) => {
+    for (const otherTab of allTabs) {
       if (!otherTab.url || !otherTab.id || !tab.url || !tab.id) {
         return
       }
@@ -80,6 +80,6 @@ export class DeduplicationService {
           tabs: allTabs.length - deduplicatedTabs,
         })
       }
-    })
+    }
   }
 }
