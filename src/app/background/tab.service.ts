@@ -4,7 +4,6 @@ import { NGXLogger } from 'ngx-logger'
 import { AnalyticsService } from '../analytics/analytics.service'
 import { ChromeApiService } from '../chrome/chrome-api.service'
 import { DeduplicationService } from '../duplicates/service/deduplication.service'
-import { SettingsService } from '../settings/service/settings.service'
 import { TrackedEvent } from '../storage/model/EventRecord'
 import { DatabaseService } from '../storage/service/database.service'
 import { BadgeService } from './badge.service'
@@ -25,7 +24,6 @@ export class TabService {
     private chromeApiService: ChromeApiService,
     private databaseService: DatabaseService,
     private deduplicationService: DeduplicationService,
-    private settingsService: SettingsService,
   ) {
     chrome.tabs.onCreated.addListener(this.tabCreated.bind(this))
     chrome.tabs.onUpdated.addListener(this.tabUpdated.bind(this))

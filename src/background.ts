@@ -80,7 +80,6 @@ const options = {
         ChromeApiService,
         DatabaseService,
         DeduplicationService,
-        SettingsService,
       ],
     },
   ],
