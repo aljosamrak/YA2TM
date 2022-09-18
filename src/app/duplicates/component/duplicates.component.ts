@@ -13,10 +13,10 @@ import Tab = chrome.tabs.Tab
 export class DuplicatesComponent implements OnInit {
   duplicates: Tab[] = []
 
-  constructor(private chromeSpiService: ChromeApiService) {}
+  constructor(private chromeApiService: ChromeApiService) {}
 
   async ngOnInit(): Promise<void> {
-    const allTabs = await this.chromeSpiService.getTabs()
+    const allTabs = await this.chromeApiService.getTabs()
 
     const urlCounts = allTabs.reduce((urlMap, tab) => {
       const url = DeduplicationService.extractUrl(tab.url!)
