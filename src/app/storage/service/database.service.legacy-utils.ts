@@ -28,12 +28,19 @@ export async function openDatabase(databaseName: string, dbVersion?: number) {
 /**
  * Creates the database with one object store with key timestamp and fills it with the given entries.
  */
-export function createAndFillDbWithEventRecord(
+export async function createAndFillDbWithEventRecord(
   databaseVersion: number,
   storeName: string,
   ...objects: any[]
 ) {
-  return new Promise<IDBDatabase>((resolve) => {
+  await new Promise<void>((resolve) => {
+    const delRequest = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
+    delRequest.onerror = () =>
+      fail(`Unable to clear Database, error: ${delRequest.error}`)
+    delRequest.onsuccess = () => resolve()
+  })
+
+  const database = await new Promise<IDBDatabase>((resolve) => {
     // Create database
     const request = indexedDB.open(
       DatabaseService.DATABASE_NAME,
@@ -45,25 +52,26 @@ export function createAndFillDbWithEventRecord(
     }
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => fail(request.error)
-  }).then((db: IDBDatabase): Promise<void> => {
-    return new Promise<void>((resolve, reject) => {
-      // Populate data with the data in that version
-      const transaction = db.transaction(storeName, 'readwrite')
-
-      transaction.oncomplete = () => {
-        db.close()
-        resolve()
-      }
-      transaction.onerror = () => {
-        db.close()
-        reject()
-      }
-
-      const objectStore = transaction.objectStore(storeName)
-      objects.forEach((object) => {
-        objectStore.add(object)
-      })
-      transaction.commit()
-    })
   })
+
+  return new Promise<void>((resolve, reject) => {
+    // Populate data with the data in that version
+    const transaction = database.transaction(storeName, 'readwrite')
+
+    transaction.oncomplete = () => {
+      database.close()
+      resolve()
+    }
+    transaction.onerror = () => {
+      database.close()
+      reject()
+    }
+
+    const objectStore = transaction.objectStore(storeName)
+    objects.forEach((object) => {
+      objectStore.put(object)
+    })
+
+    transaction.commit()
+  }).catch((error) => console.error(error))
 }

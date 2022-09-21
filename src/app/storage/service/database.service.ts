@@ -3,6 +3,7 @@ import Dexie, { Table } from 'dexie'
 import { NGXLogger } from 'ngx-logger'
 
 import { AnalyticsService } from '../../analytics/analytics.service'
+import { SnoozedTab } from '../../snooze/model/SnoozedTab'
 import { EventRecord } from '../model/EventRecord'
 import { OpenTab } from '../model/OpenTab'
 
@@ -11,10 +12,11 @@ import { OpenTab } from '../model/OpenTab'
 })
 export class DatabaseService extends Dexie {
   static DATABASE_NAME = 'TabsDB'
-  static DATABASE_VERSION = 3
+  static DATABASE_VERSION = 4
 
   history!: Table<EventRecord, number>
   openedTabs!: Table<OpenTab, number>
+  snoozedTabs!: Table<SnoozedTab, number>
 
   constructor(
     private logger: NGXLogger,
@@ -22,19 +24,21 @@ export class DatabaseService extends Dexie {
   ) {
     super(DatabaseService.DATABASE_NAME)
 
-    this.version(DatabaseService.DATABASE_VERSION)
+    this.version(3)
       .stores({
-        history: '++id, timestamp, event',
-        openedTabs: 'id&, windowId&, openerTabId, index, groupId, title',
+        history: '++, timestamp, event',
+        openedTabs: '++, windowId, openerTabId, index, groupId, title',
       })
-      .upgrade((tx) =>
-        tx
-          .table('tanEvents')
+      .upgrade((tx) => {
+        tx.table('tanEvents')
           .toArray()
-          .then((records) => this.history.bulkPut(records))
+          .then((records: EventRecord[]) => this.history.bulkPut(records))
           .then((_) => tx.table('tanEvents').clear())
-          .catch((e) => console.log(e)),
-      )
+          .catch((e) => logger.error(e))
+      })
+    this.version(DatabaseService.DATABASE_VERSION).stores({
+      snoozedTabs: '++, unsnoozedTimestamp',
+    })
   }
 
   async deleteData(): Promise<void> {
@@ -66,5 +70,27 @@ export class DatabaseService extends Dexie {
     })
 
     return dataPromise
+  }
+
+  addOpenTab(param: OpenTab) {
+    this.openedTabs.add(param).catch((err) => this.logger.error(err.message))
+  }
+
+  getOpenTabs(): Promise<OpenTab[]> {
+    return this.openedTabs.toArray()
+  }
+
+  addSnoozedTab(snoozedTab: SnoozedTab) {
+    this.snoozedTabs
+      .put(snoozedTab)
+      .catch((err) => this.logger.error(err.message))
+  }
+
+  getSnoozedTabs() {
+    return this.snoozedTabs.toArray()
+  }
+
+  removeSnoozedTab(key: number) {
+    this.snoozedTabs.delete(key).catch((err) => this.logger.error(err.message))
   }
 }
