@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger'
 
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { EventRecord } from '../model/EventRecord'
-import { TabRelation } from '../model/TabRelations'
+import { OpenTab } from '../model/OpenTab'
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class DatabaseService extends Dexie {
   static DATABASE_VERSION = 3
 
   history!: Table<EventRecord, number>
-  openedTabs!: Table<TabRelation, number>
+  openedTabs!: Table<OpenTab, number>
 
   constructor(
     private logger: NGXLogger,

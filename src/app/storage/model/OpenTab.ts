@@ -1,4 +1,4 @@
-export type TabRelation = {
+export type OpenTab = {
   id?: number
   createdTimestamp?: number
   openerTabId?: number
