@@ -5,7 +5,6 @@ import { NGXLogger } from 'ngx-logger'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { EventRecord } from '../model/EventRecord'
 import { TabRelation } from '../model/TabRelations'
-import { convert } from './database.service.legacy-utils'
 
 @Injectable({
   providedIn: 'root',
@@ -23,24 +22,6 @@ export class DatabaseService extends Dexie {
   ) {
     super(DatabaseService.DATABASE_NAME)
 
-    this.version(1).stores({
-      tabs: 'timestamp',
-    })
-    this.version(2)
-      .stores({
-        tanEvents: 'timestamp',
-      })
-      .upgrade((tx) => {
-        tx.table('tabs')
-          .toArray()
-          .then((records) =>
-            tx
-              .table('tanEvents')
-              .bulkPut(records.map((record) => convert(record))),
-          )
-          .then(() => tx.table('tabs').clear())
-          .catch((e) => console.log(e))
-      })
     this.version(DatabaseService.DATABASE_VERSION)
       .stores({
         history: '++id, timestamp, event',

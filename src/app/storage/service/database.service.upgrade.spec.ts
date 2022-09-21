@@ -9,8 +9,10 @@ import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
 import {
   createAndFillDbWithEventRecord,
-  LEGACY_SORE_NAME_V1,
+  LEGACY_SORE_NAME_V2,
+  openDatabase,
 } from './database.service.legacy-utils'
+
 import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService upgrade tests', () => {
@@ -44,86 +46,53 @@ describe('DatabaseService upgrade tests', () => {
     })
   })
 
-  describe('Upgrade from version 1', () => {
-    it('Old entries status gets converted correctly to event', async () => {
-      await createAndFillDbWithEventRecord(
-        1,
-        LEGACY_SORE_NAME_V1,
-        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-      )
+  describe('Upgrade from version 2', () => {
+    const record = {
+      timestamp: 0,
+      event: TrackedEvent.TabOpened,
+      url: 'url',
+      windows: 2,
+      tabs: 5,
+      id: 1,
+    }
+
+    it('Old entries are preserved', async () => {
+      await createAndFillDbWithEventRecord(2, LEGACY_SORE_NAME_V2, record)
 
       service = await TestBed.inject(DatabaseService)
-      const result = await service.query(-1, 2)
+      const result = await service.query(-1, 1)
 
-      expect(result.length).toBe(2)
-      expect(result).toEqual(
-        arrayContaining([
-          {
-            id: 1,
-            timestamp: 0,
-            event: TrackedEvent.TabOpened,
-            url: 'url',
-            windows: 2,
-            tabs: 5,
-          },
-          {
-            id: 2,
-            timestamp: 1,
-            event: TrackedEvent.TabClosed,
-            url: 'url',
-            windows: 2,
-            tabs: 5,
-          },
-        ]),
-      )
+      expect(result.length).toBe(1)
+      expect(result).toEqual(arrayContaining([record]))
     })
 
     it('Old object store gets cleared', async () => {
       // We can't delete the data store at the next version, we can just clear it.
-      await createAndFillDbWithEventRecord(
-        1,
-        LEGACY_SORE_NAME_V1,
-        { timestamp: 0, url: 'url', status: 'opened', windows: 2, tabs: 5 },
-        { timestamp: 1, url: 'url', status: 'closed', windows: 2, tabs: 5 },
-      )
+      await createAndFillDbWithEventRecord(2, LEGACY_SORE_NAME_V2, record)
 
       service = await TestBed.inject(DatabaseService)
       await service.query(-1, 0)
 
       // Dixie sets very high version above the version set. At the time of writing it was 20.
-      const dbVersion = await getDatabaseVersion(DatabaseService.DATABASE_NAME)
+      const database = await openDatabase(DatabaseService.DATABASE_NAME)
+      const objectStoreNames = database.objectStoreNames
+      database.close()
 
-      const objectStoreNames = await new Promise<any>((resolve) => {
-        const request = indexedDB.open(DatabaseService.DATABASE_NAME, dbVersion)
-        request.onerror = () => fail(request.error)
-        request.onsuccess = () => {
-          const transaction = request.result.transaction(
-            LEGACY_SORE_NAME_V1,
-            'readonly',
-          )
+      expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V2)
+    })
 
-          const getAllRequest = transaction
-            .objectStore(LEGACY_SORE_NAME_V1)
-            .getAll()
-          getAllRequest.onerror = () => fail(request.error)
-          getAllRequest.onsuccess = () => {
-            resolve(getAllRequest.result)
-            request.result.close()
-          }
-        }
-      })
+    it('Old object store gets removed', async () => {
+      await createAndFillDbWithEventRecord(2, LEGACY_SORE_NAME_V2, record)
 
-      expect(objectStoreNames).toEqual([])
+      service = TestBed.inject(DatabaseService)
+      await service.query(-1, 0)
+
+      // Dixie sets very high version above the version set. At the time of writing it was 20.
+      const database = await openDatabase(DatabaseService.DATABASE_NAME)
+      const objectStoreNames = database.objectStoreNames
+      database.close()
+
+      expect(objectStoreNames).not.toContain(LEGACY_SORE_NAME_V2)
     })
   })
 })
-
-async function getDatabaseVersion(databaseName: string) {
-  return indexedDB
-    .databases()
-    .then(
-      (databaseInfos) =>
-        databaseInfos.find((info) => info.name === databaseName)?.version,
-    )
-}
