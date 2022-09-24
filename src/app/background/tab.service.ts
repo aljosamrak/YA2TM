@@ -36,10 +36,26 @@ export class TabService {
   private async tabCreated(tab: Tab) {
     const currentTabsPromise = this.chromeApiService.getTabs()
 
-    this.saveEventToDatabase(TrackedEvent.TabOpened, currentTabsPromise, tab)
+    this.databaseService.addOpenTab({
+      id: tab.id,
+      createdTimestamp: Date.now(),
+      openerTabId: tab.openerTabId,
+      windowId: tab.windowId,
+      index: tab.index,
+      groupId: tab.groupId,
+      title: tab.title,
+    })
+
+    return this.saveEventToDatabase(
+      TrackedEvent.TabOpened,
+      currentTabsPromise,
+      tab,
+    )
   }
 
   private async tabRemoved(tabId: number) {
+    this.databaseService.closeTab(tabId)
+
     return this.saveEventToDatabase(
       TrackedEvent.TabClosed,
       this.chromeApiService.getTabs(),
@@ -51,6 +67,14 @@ export class TabService {
     if (!changeInfo.url) {
       return
     }
+
+    this.databaseService.updateOpenTab({
+      id: tab.id,
+      windowId: tab.windowId,
+      index: tab.index,
+      groupId: tab.groupId,
+      title: tab.title,
+    })
 
     return this.deduplicationService.deduplicate(tab)
   }

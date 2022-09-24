@@ -76,6 +76,18 @@ export class DatabaseService extends Dexie {
     this.openedTabs.add(param).catch((err) => this.logger.error(err.message))
   }
 
+  updateOpenTab(param: OpenTab) {
+    this.openedTabs
+      .update(param.id!, {
+        title: param.title,
+      })
+      .catch((err) => this.logger.error(err.message))
+  }
+
+  closeTab(tabId: number) {
+    this.openedTabs.delete(tabId).catch((err) => this.logger.error(err.message))
+  }
+
   getOpenTabs(): Promise<OpenTab[]> {
     return this.openedTabs.toArray()
   }
