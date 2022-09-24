@@ -1,5 +1,6 @@
 <ul>
   <li *ngFor="let duplicate of duplicates">
+    <tab [setTabId]='duplicate.id!'></tab>
     {{duplicate.url}}
   </li>
 </ul>

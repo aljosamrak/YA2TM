@@ -3,7 +3,7 @@
     <li>{{toDate(records.key)}}</li>
     <ul>
       <li *ngFor="let record of records.value">
-        {{record.title}}
+        <tab [setTabId]='record.id!'></tab>
       </li>
     </ul>
   </div>
