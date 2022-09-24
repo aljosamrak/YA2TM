@@ -90,7 +90,10 @@ function createTracker(trackingId: string, uuid: string) {
   try {
     return measure(trackingId, {
       cid: uuid,
-      av: environment.version,
+      av: environment.version as string,
+
+      // Current locale
+      ul: '@@ui_locale',
 
       // https://cynoteck.com/blog-post/google-analytics-measurement-protocol-overview
       cd1: DatabaseService.DATABASE_VERSION.toString(),
