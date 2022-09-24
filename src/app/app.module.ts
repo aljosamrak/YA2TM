@@ -20,6 +20,7 @@ import { SettingsModule } from './settings/settings.module'
 import { DatabaseService } from './storage/service/database.service'
 import { LocalStorageService } from './storage/service/local-storage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
+import { TabComponent } from './tab/tab.component'
 import { TabsComponent } from './tabs/tabs.component'
 import { TestingComponent } from './testing/testing.component'
 
@@ -33,6 +34,7 @@ import { TestingComponent } from './testing/testing.component'
     PageNotFoundComponentComponent,
     DrillDownComponent,
     TestingComponent,
+    TabComponent,
   ],
   imports: [
     BrowserModule,
