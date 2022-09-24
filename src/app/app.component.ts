@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   drillDownEnabled?: boolean
   duplicateEnabled?: boolean
   achievementsEnabled?: boolean
+  snoozingEnabled?: boolean
 
   settingsLastClicked = 0
   settingsNumClicked = 0
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
         this.drillDownEnabled = item.drillDownEnabled
         this.duplicateEnabled = item.deduplicateTabs
         this.achievementsEnabled = item.achievementsEnabled
+        this.snoozingEnabled = item.snoozingEnabled
       },
     )
   }

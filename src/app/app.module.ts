@@ -17,6 +17,7 @@ import { DuplicatesComponent } from './duplicates/component/duplicates.component
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/component/settings.component'
 import { SettingsModule } from './settings/settings.module'
+import { SnoozedTabsComponent } from './snooze/component/snooze-tabs.component'
 import { DatabaseService } from './storage/service/database.service'
 import { LocalStorageService } from './storage/service/local-storage.service'
 import { TabInsightsModule } from './tab-insights/tab-insights.module'
@@ -35,6 +36,7 @@ import { TestingComponent } from './testing/testing.component'
     DrillDownComponent,
     TestingComponent,
     TabComponent,
+    SnoozedTabsComponent,
   ],
   imports: [
     BrowserModule,

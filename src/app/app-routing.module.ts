@@ -6,6 +6,7 @@ import { DrillDownComponent } from './drill-down/drill-down.component'
 import { DuplicatesComponent } from './duplicates/component/duplicates.component'
 import { PageNotFoundComponentComponent } from './page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from './settings/component/settings.component'
+import { SnoozedTabsComponent } from './snooze/component/snooze-tabs.component'
 import { TabInsightsComponent } from './tab-insights/history/tab-insights-component.component'
 import { TabsComponent } from './tabs/tabs.component'
 import { TestingComponent } from './testing/testing.component'
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'graphs', component: TabInsightsComponent },
   { path: 'drillDown', component: DrillDownComponent },
   { path: 'duplicates', component: DuplicatesComponent },
+  { path: 'snoozed', component: SnoozedTabsComponent },
   { path: 'achievements', component: AchievementsComponent },
   { path: 'settings', component: SettingsComponent },
 
