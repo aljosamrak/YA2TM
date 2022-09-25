@@ -10,7 +10,7 @@ import groupBy from '../util/utils'
   styleUrls: ['./drill-down.component.sass'],
 })
 export class DrillDownComponent implements OnInit {
-  recordMap?: Record<string, OpenTab[]>
+  recordMap?: Map<string, OpenTab[]>
 
   constructor(private databaseService: DatabaseService) {}
 

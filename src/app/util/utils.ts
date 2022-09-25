@@ -4,10 +4,10 @@ export default function groupBy<T, K extends keyof any>(
 ) {
   return list.reduce((previous, currentItem) => {
     const group = getKey(currentItem)
-    if (!previous[group]) {
-      previous[group] = []
+    if (!previous.get(group)) {
+      previous.set(group, [])
     }
-    previous[group].push(currentItem)
+    previous.get(group)?.push(currentItem)
     return previous
-  }, {} as Record<K, T[]>)
+  }, new Map<K, T[]>())
 }

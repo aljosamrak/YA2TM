@@ -1,8 +1,8 @@
 <ul>
-  <div *ngFor="let records of recordMap! | keyvalue">
-    <li>{{toDate(records.key)}}</li>
+  <div *ngFor="let key of this.recordMap?.keys()">
+    <li>{{toDate(key)}}</li>
     <ul>
-      <li *ngFor="let record of records.value">
+      <li *ngFor="let record of recordMap?.get(key)">
         <tab [setTabId]='record.id!'></tab>
       </li>
     </ul>
