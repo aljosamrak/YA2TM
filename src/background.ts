@@ -20,19 +20,24 @@ import {
 } from 'ngx-logger'
 import { Observable } from 'rxjs'
 
-import { AnalyticsIdConfig, AnalyticsService } from './app/analytics/analytics.service'
+import {
+  AnalyticsIdConfig,
+  AnalyticsService,
+} from './app/analytics/analytics.service'
 import { BadgeService } from './app/background/badge.service'
 import { TabService } from './app/background/tab.service'
+import { ChromeAlarmApiService } from './app/chrome/chrome-alarm-api.service'
 import { ChromeApiService } from './app/chrome/chrome-api.service'
 import { DeduplicationService } from './app/duplicates/service/deduplication.service'
 import { SettingsService } from './app/settings/service/settings.service'
+import { SnoozeService } from './app/snooze/service/snooze.service'
 import { DatabaseService } from './app/storage/service/database.service'
 import { LocalStorageService } from './app/storage/service/local-storage.service'
 import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generated'
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
   handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
-    return new Observable(subscriber => {
+    return new Observable((subscriber) => {
       subscriber.complete()
     })
   }
@@ -64,6 +69,7 @@ class Background {
         { provide: NGXLogger, useValue: logger },
         { provide: LocalStorageService, deps: [] },
         { provide: ChromeApiService, deps: [] },
+        { provide: ChromeAlarmApiService, deps: [] },
 
         { provide: AnalyticsIdConfig, useValue: analyticsConfiguration },
 
@@ -81,6 +87,17 @@ class Background {
         {
           provide: DeduplicationService,
           deps: [ChromeApiService, DatabaseService, SettingsService],
+        },
+
+        {
+          provide: SnoozeService,
+          deps: [
+            ChromeAlarmApiService,
+            ChromeApiService,
+            DatabaseService,
+            NGXLogger,
+            SettingsService,
+          ],
         },
 
         {
@@ -102,9 +119,11 @@ class Background {
 
   public start() {
     const tabService = this.injector.get(TabService)
+    const snoozeService = this.injector.get(SnoozeService)
+    snoozeService.setUpContextMenus()
   }
 }
 
 // Init background script
 // tslint:disable-next-line:no-unused-expression
-new Background()
+new Background().start()

@@ -23,6 +23,8 @@ export class UserPreferences {
   deduplicateTabs = false
   deduplicateNewTab = true
 
+  snoozingEnabled = false
+
   achievementsEnabled = false
   desiredTabs = 30
 }
