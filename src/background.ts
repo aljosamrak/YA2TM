@@ -1,3 +1,11 @@
+/**
+ * Background script
+ *
+ * The background script runs as long as the extension is active, regardless of
+ * whether the app (the app window) is open or not.
+ *
+ * See https://developer.chrome.com/extensions/background_pages
+ */
 import { DatePipe } from '@angular/common'
 import { HttpBackend, HttpEvent, HttpRequest } from '@angular/common/http'
 import { Injector } from '@angular/core'
@@ -12,10 +20,7 @@ import {
 } from 'ngx-logger'
 import { Observable } from 'rxjs'
 
-import {
-  AnalyticsIdConfig,
-  AnalyticsService,
-} from './app/analytics/analytics.service'
+import { AnalyticsIdConfig, AnalyticsService } from './app/analytics/analytics.service'
 import { BadgeService } from './app/background/badge.service'
 import { TabService } from './app/background/tab.service'
 import { ChromeApiService } from './app/chrome/chrome-api.service'
@@ -27,7 +32,7 @@ import { GOOGLE_ANALYTICS_TRACKING_ID } from './environments/environment-generat
 
 const httpBackend = new (class MyRunnable extends HttpBackend {
   handle(req: HttpRequest<any>): Observable<HttpEvent<any>> {
-    return new Observable((subscriber) => {
+    return new Observable(subscriber => {
       subscriber.complete()
     })
   }
@@ -47,43 +52,59 @@ const analyticsConfiguration: AnalyticsIdConfig = {
   id: GOOGLE_ANALYTICS_TRACKING_ID,
 }
 
-const options = {
-  providers: [
-    { provide: NGXLogger, useValue: logger },
-    { provide: LocalStorageService, deps: [] },
-    { provide: ChromeApiService, deps: [] },
+class Background {
+  injector: Injector
 
-    { provide: AnalyticsIdConfig, useValue: analyticsConfiguration },
+  /**
+   * Initialize background script
+   */
+  constructor() {
+    const options = {
+      providers: [
+        { provide: NGXLogger, useValue: logger },
+        { provide: LocalStorageService, deps: [] },
+        { provide: ChromeApiService, deps: [] },
 
-    {
-      provide: AnalyticsService,
-      deps: [AnalyticsIdConfig, LocalStorageService],
-    },
+        { provide: AnalyticsIdConfig, useValue: analyticsConfiguration },
 
-    { provide: DatabaseService, deps: [NGXLogger, AnalyticsService] },
+        {
+          provide: AnalyticsService,
+          deps: [AnalyticsIdConfig, LocalStorageService],
+        },
 
-    { provide: SettingsService, deps: [LocalStorageService] },
+        { provide: DatabaseService, deps: [NGXLogger, AnalyticsService] },
 
-    { provide: BadgeService, deps: [ChromeApiService, SettingsService] },
+        { provide: SettingsService, deps: [LocalStorageService] },
 
-    {
-      provide: DeduplicationService,
-      deps: [ChromeApiService, DatabaseService, SettingsService],
-    },
+        { provide: BadgeService, deps: [ChromeApiService, SettingsService] },
 
-    {
-      provide: TabService,
-      deps: [
-        NGXLogger,
-        AnalyticsService,
-        BadgeService,
-        ChromeApiService,
-        DatabaseService,
-        DeduplicationService,
+        {
+          provide: DeduplicationService,
+          deps: [ChromeApiService, DatabaseService, SettingsService],
+        },
+
+        {
+          provide: TabService,
+          deps: [
+            NGXLogger,
+            AnalyticsService,
+            BadgeService,
+            ChromeApiService,
+            DatabaseService,
+            DeduplicationService,
+          ],
+        },
       ],
-    },
-  ],
+    }
+
+    this.injector = Injector.create(options)
+  }
+
+  public start() {
+    const tabService = this.injector.get(TabService)
+  }
 }
 
-const injector = Injector.create(options)
-const tabService = injector.get(TabService)
+// Init background script
+// tslint:disable-next-line:no-unused-expression
+new Background()
