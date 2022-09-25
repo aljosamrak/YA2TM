@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core'
 
 import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { ChromeNotificationService } from '../../chrome/chrome-notification'
+import { DeduplicateStrategy } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { TrackedEvent } from '../../storage/model/EventRecord'
 import { DatabaseService } from '../../storage/service/database.service'
@@ -13,6 +15,7 @@ import Tab = chrome.tabs.Tab
 export class DeduplicationService {
   constructor(
     private chromeApiService: ChromeApiService,
+    private chromeNotificationService: ChromeNotificationService,
     private databaseService: DatabaseService,
     private settingsService: SettingsService,
   ) {}
@@ -33,6 +36,7 @@ export class DeduplicationService {
   }
 
   async deduplicate(tab: Tab) {
+    // Feature disabled
     if (!this.settingsService.getUserPreferences().deduplicateTabs) {
       return
     }
@@ -66,9 +70,27 @@ export class DeduplicationService {
         tab.incognito === otherTab.incognito &&
         !tab.pinned
       ) {
-        this.chromeApiService.updateTab(otherTab.id, { selected: true })
-        this.chromeApiService.updateWindow(otherTab.windowId, { focused: true })
-        this.chromeApiService.removeTab(tab.id)
+        switch (this.settingsService.getUserPreferences().deduplicateStrategy) {
+          case DeduplicateStrategy.REMOVE_NEW_TAB:
+            this.removeAndSwitch(tab.id, otherTab.windowId, otherTab.id)
+            break
+          case DeduplicateStrategy.REMOVE_OLD_TAB:
+            this.removeAndSwitch(otherTab.id, tab.windowId, tab.id)
+            break
+          case DeduplicateStrategy.NOTIFICATION:
+            this.chromeNotificationService.create(
+              {
+                type: 'basic',
+                iconUrl: 'assets/icon-128.png',
+                /** Optional. Title of the notification (e.g. sender name for email). Required for notifications.create method. */
+                title: 'Duplicate tab opened',
+                /** Optional. Main notification content. Required for notifications.create method. */
+                message: '',
+              },
+              (notificationId: string) => {},
+            )
+            break
+        }
 
         deduplicatedTabs++
         const timeNow = Date.now()
@@ -79,7 +101,14 @@ export class DeduplicationService {
           windows: allWindows.length,
           tabs: allTabs.length - deduplicatedTabs,
         })
+        return
       }
     }
+  }
+
+  removeAndSwitch(removeTabId: number, switchWindowId: number, switchTabId: number) {
+    this.chromeApiService.updateTab(switchTabId, { selected: true })
+    this.chromeApiService.updateWindow(switchWindowId, { focused: true })
+    this.chromeApiService.removeTab(removeTabId)
   }
 }
