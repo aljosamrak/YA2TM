@@ -6,7 +6,11 @@ import { throttleTime } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
-import { BadgeTextType, UserPreferences } from '../model/user-preferences'
+import {
+  BadgeTextType,
+  DeduplicateStrategy,
+  UserPreferences,
+} from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
 @Component({
@@ -31,6 +35,12 @@ export class SettingsComponent implements OnInit {
   public fileTypes = Object.values(BadgeTextType).filter(
     (value) => typeof value === 'number',
   )
+
+  deduplicateStrategyMap: any[] = [
+    { name: 'Remove new tab', id: DeduplicateStrategy.REMOVE_NEW_TAB },
+    { name: 'Remove Old tab', id: DeduplicateStrategy.REMOVE_OLD_TAB },
+    { name: 'Show notification', id: DeduplicateStrategy.NOTIFICATION },
+  ]
 
   constructor(
     private analytics: AnalyticsService,

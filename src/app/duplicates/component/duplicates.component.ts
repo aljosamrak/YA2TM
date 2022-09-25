@@ -30,9 +30,9 @@ export class DuplicatesComponent implements OnInit {
     }, new Map<string, Array<Tab>>())
 
     const duplicateTabs = new Array<Tab>()
-    urlCounts.forEach((tabs) => {
+    urlCounts.forEach(tabs => {
       if (tabs.length > 1) {
-        tabs.forEach((tab) => duplicateTabs.push(tab))
+        tabs.forEach(tab => duplicateTabs.push(tab))
       }
     })
 

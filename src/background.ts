@@ -28,6 +28,7 @@ import { BadgeService } from './app/background/badge.service'
 import { TabService } from './app/background/tab.service'
 import { ChromeAlarmApiService } from './app/chrome/chrome-alarm-api.service'
 import { ChromeApiService } from './app/chrome/chrome-api.service'
+import { ChromeNotificationService } from './app/chrome/chrome-notification'
 import { DeduplicationService } from './app/duplicates/service/deduplication.service'
 import { SettingsService } from './app/settings/service/settings.service'
 import { SnoozeService } from './app/snooze/service/snooze.service'
@@ -69,6 +70,7 @@ class Background {
         { provide: NGXLogger, useValue: logger },
         { provide: LocalStorageService, deps: [] },
         { provide: ChromeApiService, deps: [] },
+        { provide: ChromeNotificationService, deps: [] },
         { provide: ChromeAlarmApiService, deps: [] },
 
         { provide: AnalyticsIdConfig, useValue: analyticsConfiguration },
@@ -86,7 +88,7 @@ class Background {
 
         {
           provide: DeduplicationService,
-          deps: [ChromeApiService, DatabaseService, SettingsService],
+          deps: [ChromeApiService, ChromeNotificationService, DatabaseService, SettingsService],
         },
 
         {

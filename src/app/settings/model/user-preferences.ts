@@ -6,6 +6,12 @@ export enum BadgeTextType {
   // TODO do the same for tab color
 }
 
+export enum DeduplicateStrategy {
+  REMOVE_NEW_TAB,
+  REMOVE_OLD_TAB,
+  NOTIFICATION,
+}
+
 export class UserPreferences {
   badgeEnabled = true
   badgeTextType = BadgeTextType.TABS_NUM
@@ -21,6 +27,7 @@ export class UserPreferences {
 
   // Tab deduplication settings
   deduplicateTabs = false
+  deduplicateStrategy = DeduplicateStrategy.REMOVE_NEW_TAB
   deduplicateNewTab = true
 
   snoozingEnabled = false
