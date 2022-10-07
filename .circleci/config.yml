@@ -102,6 +102,33 @@ jobs:
           paths:
             - coverage/YA2TM/lcov.info
 
+  test-e2e:
+    <<: *defaults
+
+    steps:
+      - checkout
+
+      # Install the dependencies from a package.json and cache them for faster future runs
+      - node/install-packages:
+          pkg-manager: npm
+          include-branch-in-cache-key: false
+
+      # Run build command
+      - run:
+          name: "Build"
+          command: npm run build
+
+      # Run e2e tests
+      - run:
+          name: "Test e2e"
+          command: npm run wdio
+
+      # Store test results
+      - store_test_results:
+          path: junit
+      - store_artifacts:
+          path: junit
+
   sonar:
     docker:
       - image: cimg/node:17.1
@@ -167,6 +194,7 @@ workflows:
       - build
       - test:
           context: SonarCloud
+      - test-e2e
       - sonar:
           context: SonarCloud
           requires:
@@ -175,6 +203,7 @@ workflows:
           requires:
             - shellcheck/check
             - test
+            - test-e2e
             - build
           filters:
             branches:
@@ -184,6 +213,7 @@ workflows:
           requires:
             - shellcheck/check
             - test
+            - test-e2e
             - build
           filters:
             branches:
