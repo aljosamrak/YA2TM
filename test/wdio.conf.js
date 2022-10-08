@@ -78,6 +78,7 @@ exports.config = {
       'goog:chromeOptions': {
         args: [
           '--no-sandbox',
+          '--disable-gpu',
           '--disable-dev-shm-usage',
           '--load-extension=/data/Projects/YA2TM/dist/YA2TM/',
         ],
