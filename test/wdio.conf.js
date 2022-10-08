@@ -80,6 +80,7 @@ exports.config = {
           '--no-sandbox',
           '--disable-gpu',
           '--disable-dev-shm-usage',
+          '--remote-debugging-port=9222',
           '--load-extension=/data/Projects/YA2TM/dist/YA2TM/',
         ],
       },
