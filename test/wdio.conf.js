@@ -76,7 +76,11 @@ exports.config = {
       // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
       // excludeDriverLogs: ['bugreport', 'server'],
       'goog:chromeOptions': {
-        args: ['--load-extension=/data/Projects/YA2TM/dist/YA2TM/'],
+        args: [
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--load-extension=/data/Projects/YA2TM/dist/YA2TM/',
+        ],
       },
     },
   ],
