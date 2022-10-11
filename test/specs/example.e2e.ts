@@ -1,4 +1,4 @@
-import ExtensionPage from '../pageobjects/extention.page'
+import ExtensionPage from '../pageobjects/extension.page'
 
 describe('Extension full screen', () => {
   it('opened', async () => {
