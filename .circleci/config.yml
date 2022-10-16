@@ -175,7 +175,7 @@ jobs:
       # Publish the zip file to the Chrome Web Store Developer Dashboard
       - run:
           name: "Publish to the Google Chrome Store"
-          command: $(npm bin)/chrome-webstore-upload upload --source build.zip --auto-publish
+          command: npm run release --source build.zip
 
   publish-github-nightly:
     docker:

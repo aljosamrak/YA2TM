@@ -12,7 +12,8 @@
     "test-watch": "ng test --watch",
     "wdio": "wdio run test/wdio.conf.js",
     "format": "prettier --write \"./**/*.{ts,tsx,json}\"",
-    "postinstall": "node scripts/environment.js"
+    "postinstall": "node scripts/environment.js",
+    "release": "chrome-webstore-upload upload --auto-publish"
   },
   "browser": {
     "https": false
