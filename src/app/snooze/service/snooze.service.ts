@@ -49,7 +49,9 @@ export class SnoozeService {
     private databaseService: DatabaseService,
     private logger: NGXLogger,
     private settingsService: SettingsService,
-  ) {}
+  ) {
+    settingsService.userPreferences$.subscribe(() => this.setUpContextMenus())
+  }
 
   async createAlarm(delayInMinutes: number) {
     await this.chromeAlarmApiService.create('wakeUpTabs', {
@@ -110,7 +112,9 @@ export class SnoozeService {
       })
     })
 
-    this.chromeApiService.addContextMenusOnClickedListener(this.onContextMenuClick.bind(this))
+    this.chromeApiService.addContextMenusOnClickedListener(
+      this.onContextMenuClick.bind(this),
+    )
 
     this.chromeAlarmApiService.addListener(this.unsnoozeTab.bind(this))
   }
@@ -135,6 +139,6 @@ export class SnoozeService {
         })
         this.databaseService.removeSnoozedTab(cursor.primaryKey)
       })
-      .catch(err => this.logger.error(err.message))
+      .catch((err) => this.logger.error(err.message))
   }
 }

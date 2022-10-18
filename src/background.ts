@@ -88,7 +88,12 @@ class Background {
 
         {
           provide: DeduplicationService,
-          deps: [ChromeApiService, ChromeNotificationService, DatabaseService, SettingsService],
+          deps: [
+            ChromeApiService,
+            ChromeNotificationService,
+            DatabaseService,
+            SettingsService,
+          ],
         },
 
         {
@@ -122,7 +127,7 @@ class Background {
   public start() {
     const tabService = this.injector.get(TabService)
     const snoozeService = this.injector.get(SnoozeService)
-    snoozeService.setUpContextMenus()
+    snoozeService.setUpContextMenus.bind(snoozeService)()
   }
 }
 
