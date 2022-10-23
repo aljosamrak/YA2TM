@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core'
 })
 export class ChromeNotificationService {
   async create(
-    options: chrome.notifications.NotificationOptions,
+    options: chrome.notifications.NotificationOptions<true>,
     callback?: (notificationId: string) => void,
   ) {
     chrome.notifications.create(options, callback)
