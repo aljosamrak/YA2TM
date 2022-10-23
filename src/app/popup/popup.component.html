@@ -20,19 +20,19 @@
       <!-- Left elements -->
       <ul class="navbar-nav flex-row d-none d-md-flex">
         <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='tabsEnabled'>
-          <a class="nav-link waves-light" mdbWavesEffect routerLink="/tabs">
+          <a class="nav-link waves-light" mdbWavesEffect [routerLink]="'tabs'">
             <span>Tabs</span>
           </a>
         </li>
 
         <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
-          <a class="nav-link waves-light" mdbWavesEffect routerLink="/graphs">
+          <a class="nav-link waves-light" mdbWavesEffect [routerLink]="'graphs'">
             <span>Graphs</span>
           </a>
         </li>
 
         <li class="nav-item me-3 me-lg-1" routerLinkActive="active" *ngIf='drillDownEnabled'>
-          <a class="nav-link waves-light" mdbWavesEffect routerLink="/drillDown">
+          <a class="nav-link waves-light" mdbWavesEffect [routerLink]="'drillDown'">
             <span>Drill Down</span>
           </a>
         </li>
@@ -41,7 +41,7 @@
           <a
             class="nav-link waves-light"
             mdbWavesEffect
-            routerLink="/duplicates"
+            [routerLink]="'duplicates'"
           >
             <span>Duplicates</span>
           </a>
@@ -51,7 +51,7 @@
           <a
             class="nav-link waves-light"
             mdbWavesEffect
-            routerLink="/snoozed"
+            [routerLink]="'snoozed'"
           >
             <span>Snoozed tabs</span>
           </a>
@@ -65,13 +65,13 @@
           <a
             class="nav-link waves-light"
             mdbWavesEffect
-            routerLink="/testing"
+            [routerLink]="'testing'"
           >
             <span>Testing</span>
           </a>
         </li>
         <li class="nav-item me-3 me-lg-1" routerLinkActive="active">
-          <a class="nav-link waves-light" mdbWavesEffect routerLink="/TODO">
+          <a class="nav-link waves-light" mdbWavesEffect [routerLink]="'TODO'">
             <img
               src="assets/full-screen.png"
               height="22"
@@ -85,7 +85,7 @@
           <a
             class="nav-link waves-light"
             mdbWavesEffect
-            routerLink="/achievements"
+            [routerLink]="'achievements'"
           >
             <img src="assets/trophy.png" height="22" alt="" loading="lazy" />
             <span class="badge rounded-pill badge-notification bg-danger"
@@ -94,7 +94,7 @@
           </a>
         </li>
         <li class="nav-item" routerLinkActive="active" (click)="settingsClick()">
-          <a class="nav-link waves-light" mdbWavesEffect routerLink="/settings">
+          <a class="nav-link waves-light" mdbWavesEffect [routerLink]="'settings'">
             <img src="assets/settings.png" height="22" alt="" loading="lazy" />
           </a>
         </li>

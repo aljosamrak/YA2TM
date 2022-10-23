@@ -11,19 +11,15 @@ import { MatExpansionModule } from '@angular/material/expansion'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSelectModule } from '@angular/material/select'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 const MODULES = [
   CommonModule,
   ReactiveFormsModule,
-  BrowserModule,
   MatButtonModule,
   MatSlideToggleModule,
   MatExpansionModule,
   MatFormFieldModule,
   MatSelectModule,
-  BrowserAnimationsModule,
 ]
 
 @NgModule({

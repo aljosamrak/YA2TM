@@ -1,18 +1,12 @@
 import { TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing'
-
-import { SettingsServiceStub } from '../test/SettingsServiceStub'
 import { AppComponent } from './app.component'
-import { SettingsService } from './settings/service/settings.service'
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [
-        AppComponent,
-        { provide: SettingsService, useClass: SettingsServiceStub },
-      ],
+      providers: [AppComponent],
     }).compileComponents()
   })
 

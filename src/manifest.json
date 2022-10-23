@@ -8,13 +8,10 @@
     "48": "assets/icon-48.png",
     "128": "assets/icon-128.png"
   },
-  "options_ui": {
-    "page": "index.html#/options"
-  },
   "action": {
     "default_name": "YA2TM",
     "default_icon": "assets/icon-48.png",
-    "default_popup": "index.html"
+    "default_popup": "index.html#/popup"
   },
   "background": {
     "service_worker": "background.js",
