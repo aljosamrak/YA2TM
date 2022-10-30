@@ -4,12 +4,10 @@ import { NgModule } from '@angular/core'
 import { MatInputModule } from '@angular/material/input'
 import { MDBBootstrapModule } from 'angular-bootstrap-md'
 import { NgChartsModule } from 'ng2-charts'
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger'
 import { AchievementsComponent } from '../achievements/achievements.component'
 import { ChromeApiService } from '../chrome/chrome-api.service'
 import { DrillDownComponent } from '../drill-down/drill-down.component'
 import { DuplicatesComponent } from '../duplicates/component/duplicates.component'
-import { PageNotFoundComponentComponent } from '../page-not-found-component/page-not-found-component.component'
 import { SettingsComponent } from '../settings/component/settings.component'
 import { SettingsModule } from '../settings/settings.module'
 import { SnoozedTabsComponent } from '../snooze/component/snooze-tabs.component'
@@ -29,7 +27,6 @@ import { PopupComponent } from './popup.component'
     DuplicatesComponent,
     SettingsComponent,
     AchievementsComponent,
-    PageNotFoundComponentComponent,
     DrillDownComponent,
     TestingComponent,
     TabComponent,
@@ -41,10 +38,6 @@ import { PopupComponent } from './popup.component'
     NgChartsModule,
     TabInsightsModule,
     MDBBootstrapModule.forRoot(),
-    LoggerModule.forRoot({
-      level: NgxLoggerLevel.DEBUG,
-      serverLogLevel: NgxLoggerLevel.ERROR,
-    }),
     SettingsModule.forRoot(),
     MatInputModule,
   ],
