@@ -6,7 +6,6 @@ import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
-
 import createSpyObj = jasmine.createSpyObj
 import Tab = chrome.tabs.Tab
 
@@ -94,7 +93,7 @@ describe('DeduplicationService', () => {
   describe('deduplicate empty tab', () => {
     it('disabled, should not deduplicate empty tabs', async () => {
       settingsStub.userPreferences.deduplicateTabs = true
-      settingsStub.userPreferences.deduplicateNewTab = false
+      settingsStub.userPreferences.deduplicateDontDeduplicateUrls = ''
       chromeApiSpy.getTabs.and.returnValue(
         Promise.resolve([createTab('chrome://newtab/')]),
       )
@@ -106,7 +105,8 @@ describe('DeduplicationService', () => {
 
     it('enabled, should not deduplicate empty tabs', async () => {
       settingsStub.userPreferences.deduplicateTabs = true
-      settingsStub.userPreferences.deduplicateNewTab = true
+      settingsStub.userPreferences.deduplicateDontDeduplicateUrls =
+        'chrome://newtab/'
       chromeApiSpy.getTabs.and.returnValue(
         Promise.resolve([createTab('chrome://newtab/')]),
       )

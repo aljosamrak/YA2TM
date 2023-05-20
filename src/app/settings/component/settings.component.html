@@ -57,13 +57,6 @@
 
       <div class="d-flex p-2 pr-0 col-example">
         <mat-panel-title>
-          Deduplicate new tab
-        </mat-panel-title>
-        <mat-slide-toggle formControlName="deduplicateNewTab" id="deduplicateNewTab"></mat-slide-toggle>
-      </div>
-
-      <div class="d-flex p-2 pr-0 col-example">
-        <mat-panel-title>
           Deduplicate strategy
         </mat-panel-title>
         <mat-form-field appearance="fill">
@@ -73,6 +66,75 @@
               {{deduplicateStrategy.name}}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Ignore hash part
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateIgnoreHashPart" id="deduplicateIgnoreHashPart"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Ignore search path
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateIgnoreSearchPart" id="deduplicateIgnoreSearchPart"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Ignore path part
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateIgnorePathPart" id="deduplicateIgnorePathPart"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Ignore WWW
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateIgnore3w" id="deduplicateIgnore3w"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Ignore case
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateIgnoreCase" id="deduplicateIgnoreCase"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Compare with title
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateCompareWithTitle" id="deduplicateCompareWithTitle"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Deduplicate in all windows
+        </mat-panel-title>
+        <mat-slide-toggle formControlName="deduplicateSearchInAllWindows" id="deduplicateSearchInAllWindows"></mat-slide-toggle>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Don't deduplicate URLs containing
+        </mat-panel-title>
+        <mat-form-field appearance="fill" style="width:40vw">
+          <mat-label>Don't deduplicate URLs</mat-label>
+          <textarea matInput formControlName="deduplicateDontDeduplicateUrls" id="deduplicateDontDeduplicateUrls"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex p-2 pr-0 col-example">
+        <mat-panel-title>
+          Remove part from URL
+        </mat-panel-title>
+        <mat-form-field appearance="fill">
+          <mat-label>Remove URL part</mat-label>
+          <textarea matInput formControlName="deduplicateStripUslParts" id="deduplicateStripUslParts"></textarea>
         </mat-form-field>
       </div>
 

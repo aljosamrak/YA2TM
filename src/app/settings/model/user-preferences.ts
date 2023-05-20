@@ -28,7 +28,16 @@ export class UserPreferences {
   // Tab deduplication settings
   deduplicateTabs = false
   deduplicateStrategy = DeduplicateStrategy.REMOVE_NEW_TAB
-  deduplicateNewTab = true
+  deduplicateIgnoreHashPart = true
+  deduplicateIgnoreSearchPart = true
+  deduplicateIgnorePathPart = false
+  deduplicateIgnore3w = false
+  deduplicateIgnoreCase = false
+  deduplicateCompareWithTitle = true
+  deduplicateSearchInAllWindows = true
+  deduplicateDontDeduplicateUrls = 'chrome://newtab/'
+  deduplicateStripUslParts =
+    'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#'
 
   snoozingEnabled = false
 

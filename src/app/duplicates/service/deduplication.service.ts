@@ -6,7 +6,6 @@ import { DeduplicateStrategy } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { TrackedEvent } from '../../storage/model/EventRecord'
 import { DatabaseService } from '../../storage/service/database.service'
-
 import Tab = chrome.tabs.Tab
 
 @Injectable({
@@ -47,8 +46,11 @@ export class DeduplicationService {
     }
 
     // If disabled, don't deduplicate new tab
+    // TODO don't special new tab. This is temporary part of the migration
     if (
-      !this.settingsService.getUserPreferences().deduplicateNewTab &&
+      !this.settingsService
+        .getUserPreferences()
+        .deduplicateDontDeduplicateUrls.includes('chrome://newtab/') &&
       tab.url === 'chrome://newtab/'
     ) {
       return
@@ -106,7 +108,11 @@ export class DeduplicationService {
     }
   }
 
-  removeAndSwitch(removeTabId: number, switchWindowId: number, switchTabId: number) {
+  removeAndSwitch(
+    removeTabId: number,
+    switchWindowId: number,
+    switchTabId: number,
+  ) {
     this.chromeApiService.updateTab(switchTabId, { selected: true })
     this.chromeApiService.updateWindow(switchWindowId, { focused: true })
     this.chromeApiService.removeTab(removeTabId)
