@@ -1,7 +1,7 @@
 <form class="p-8" [formGroup]="settingsForm">
 
   <mat-accordion>
-    <mat-expansion-panel hideToggle [expanded]='userPreferences?.badgeEnabled' [disabled]='!userPreferences?.badgeEnabled'>
+    <mat-expansion-panel hideToggle [expanded]='userPreferences.badgeEnabled' [disabled]='!userPreferences.badgeEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Enable badge
@@ -47,7 +47,7 @@
   </mat-accordion>
 <!--  Graph setting  -->
 
-    <mat-expansion-panel hideToggle [expanded]='userPreferences?.deduplicateTabs' [disabled]='!userPreferences?.deduplicateTabs' *ngIf='userPreferences?.experimentsEnabled'>
+    <mat-expansion-panel hideToggle [expanded]='userPreferences.deduplicateTabs' [disabled]='!userPreferences.deduplicateTabs' *ngIf='userPreferences.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Deduplicate tabs
@@ -140,7 +140,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel hideToggle [expanded]='userPreferences?.snoozingEnabled' [disabled]='!userPreferences?.snoozingEnabled' *ngIf='userPreferences?.experimentsEnabled'>
+    <mat-expansion-panel hideToggle [expanded]='userPreferences.snoozingEnabled' [disabled]='!userPreferences.snoozingEnabled' *ngIf='userPreferences.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Snoozed tabs
@@ -186,7 +186,7 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf='userPreferences?.experimentsEnabled'>
+    <mat-expansion-panel *ngIf='userPreferences.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Experiments
@@ -222,7 +222,7 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf='userPreferences?.experimentsEnabled'>
+    <mat-expansion-panel *ngIf='userPreferences.experimentsEnabled'>
       <mat-expansion-panel-header>
         <mat-panel-title>
           About

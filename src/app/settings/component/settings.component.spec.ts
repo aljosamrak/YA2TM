@@ -2,13 +2,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
 import { LoggerTestingModule } from 'ngx-logger/testing'
 
+import { MatInputModule } from '@angular/material/input'
+import { MatSelectModule } from '@angular/material/select'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { SettingsService } from '../service/settings.service'
 import { SettingsComponent } from './settings.component'
-import { MatSelectModule } from '@angular/material/select'
-import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import arrayContaining = jasmine.arrayContaining
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -22,8 +25,10 @@ describe('SettingsComponent', () => {
       declarations: [SettingsComponent],
       imports: [
         LoggerTestingModule,
+        MatInputModule,
         MatSelectModule,
         MatSlideToggleModule,
+        NoopAnimationsModule,
         ReactiveFormsModule,
       ],
       providers: [
@@ -42,5 +47,33 @@ describe('SettingsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('experiment', () => {
+    const experimentalSettings = [
+      'Deduplicate tabs',
+      'Snoozed tabs',
+      'Experiments',
+      'About',
+      'Version',
+    ]
+    it('experiment disabled by default', () => {
+      expect(
+        Array.from(
+          fixture.nativeElement.querySelectorAll('mat-panel-title').values(),
+        ).map((it: any) => it.textContent.trim()),
+      ).not.toEqual(arrayContaining(experimentalSettings))
+    })
+
+    it('experiments shown after enabled', () => {
+      component.userPreferences.experimentsEnabled = true
+      fixture.detectChanges()
+
+      expect(
+        Array.from(
+          fixture.nativeElement.querySelectorAll('mat-panel-title').values(),
+        ).map((it: any) => it.textContent.trim()),
+      ).toEqual(arrayContaining(experimentalSettings))
+    })
   })
 })

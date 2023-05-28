@@ -24,7 +24,7 @@ export class SettingsComponent implements OnInit {
   settingsForm: FormGroup
 
   applicationVersion = environment.version
-  userPreferences?: UserPreferences
+  userPreferences: UserPreferences
 
   public FileType2LabelMapping: Record<any, string> = {
     [BadgeTextType.TABS_NUM]: 'Number of tabs',
@@ -48,6 +48,7 @@ export class SettingsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private settingsService: SettingsService,
   ) {
+    this.userPreferences = settingsService.getUserPreferences()
     // create form group using the form builder
     this.settingsForm = this.createGroup(
       formBuilder,
