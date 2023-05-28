@@ -14,12 +14,9 @@ describe('tab-insights', () => {
     databaseSpy.query.and.returnValue(Promise.resolve([]))
 
     await TestBed.configureTestingModule({
+      declarations: [TabInsightsComponent],
       imports: [LoggerTestingModule],
-
-      providers: [
-        TabInsightsComponent,
-        { provide: DatabaseService, useValue: databaseSpy },
-      ],
+      providers: [{ provide: DatabaseService, useValue: databaseSpy }],
     }).compileComponents()
   })
 

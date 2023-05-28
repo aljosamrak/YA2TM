@@ -16,8 +16,8 @@ describe('PopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [PopupComponent],
       providers: [
-        PopupComponent,
         { provide: AnalyticsService, useValue: analyticsSpy },
         { provide: SettingsService, useClass: SettingsServiceStub },
       ],

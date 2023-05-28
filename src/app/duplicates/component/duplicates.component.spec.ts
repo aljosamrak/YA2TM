@@ -12,10 +12,8 @@ describe('DuplicatesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        DuplicatesComponent,
-        { provide: ChromeApiService, useClass: ChromeApiStub },
-      ],
+      declarations: [DuplicatesComponent],
+      providers: [{ provide: ChromeApiService, useClass: ChromeApiStub }],
     }).compileComponents()
   })
 

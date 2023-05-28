@@ -14,11 +14,9 @@ describe('DrillDownComponent', () => {
     databaseSpy.getOpenTabs.and.returnValue(Promise.resolve([]))
 
     await TestBed.configureTestingModule({
+      declarations: [DrillDownComponent],
       imports: [LoggerTestingModule],
-      providers: [
-        DrillDownComponent,
-        { provide: DatabaseService, useValue: databaseSpy },
-      ],
+      providers: [{ provide: DatabaseService, useValue: databaseSpy }],
     }).compileComponents()
   })
 

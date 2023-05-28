@@ -17,9 +17,9 @@ describe('SettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [SettingsComponent],
       imports: [LoggerTestingModule, ReactiveFormsModule],
       providers: [
-        SettingsComponent,
         { provide: AnalyticsService, useValue: analyticsSpy },
         { provide: DatabaseService, useValue: databaseSpy },
         { provide: SettingsService, useClass: SettingsServiceStub },

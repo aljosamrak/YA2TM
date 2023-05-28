@@ -16,11 +16,9 @@ describe('SnoozeComponent', () => {
     databaseSpy.getSnoozedTabs.and.returnValue(Promise.resolve([]))
 
     await TestBed.configureTestingModule({
+      declarations: [SnoozedTabsComponent],
       imports: [LoggerTestingModule],
-      providers: [
-        SnoozedTabsComponent,
-        { provide: DatabaseService, useValue: databaseSpy },
-      ],
+      providers: [{ provide: DatabaseService, useValue: databaseSpy }],
     }).compileComponents()
   })
 
