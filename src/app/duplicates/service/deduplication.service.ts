@@ -35,8 +35,10 @@ export class DeduplicationService {
   }
 
   async deduplicate(tab: Tab) {
+    const preferences = this.settingsService.getUserPreferences()
+
     // Feature disabled
-    if (!this.settingsService.getUserPreferences().deduplicateTabs) {
+    if (!preferences.deduplicateTabs) {
       return
     }
 
@@ -45,13 +47,12 @@ export class DeduplicationService {
       return
     }
 
-    // If disabled, don't deduplicate new tab
-    // TODO don't special new tab. This is temporary part of the migration
+    // If we shouldn't deduplicate this URL
     if (
-      !this.settingsService
-        .getUserPreferences()
-        .deduplicateDontDeduplicateUrls.includes('chrome://newtab/') &&
-      tab.url === 'chrome://newtab/'
+      preferences.deduplicateDontDeduplicateUrls
+        .split(',')
+        .map((it) => it.trim())
+        .includes(tab.url)
     ) {
       return
     }
@@ -72,7 +73,7 @@ export class DeduplicationService {
         tab.incognito === otherTab.incognito &&
         !tab.pinned
       ) {
-        switch (this.settingsService.getUserPreferences().deduplicateStrategy) {
+        switch (preferences.deduplicateStrategy) {
           case DeduplicateStrategy.REMOVE_NEW_TAB:
             this.removeAndSwitch(tab.id, otherTab.windowId, otherTab.id)
             break
