@@ -24,7 +24,7 @@ export class SnoozeService {
       'snooze_tab_15min',
       {
         text: '🕑 ⏰ Snooze tab for 15 min',
-        func: (tab?: Tab) => this.snoozeTab(1, tab),
+        func: (tab?: Tab) => this.snoozeTab(15, tab),
       },
     ],
     [
