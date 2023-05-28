@@ -7,6 +7,8 @@ import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { SettingsService } from '../service/settings.service'
 import { SettingsComponent } from './settings.component'
+import { MatSelectModule } from '@angular/material/select'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -18,7 +20,12 @@ describe('SettingsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingsComponent],
-      imports: [LoggerTestingModule, ReactiveFormsModule],
+      imports: [
+        LoggerTestingModule,
+        MatSelectModule,
+        MatSlideToggleModule,
+        ReactiveFormsModule,
+      ],
       providers: [
         { provide: AnalyticsService, useValue: analyticsSpy },
         { provide: DatabaseService, useValue: databaseSpy },
