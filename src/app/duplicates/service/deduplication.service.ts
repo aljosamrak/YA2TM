@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core'
 
 import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { ChromeNotificationService } from '../../chrome/chrome-notification'
-import { DeduplicateStrategy } from '../../settings/model/user-preferences'
+import {
+  DeduplicateStrategy,
+  UserPreferences,
+} from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { TrackedEvent } from '../../storage/model/EventRecord'
 import { DatabaseService } from '../../storage/service/database.service'
@@ -29,9 +32,14 @@ export class DeduplicationService {
       return url
     }
   }
+  static formatUrl(url: string, preferences: UserPreferences): string {
+    preferences.deduplicateStripUrlParts
+      .split(',')
+      .forEach((stripUrl: string) => {
+        url = url.replace(new RegExp(stripUrl.trim()), '')
+      })
 
-  static extractUrl(url: string): string {
-    return this.extractGreatSuspenderUrl(url)
+    return url
   }
 
   async deduplicate(tab: Tab) {
@@ -57,6 +65,9 @@ export class DeduplicationService {
       return
     }
 
+    // Prepare URL to be matched, by cleaning it up and sanitize it
+    tab.url = DeduplicationService.formatUrl(tab.url, preferences)
+
     const allTabs = await this.chromeApiService.getTabs()
     const allWindows = await this.chromeApiService.getWindows()
 
@@ -66,7 +77,10 @@ export class DeduplicationService {
         return
       }
 
-      const otherTabUrl = DeduplicationService.extractUrl(otherTab.url)
+      const otherTabUrl = DeduplicationService.formatUrl(
+        otherTab.url,
+        preferences,
+      )
       if (
         tab.id !== otherTab.id &&
         tab.url === otherTabUrl &&

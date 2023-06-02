@@ -36,8 +36,8 @@ export class UserPreferences {
   deduplicateCompareWithTitle = true
   deduplicateSearchInAllWindows = true
   deduplicateDontDeduplicateUrls = 'chrome://newtab/'
-  deduplicateStripUslParts =
-    'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#'
+  deduplicateStripUrlParts =
+    'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
 
   snoozingEnabled = false
 

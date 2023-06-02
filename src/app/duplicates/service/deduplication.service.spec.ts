@@ -3,6 +3,7 @@ import { LoggerTestingModule } from 'ngx-logger/testing'
 
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { UserPreferences } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
@@ -126,6 +127,38 @@ describe('DeduplicationService', () => {
       await service.deduplicate(createTab('URL'))
 
       expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('strip URL', () => {
+    it('suspend tab regex extracts URL', async () => {
+      const preferences = new UserPreferences()
+      preferences.deduplicateStripUrlParts =
+        'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
+
+      const formattedUrl = DeduplicationService.formatUrl(
+        'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=YA2TM&pos=0&uri=url#/',
+        preferences,
+      )
+
+      expect(formattedUrl).toBe('url#/')
+    })
+
+    it('multiple strip URLs works for different URLs', async () => {
+      const pref = new UserPreferences()
+      pref.deduplicateStripUrlParts = 'prefix1=, prefix2='
+
+      expect(DeduplicationService.formatUrl('prefix1=url', pref)).toBe('url')
+      expect(DeduplicationService.formatUrl('prefix2=url', pref)).toBe('url')
+    })
+
+    it('multiple strip URLs strip all in same URLs', async () => {
+      const pref = new UserPreferences()
+      pref.deduplicateStripUrlParts = 'prefix1=, prefix2='
+
+      expect(DeduplicationService.formatUrl('prefix1=prefix2=url', pref)).toBe(
+        'url',
+      )
     })
   })
 
