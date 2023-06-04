@@ -6,31 +6,27 @@ import { BadgeTextType } from '../settings/model/user-preferences'
 import { SettingsService } from '../settings/service/settings.service'
 import { BadgeService, hslToHex } from './badge.service'
 
-import createSpyObj = jasmine.createSpyObj
+import { ChromeApiStub } from '../../test/ChromeApiStub'
 
 describe('BadgeService', () => {
   let service: BadgeService
 
-  let chromeApiSpy: jasmine.SpyObj<ChromeApiService>
+  let chromeApiStub: ChromeApiStub
   let settingsStub: SettingsServiceStub
 
-  beforeEach(() => {
-    chromeApiSpy = createSpyObj('ChromeApiService', {
-      getTabs: () => Promise.resolve([]),
-      getWindows: () => Promise.resolve([]),
-      setBadgeText: () => {},
-      setBadgeBackgroundColor: () => {},
-    })
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [
         BadgeService,
-        { provide: ChromeApiService, useValue: chromeApiSpy },
+        { provide: ChromeApiService, useClass: ChromeApiStub },
         { provide: SettingsService, useClass: SettingsServiceStub },
       ],
     })
+  })
 
+  beforeEach(() => {
     service = TestBed.inject(BadgeService)
+    chromeApiStub = TestBed.inject(ChromeApiService) as unknown as ChromeApiStub
     settingsStub = TestBed.inject(
       SettingsService,
     ) as unknown as SettingsServiceStub
@@ -44,21 +40,21 @@ describe('BadgeService', () => {
     it('ALL_TAB preference the same as tab count', async () => {
       settingsStub.userPreferences.badgeEnabled = true
       settingsStub.userPreferences.badgeTextType = BadgeTextType.TABS_NUM
-      chromeApiSpy.getTabs.and.returnValue(Promise.resolve(new Array(20)))
+      chromeApiStub.setTabs([...Array(20).map((it) => it.toString())])
 
       await service.updateTabCount()
 
-      expect(chromeApiSpy.setBadgeText).toHaveBeenCalledWith('20')
+      expect(chromeApiStub.getBadgeText()).toBe('20')
     })
 
     it('ALL_WINDOW preference the same as window count', async () => {
       settingsStub.userPreferences.badgeEnabled = true
       settingsStub.userPreferences.badgeTextType = BadgeTextType.WINDOW_NUM
-      chromeApiSpy.getWindows.and.returnValue(Promise.resolve(new Array(20)))
+      chromeApiStub.setWindows(20)
 
       await service.updateTabCount()
 
-      expect(chromeApiSpy.setBadgeText).toHaveBeenCalledWith('20')
+      expect(chromeApiStub.getBadgeText()).toBe('20')
     })
   })
 
@@ -75,12 +71,10 @@ describe('BadgeService', () => {
         settingsStub.userPreferences.badgeEnabled = true
         settingsStub.userPreferences.desiredTabs = desiredTabs
         settingsStub.userPreferences.changingColorEnabled = true
-        chromeApiSpy.getTabs.and.returnValue(
-          Promise.resolve(new Array(tabCount)),
-        )
+        chromeApiStub.setTabs([...Array(tabCount).map((it) => it.toString())])
 
         await service.updateTabCount()
-        expect(chromeApiSpy.setBadgeBackgroundColor).toHaveBeenCalledWith(
+        expect(chromeApiStub.getBadgeBackgroundColor()).toBe(
           hslToHex(expectedColorHue, 50, 50),
         )
       })
@@ -92,19 +86,19 @@ describe('BadgeService', () => {
 
       await service.updateTabCount()
 
-      expect(chromeApiSpy.setBadgeText).toHaveBeenCalledWith('')
-      expect(chromeApiSpy.setBadgeBackgroundColor).toHaveBeenCalledTimes(0)
+      expect(chromeApiStub.getBadgeText()).toBe('')
+      expect(chromeApiStub.getBadgeBackgroundColor()).toBe('')
     })
 
     it('changing color disabled does not change badge color', async () => {
       settingsStub.userPreferences.badgeEnabled = true
       settingsStub.userPreferences.changingColorEnabled = false
-      chromeApiSpy.getTabs.and.returnValue(Promise.resolve(new Array(20)))
+      chromeApiStub.setTabs([...Array(20).map((it) => it.toString())])
 
       await service.updateTabCount()
 
-      expect(chromeApiSpy.setBadgeText).toHaveBeenCalledWith('20')
-      expect(chromeApiSpy.setBadgeBackgroundColor).toHaveBeenCalledWith('blue')
+      expect(chromeApiStub.getBadgeText()).toBe('20')
+      expect(chromeApiStub.getBadgeBackgroundColor()).toBe('blue')
     })
   })
 })

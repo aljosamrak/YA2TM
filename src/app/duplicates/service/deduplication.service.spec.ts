@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
-
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { UserPreferences } from '../../settings/model/user-preferences'
