@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ChromeApiStub } from '../../../test/ChromeApiStub'
+import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
+import { SettingsService } from '../../settings/service/settings.service'
 import { DuplicatesComponent } from './duplicates.component'
 
 describe('DuplicatesComponent', () => {
@@ -13,7 +15,10 @@ describe('DuplicatesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DuplicatesComponent],
-      providers: [{ provide: ChromeApiService, useClass: ChromeApiStub }],
+      providers: [
+        { provide: ChromeApiService, useClass: ChromeApiStub },
+        { provide: SettingsService, useClass: SettingsServiceStub },
+      ],
     }).compileComponents()
   })
 
