@@ -65,6 +65,8 @@ jobs:
     parallelism: 5
 
     steps:
+      - checkout
+
       # Install Chrome browser
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
@@ -74,8 +76,6 @@ jobs:
             chromedriver --version
             node --version
           name: Check install
-
-      - checkout
 
       # Install the dependencies from a package.json and cache them for faster future runs
       - node/install-packages:
