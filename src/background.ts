@@ -8,7 +8,7 @@
  */
 import { DatePipe } from '@angular/common'
 import { HttpBackend, HttpEvent, HttpRequest } from '@angular/common/http'
-import { Injector } from '@angular/core'
+import { Injector, NgZone } from '@angular/core'
 import {
   NGXLogger,
   NGXLoggerConfigEngineFactory,
@@ -51,7 +51,7 @@ const logger = new NGXLogger(
   new NGXLoggerRulesService(),
   new NGXLoggerMapperService(httpBackend),
   new NGXLoggerWriterService(''),
-  new NGXLoggerServerService(httpBackend),
+  new NGXLoggerServerService(httpBackend, new NgZone({})),
 )
 
 const analyticsConfiguration: AnalyticsIdConfig = {
