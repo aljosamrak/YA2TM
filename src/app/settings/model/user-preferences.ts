@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash'
+
 export enum BadgeTextType {
   TABS_NUM,
   DAY_DIFF,
@@ -45,6 +47,6 @@ export class UserPreferences {
   desiredTabs = 30
 
   equals(other: UserPreferences) {
-    return JSON.stringify(this) === JSON.stringify(other)
+    return isEqual(this, other)
   }
 }
