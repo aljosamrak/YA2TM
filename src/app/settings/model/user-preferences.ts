@@ -43,4 +43,8 @@ export class UserPreferences {
 
   achievementsEnabled = false
   desiredTabs = 30
+
+  equals(other: UserPreferences) {
+    return JSON.stringify(this) === JSON.stringify(other)
+  }
 }

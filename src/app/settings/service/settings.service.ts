@@ -36,10 +36,7 @@ export class SettingsService {
   }
 
   updateUserPreferences(newValue: UserPreferences) {
-    if (
-      JSON.stringify(this.userPreferences.getValue()) ===
-      JSON.stringify(newValue)
-    ) {
+    if (this.userPreferences.getValue().equals(newValue)) {
       return
     }
 
