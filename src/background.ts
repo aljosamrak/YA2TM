@@ -19,6 +19,7 @@ import {
   NGXLoggerWriterService,
 } from 'ngx-logger'
 import { Observable } from 'rxjs'
+import 'zone.js'
 
 import {
   AnalyticsIdConfig,
