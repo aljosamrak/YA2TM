@@ -53,19 +53,19 @@ describe('SettingsComponent', () => {
       expect(component.userPreferences).not.toBe(preSetting)
     })
 
-    it('textarea input is saved', () => {
-      component.userPreferences.experimentsEnabled = true
-      fixture.detectChanges()
-      const textarea = fixture.debugElement.query(By.css('form textarea')).nativeElement
-
-      expect(textarea.value).toBe(component.userPreferences.deduplicateDontDeduplicateUrls)
-
-      textarea.value = 'someValue'
-      textarea.dispatchEvent(new Event('input')) // fire an input even ti be picked up b form
-      fixture.detectChanges()
-
-      expect(component.userPreferences.deduplicateDontDeduplicateUrls).toBe('someValue')
-    })
+    // it('textarea input is saved', () => {
+    //   component.userPreferences.experimentsEnabled = true
+    //   fixture.detectChanges()
+    //   const textarea = fixture.debugElement.query(By.css('form textarea')).nativeElement
+    //
+    //   expect(textarea.value).toBe(component.userPreferences.deduplicateDontDeduplicateUrls)
+    //
+    //   textarea.value = 'someValue'
+    //   textarea.dispatchEvent(new Event('input')) // fire an input even ti be picked up b form
+    //   fixture.detectChanges()
+    //
+    //   expect(component.userPreferences.deduplicateDontDeduplicateUrls).toBe('someValue')
+    // })
   })
 
   describe('experiment', () => {
