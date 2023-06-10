@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing'
 
+import { ChromeApiStub } from '../../test/ChromeApiStub'
+
 import { SettingsServiceStub } from '../../test/SettingsServiceStub'
 import { ChromeApiService } from '../chrome/chrome-api.service'
 import { BadgeTextType } from '../settings/model/user-preferences'
 import { SettingsService } from '../settings/service/settings.service'
 import { BadgeService, hslToHex } from './badge.service'
-
-import { ChromeApiStub } from '../../test/ChromeApiStub'
 
 describe('BadgeService', () => {
   let service: BadgeService
@@ -27,9 +27,7 @@ describe('BadgeService', () => {
   beforeEach(() => {
     service = TestBed.inject(BadgeService)
     chromeApiStub = TestBed.inject(ChromeApiService) as unknown as ChromeApiStub
-    settingsStub = TestBed.inject(
-      SettingsService,
-    ) as unknown as SettingsServiceStub
+    settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
   })
 
   it('should be created', () => {
@@ -44,7 +42,7 @@ describe('BadgeService', () => {
 
       await service.updateTabCount()
 
-      expect(chromeApiStub.getBadgeText()).toBe('20')
+      expect(chromeApiStub.getBadgeText()).toEqual('20')
     })
 
     it('ALL_WINDOW preference the same as window count', async () => {
@@ -54,7 +52,7 @@ describe('BadgeService', () => {
 
       await service.updateTabCount()
 
-      expect(chromeApiStub.getBadgeText()).toBe('20')
+      expect(chromeApiStub.getBadgeText()).toEqual('20')
     })
   })
 
@@ -74,9 +72,7 @@ describe('BadgeService', () => {
         chromeApiStub.setTabs([...Array(tabCount).map((it) => it.toString())])
 
         await service.updateTabCount()
-        expect(chromeApiStub.getBadgeBackgroundColor()).toBe(
-          hslToHex(expectedColorHue, 50, 50),
-        )
+        expect(chromeApiStub.getBadgeBackgroundColor()).toEqual(hslToHex(expectedColorHue, 50, 50))
       })
     }))
 
@@ -86,8 +82,8 @@ describe('BadgeService', () => {
 
       await service.updateTabCount()
 
-      expect(chromeApiStub.getBadgeText()).toBe('')
-      expect(chromeApiStub.getBadgeBackgroundColor()).toBe('')
+      expect(chromeApiStub.getBadgeText()).toEqual('')
+      expect(chromeApiStub.getBadgeBackgroundColor()).toEqual('')
     })
 
     it('changing color disabled does not change badge color', async () => {
@@ -97,8 +93,8 @@ describe('BadgeService', () => {
 
       await service.updateTabCount()
 
-      expect(chromeApiStub.getBadgeText()).toBe('20')
-      expect(chromeApiStub.getBadgeBackgroundColor()).toBe('blue')
+      expect(chromeApiStub.getBadgeText()).toEqual('20')
+      expect(chromeApiStub.getBadgeBackgroundColor()).toEqual('blue')
     })
   })
 })

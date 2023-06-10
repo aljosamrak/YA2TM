@@ -7,29 +7,18 @@ import { LoggerTestingModule } from 'ngx-logger/testing'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
-import {
-  createAndFillDbWithEventRecord,
-  LEGACY_SORE_NAME_V2,
-  openDatabase,
-} from './database.service.legacy-utils'
-
+import { createAndFillDbWithEventRecord, LEGACY_SORE_NAME_V2, openDatabase } from './database.service.legacy-utils'
 import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService upgrade tests', () => {
-  const analyticSpy = jasmine.createSpyObj('AnalyticsService', [
-    'event',
-    'time',
-  ])
+  const analyticSpy = jasmine.createSpyObj('AnalyticsService', ['event', 'time'])
 
   let service: DatabaseService
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [LoggerTestingModule],
-      providers: [
-        DatabaseService,
-        { provide: AnalyticsService, useValue: analyticSpy },
-      ],
+      providers: [DatabaseService, { provide: AnalyticsService, useValue: analyticSpy }],
     })
   })
 
@@ -41,8 +30,7 @@ describe('DatabaseService upgrade tests', () => {
     await new Promise<void>((resolve) => {
       const delRequest = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
       delRequest.onsuccess = () => resolve()
-      delRequest.onerror = () =>
-        fail(`Unable to clear Database, error: ${delRequest.error}`)
+      delRequest.onerror = () => fail(`Unable to clear Database, error: ${delRequest.error}`)
     })
   })
 
@@ -62,7 +50,7 @@ describe('DatabaseService upgrade tests', () => {
       service = await TestBed.inject(DatabaseService)
       const result = await service.query(-1, 1)
 
-      expect(result.length).toBe(1)
+      expect(result.length).toEqual(1)
       expect(result).toEqual(arrayContaining([record]))
     })
 

@@ -6,8 +6,8 @@ import { UserPreferences } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
-import createSpyObj = jasmine.createSpyObj
 import Tab = chrome.tabs.Tab
+import createSpyObj = jasmine.createSpyObj
 
 describe('DeduplicationService', () => {
   let service: DeduplicationService
@@ -38,9 +38,7 @@ describe('DeduplicationService', () => {
     }).compileComponents()
 
     service = TestBed.inject(DeduplicationService)
-    settingsStub = TestBed.inject(
-      SettingsService,
-    ) as unknown as SettingsServiceStub
+    settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
     settingsStub.userPreferences.deduplicateTabs = true
   })
 
@@ -119,8 +117,7 @@ describe('DeduplicationService', () => {
     })
 
     it('full URL must match', async () => {
-      settingsStub.userPreferences.deduplicateDontDeduplicateUrls =
-        'long part with URL'
+      settingsStub.userPreferences.deduplicateDontDeduplicateUrls = 'long part with URL'
       withExistingTabs('URL')
 
       await service.deduplicate(createTab('URL'))
@@ -132,39 +129,34 @@ describe('DeduplicationService', () => {
   describe('strip URL', () => {
     it('suspend tab regex extracts URL', async () => {
       const preferences = new UserPreferences()
-      preferences.deduplicateStripUrlParts =
-        'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
+      preferences.deduplicateStripUrlParts = 'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
 
       const formattedUrl = DeduplicationService.formatUrl(
         'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=YA2TM&pos=0&uri=url#/',
         preferences,
       )
 
-      expect(formattedUrl).toBe('url#/')
+      expect(formattedUrl).toEqual('url#/')
     })
 
     it('multiple strip URLs works for different URLs', async () => {
       const pref = new UserPreferences()
       pref.deduplicateStripUrlParts = 'prefix1=, prefix2='
 
-      expect(DeduplicationService.formatUrl('prefix1=url', pref)).toBe('url')
-      expect(DeduplicationService.formatUrl('prefix2=url', pref)).toBe('url')
+      expect(DeduplicationService.formatUrl('prefix1=url', pref)).toEqual('url')
+      expect(DeduplicationService.formatUrl('prefix2=url', pref)).toEqual('url')
     })
 
     it('multiple strip URLs strip all in same URLs', async () => {
       const pref = new UserPreferences()
       pref.deduplicateStripUrlParts = 'prefix1=, prefix2='
 
-      expect(DeduplicationService.formatUrl('prefix1=prefix2=url', pref)).toBe(
-        'url',
-      )
+      expect(DeduplicationService.formatUrl('prefix1=prefix2=url', pref)).toEqual('url')
     })
   })
 
   function withExistingTabs(...urls: string[]) {
-    chromeApiSpy.getTabs.and.returnValue(
-      Promise.resolve(urls.map((url) => createTab(url))),
-    )
+    chromeApiSpy.getTabs.and.returnValue(Promise.resolve(urls.map((url) => createTab(url))))
   }
 })
 

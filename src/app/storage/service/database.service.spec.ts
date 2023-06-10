@@ -4,24 +4,17 @@ import { LoggerTestingModule } from 'ngx-logger/testing'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { TrackedEvent } from '../model/EventRecord'
 import { DatabaseService } from './database.service'
-
 import arrayContaining = jasmine.arrayContaining
 
 describe('DatabaseService', () => {
-  const analyticSpy = jasmine.createSpyObj('AnalyticsService', [
-    'event',
-    'time',
-  ])
+  const analyticSpy = jasmine.createSpyObj('AnalyticsService', ['event', 'time'])
 
   let service: DatabaseService
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [LoggerTestingModule],
-      providers: [
-        DatabaseService,
-        { provide: AnalyticsService, useValue: analyticSpy },
-      ],
+      providers: [DatabaseService, { provide: AnalyticsService, useValue: analyticSpy }],
     })
 
     service = TestBed.inject(DatabaseService)
@@ -54,7 +47,7 @@ describe('DatabaseService', () => {
       await service.insert_records(record)
       const result = await service.query(0, 2)
 
-      expect(result.length).toBe(1)
+      expect(result.length).toEqual(1)
       expect(result).toContain(record)
     })
 
@@ -63,7 +56,7 @@ describe('DatabaseService', () => {
       await service.insert_records(record)
       const result = await service.query(0, 2)
 
-      expect(result.length).toBe(2)
+      expect(result.length).toEqual(2)
       expect(result).toEqual(arrayContaining([record, record]))
     })
   })
@@ -78,7 +71,7 @@ describe('DatabaseService', () => {
       await service.addOpenTab(openTab)
       const result = await service.getOpenTabs()
 
-      expect(result.length).toBe(1)
+      expect(result.length).toEqual(1)
       expect(result).toContain(openTab)
     })
   })
@@ -95,7 +88,7 @@ describe('DatabaseService', () => {
       await service.addSnoozedTab(snoozedTab)
       const result = await service.getSnoozedTabs()
 
-      expect(result.length).toBe(1)
+      expect(result.length).toEqual(1)
       expect(result).toContain(snoozedTab)
     })
 
@@ -114,7 +107,7 @@ describe('DatabaseService', () => {
       await service.addSnoozedTab(snoozedTab)
       const result = await service.getSnoozedTabs()
 
-      expect(result.length).toBe(2)
+      expect(result.length).toEqual(2)
       expect(result).toEqual(arrayContaining([snoozedTab, snoozedTab]))
     })
   })

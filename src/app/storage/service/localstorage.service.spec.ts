@@ -1,11 +1,9 @@
+import { TestBed } from '@angular/core/testing'
+import { BrowserTestingModule } from '@angular/platform-browser/testing'
 import 'zone.js'
 import 'zone.js/testing'
 
-import { TestBed } from '@angular/core/testing'
-import { BrowserTestingModule } from '@angular/platform-browser/testing'
-
 import { LocalStorageService } from './local-storage.service'
-
 ;(window as any).global = window
 
 const map = new Map<string, string>()
@@ -47,13 +45,13 @@ describe('LocalstorageService', () => {
     await service.set({ key: 'key', defaultValue: () => '' }, value)
     const result = await service.get({ key: 'key', defaultValue: () => '' })
 
-    expect(result).toBe(value)
+    expect(result).toEqual(value)
   })
 
   it('no saved value should return default value', async () => {
     const value = 'value'
     const result = await service.get({ key: 'key', defaultValue: () => value })
 
-    expect(result).toBe(value)
+    expect(result).toEqual(value)
   })
 })
