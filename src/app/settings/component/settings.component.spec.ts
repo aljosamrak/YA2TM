@@ -36,7 +36,6 @@ describe('SettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent)
     component = fixture.componentInstance
-    fixture.detectChanges()
   })
 
   it('should create', () => {
@@ -45,27 +44,28 @@ describe('SettingsComponent', () => {
 
   describe('setting values', () => {
     it('toggle input is saved', () => {
+      fixture.detectChanges()
       const preSetting = component.userPreferences
       const slider = fixture.debugElement.query(By.css('form mat-slide-toggle')).componentInstance
 
       slider.toggle()
 
-      expect(component.userPreferences).not.toBe(preSetting)
+      expect(component.userPreferences).not.toEqual(preSetting)
     })
 
-    // it('textarea input is saved', () => {
-    //   component.userPreferences.experimentsEnabled = true
-    //   fixture.detectChanges()
-    //   const textarea = fixture.debugElement.query(By.css('form textarea')).nativeElement
-    //
-    //   expect(textarea.value).toBe(component.userPreferences.deduplicateDontDeduplicateUrls)
-    //
-    //   textarea.value = 'someValue'
-    //   textarea.dispatchEvent(new Event('input')) // fire an input even ti be picked up b form
-    //   fixture.detectChanges()
-    //
-    //   expect(component.userPreferences.deduplicateDontDeduplicateUrls).toBe('someValue')
-    // })
+    it('textarea input is saved', () => {
+      component.userPreferences.experimentsEnabled = true
+      fixture.detectChanges()
+      const textarea = fixture.debugElement.query(By.css('form textarea')).nativeElement
+
+      expect(textarea.value).toEqual(component.userPreferences.deduplicateDontDeduplicateUrls)
+
+      textarea.value = 'someValue'
+      textarea.dispatchEvent(new Event('input'))
+      fixture.detectChanges()
+
+      expect(component.userPreferences.deduplicateDontDeduplicateUrls).toEqual('someValue')
+    })
   })
 
   describe('experiment', () => {
