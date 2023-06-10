@@ -34,7 +34,7 @@ describe('DuplicatesComponent', () => {
   })
 
   it('distinct urls should not be deduplicated', async () => {
-    chromeApiStub.setTabs(['url1', 'url2'])
+    chromeApiStub.setTabUrls('url1', 'url2')
 
     await component.ngOnInit()
 
@@ -42,7 +42,7 @@ describe('DuplicatesComponent', () => {
   })
 
   it('same urls should be deduplicated', async () => {
-    chromeApiStub.setTabs(['url1', 'url1'])
+    chromeApiStub.setTabUrls('url1', 'url1')
 
     await component.ngOnInit()
 

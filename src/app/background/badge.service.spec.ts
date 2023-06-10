@@ -38,7 +38,7 @@ describe('BadgeService', () => {
     it('ALL_TAB preference the same as tab count', async () => {
       settingsStub.userPreferences.badgeEnabled = true
       settingsStub.userPreferences.badgeTextType = BadgeTextType.TABS_NUM
-      chromeApiStub.setTabs([...Array(20).map((it) => it.toString())])
+      chromeApiStub.setTabs(...Array(20).map((it) => it.toString()))
 
       await service.updateTabCount()
 
@@ -69,7 +69,7 @@ describe('BadgeService', () => {
         settingsStub.userPreferences.badgeEnabled = true
         settingsStub.userPreferences.desiredTabs = desiredTabs
         settingsStub.userPreferences.changingColorEnabled = true
-        chromeApiStub.setTabs([...Array(tabCount).map((it) => it.toString())])
+        chromeApiStub.setTabs(...Array(tabCount).map((it) => it.toString()))
 
         await service.updateTabCount()
         expect(chromeApiStub.getBadgeBackgroundColor()).toEqual(hslToHex(expectedColorHue, 50, 50))
@@ -89,7 +89,7 @@ describe('BadgeService', () => {
     it('changing color disabled does not change badge color', async () => {
       settingsStub.userPreferences.badgeEnabled = true
       settingsStub.userPreferences.changingColorEnabled = false
-      chromeApiStub.setTabs([...Array(20).map((it) => it.toString())])
+      chromeApiStub.setTabs(...Array(20).map((it) => it.toString()))
 
       await service.updateTabCount()
 

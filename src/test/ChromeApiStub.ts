@@ -14,10 +14,17 @@ export class ChromeApiStub {
     return Promise.resolve(this.tabs)
   }
 
-  setTabs(urls: string[]) {
+  setTabs(...tabs: Tab[]) {
+    this.tabs = tabs
+  }
+
+  setTabUrls(...urls: string[]) {
     this.tabs = urls.map((url) => this.createTab(url))
   }
 
+  getTabsUrls() {
+    return this.tabs.map((url) => url.url)
+  }
   async getWindows(): Promise<Window[]> {
     return Promise.resolve(this.windows)
   }

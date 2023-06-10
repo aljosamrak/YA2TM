@@ -1,29 +1,22 @@
 import { TestBed } from '@angular/core/testing'
 import { LoggerTestingModule } from 'ngx-logger/testing'
+import { ChromeApiStub } from '../../../test/ChromeApiStub'
+
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { UserPreferences } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
-import Tab = chrome.tabs.Tab
-import createSpyObj = jasmine.createSpyObj
 
 describe('DeduplicationService', () => {
   let service: DeduplicationService
 
-  let chromeApiSpy: jasmine.SpyObj<ChromeApiService>
+  let chromeApiStub: ChromeApiStub
   let databaseSpy: jasmine.SpyObj<DatabaseService>
   let settingsStub: SettingsServiceStub
 
   beforeEach(async () => {
-    chromeApiSpy = createSpyObj('ChromeApiService', {
-      getTabs: () => Promise.resolve([]),
-      getWindows: () => Promise.resolve([]),
-      updateTab: () => {},
-      updateWindow: () => {},
-      removeTab: () => {},
-    })
     databaseSpy = jasmine.createSpyObj('DatabaseService', ['insert_records'])
 
     await TestBed.configureTestingModule({
@@ -31,7 +24,7 @@ describe('DeduplicationService', () => {
 
       providers: [
         DeduplicationService,
-        { provide: ChromeApiService, useValue: chromeApiSpy },
+        { provide: ChromeApiService, useClass: ChromeApiStub },
         { provide: DatabaseService, useValue: databaseSpy },
         { provide: SettingsService, useClass: SettingsServiceStub },
       ],
@@ -39,6 +32,7 @@ describe('DeduplicationService', () => {
 
     service = TestBed.inject(DeduplicationService)
     settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
+    chromeApiStub = TestBed.inject(ChromeApiService) as unknown as ChromeApiStub
     settingsStub.userPreferences.deduplicateTabs = true
   })
 
@@ -48,88 +42,89 @@ describe('DeduplicationService', () => {
 
   it('should do nothing on disabled', async () => {
     settingsStub.userPreferences.deduplicateTabs = false
-    const tab = createTab('url')
-    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
+    const tab = chromeApiStub.createTab('url')
+    chromeApiStub.setTabs(tab)
 
     await service.deduplicate(tab)
 
-    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
+    expect(chromeApiStub.getTabs()).toContain(tab)
   })
 
   it('should remove tabs with same URL', async () => {
-    withExistingTabs('url')
-    const tab = createTab('url')
+    chromeApiStub.setTabUrls('url')
+    const tab = chromeApiStub.createTab('url')
 
     await service.deduplicate(tab)
 
-    expect(chromeApiSpy.removeTab).toHaveBeenCalledWith(tab.id!)
+    expect(chromeApiStub.getTabs()).toHaveSize(0)
   })
 
   it('should not remove tabs with different URL', async () => {
-    const tab = createTab('url')
-    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
+    const tab = chromeApiStub.createTab('url')
+    chromeApiStub.setTabs(tab)
 
-    await service.deduplicate(createTab('differentUrl'))
+    await service.deduplicate(chromeApiStub.createTab('differentUrl'))
 
-    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
+    expect(chromeApiStub.getTabs()).toContain(tab)
   })
 
   it('should deduplicate tabs with different openerTabId', async () => {
-    const tab = createTab('url')
+    const tab = chromeApiStub.createTab('url')
     tab.openerTabId = 1
-    const differentTabWithSameUrl = createTab('url')
+    const differentTabWithSameUrl = chromeApiStub.createTab('url')
     differentTabWithSameUrl.openerTabId = 2
-    chromeApiSpy.getTabs.and.returnValue(Promise.resolve([tab]))
+    chromeApiStub.setTabs(tab)
 
     await service.deduplicate(differentTabWithSameUrl)
 
-    expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+    expect(chromeApiStub.getTabs()).toHaveSize(0)
   })
 
   describe('do not deduplicate URLs', () => {
     it('not on the list', async () => {
       settingsStub.userPreferences.deduplicateDontDeduplicateUrls = ''
-      withExistingTabs()
-      withExistingTabs('url')
+      chromeApiStub.setTabUrls('url')
 
-      await service.deduplicate(createTab('url'))
+      await service.deduplicate(chromeApiStub.createTab('url'))
 
-      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+      expect(chromeApiStub.getTabs()).toHaveSize(0)
     })
 
     it('on the list', async () => {
       settingsStub.userPreferences.deduplicateDontDeduplicateUrls = 'url'
-      withExistingTabs('url')
+      chromeApiStub.setTabUrls('url')
 
-      await service.deduplicate(createTab('url'))
+      await service.deduplicate(chromeApiStub.createTab('url'))
 
-      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
+      expect(chromeApiStub.getTabsUrls()).toContain('url')
     })
 
     it('multiple URLs', async () => {
       settingsStub.userPreferences.deduplicateDontDeduplicateUrls = 'url1, url2'
-      withExistingTabs('url1', 'url2')
+      chromeApiStub.setTabUrls('url1', 'url2')
 
-      await service.deduplicate(createTab('url1'))
-      await service.deduplicate(createTab('url2'))
+      await service.deduplicate(chromeApiStub.createTab('url1'))
+      await service.deduplicate(chromeApiStub.createTab('url2'))
 
-      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(0)
+      expect(chromeApiStub.getTabsUrls()).toContain('url1')
+      expect(chromeApiStub.getTabsUrls()).toContain('url2')
     })
 
     it('full URL must match', async () => {
       settingsStub.userPreferences.deduplicateDontDeduplicateUrls = 'long part with URL'
-      withExistingTabs('URL')
+      chromeApiStub.setTabUrls('URL')
 
-      await service.deduplicate(createTab('URL'))
+      await service.deduplicate(chromeApiStub.createTab('URL'))
 
-      expect(chromeApiSpy.removeTab).toHaveBeenCalledTimes(1)
+      expect(chromeApiStub.getTabs()).toHaveSize(0)
     })
   })
 
   describe('strip URL', () => {
     it('suspend tab regex extracts URL', async () => {
       const preferences = new UserPreferences()
-      preferences.deduplicateStripUrlParts = 'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
+      preferences.deduplicateStripUrlParts =
+        'chrome-extension:\\/\\/jaekigmcljkkalnicnjoafgfjoefkpeg\\/suspended\\.html#.*uri='
 
       const formattedUrl = DeduplicationService.formatUrl(
         'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#ttl=YA2TM&pos=0&uri=url#/',
@@ -154,26 +149,4 @@ describe('DeduplicationService', () => {
       expect(DeduplicationService.formatUrl('prefix1=prefix2=url', pref)).toEqual('url')
     })
   })
-
-  function withExistingTabs(...urls: string[]) {
-    chromeApiSpy.getTabs.and.returnValue(Promise.resolve(urls.map((url) => createTab(url))))
-  }
 })
-
-let id = 1
-export function createTab(url: string): Tab {
-  return {
-    id: id++,
-    index: 1,
-    url: url,
-    pinned: false,
-    highlighted: false,
-    windowId: 1,
-    active: true,
-    incognito: false,
-    selected: false,
-    discarded: false,
-    autoDiscardable: false,
-    groupId: -1,
-  }
-}
