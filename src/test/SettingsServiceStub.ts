@@ -1,13 +1,15 @@
-import { Observable } from 'rxjs'
+import { BehaviorSubject } from 'rxjs'
 
 import { UserPreferences } from '../app/settings/model/user-preferences'
 
 export class SettingsServiceStub {
-  userPreferences$ = new Observable()
-
   userPreferences = new UserPreferences()
+  userPreferences$ = new BehaviorSubject(this.userPreferences)
 
   getUserPreferences() {
     return this.userPreferences
+  }
+  updateUserPreferences() {
+    this.userPreferences$.next(this.userPreferences)
   }
 }
