@@ -4,7 +4,7 @@ import { ChromeApiStub } from '../../../test/ChromeApiStub'
 
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
-import { UserPreferences } from '../../settings/model/user-preferences'
+import { DeduplicateStrategy, UserPreferences } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
 import { DeduplicationService } from './deduplication.service'
@@ -34,6 +34,7 @@ describe('DeduplicationService', () => {
     settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
     chromeApiStub = TestBed.inject(ChromeApiService) as unknown as ChromeApiStub
     settingsStub.userPreferences.deduplicateTabs = true
+    settingsStub.userPreferences.deduplicateStrategy = DeduplicateStrategy.REMOVE_OLD_TAB
   })
 
   it('should be created', () => {
@@ -47,7 +48,7 @@ describe('DeduplicationService', () => {
 
     await service.deduplicate(tab)
 
-    expect(chromeApiStub.getTabs()).toContain(tab)
+    expect(await chromeApiStub.getTabs()).toContain(tab)
   })
 
   it('should remove tabs with same URL', async () => {
@@ -56,7 +57,7 @@ describe('DeduplicationService', () => {
 
     await service.deduplicate(tab)
 
-    expect(chromeApiStub.getTabs()).toHaveSize(0)
+    expect(await chromeApiStub.getTabs()).toHaveSize(0)
   })
 
   it('should not remove tabs with different URL', async () => {
@@ -65,7 +66,7 @@ describe('DeduplicationService', () => {
 
     await service.deduplicate(chromeApiStub.createTab('differentUrl'))
 
-    expect(chromeApiStub.getTabs()).toContain(tab)
+    expect(await chromeApiStub.getTabs()).toContain(tab)
   })
 
   it('should deduplicate tabs with different openerTabId', async () => {
@@ -77,7 +78,7 @@ describe('DeduplicationService', () => {
 
     await service.deduplicate(differentTabWithSameUrl)
 
-    expect(chromeApiStub.getTabs()).toHaveSize(0)
+    expect(await chromeApiStub.getTabs()).toHaveSize(0)
   })
 
   describe('do not deduplicate URLs', () => {
@@ -87,7 +88,7 @@ describe('DeduplicationService', () => {
 
       await service.deduplicate(chromeApiStub.createTab('url'))
 
-      expect(chromeApiStub.getTabs()).toHaveSize(0)
+      expect(await chromeApiStub.getTabs()).toHaveSize(0)
     })
 
     it('on the list', async () => {
@@ -116,7 +117,7 @@ describe('DeduplicationService', () => {
 
       await service.deduplicate(chromeApiStub.createTab('URL'))
 
-      expect(chromeApiStub.getTabs()).toHaveSize(0)
+      expect(await chromeApiStub.getTabs()).toHaveSize(0)
     })
   })
 

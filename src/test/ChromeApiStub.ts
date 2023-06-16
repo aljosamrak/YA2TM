@@ -1,4 +1,6 @@
 import Tab = chrome.tabs.Tab
+import UpdateProperties = chrome.tabs.UpdateProperties
+import UpdateInfo = chrome.windows.UpdateInfo
 import Window = chrome.windows.Window
 
 export class ChromeApiStub {
@@ -14,6 +16,10 @@ export class ChromeApiStub {
     return Promise.resolve(this.tabs)
   }
 
+  getTabsUrls() {
+    return this.tabs.map((url) => url.url)
+  }
+
   setTabs(...tabs: Tab[]) {
     this.tabs = tabs
   }
@@ -22,15 +28,24 @@ export class ChromeApiStub {
     this.tabs = urls.map((url) => this.createTab(url))
   }
 
-  getTabsUrls() {
-    return this.tabs.map((url) => url.url)
+  updateTab(tabId: number, updateProperties: UpdateProperties) {
+    // noop
   }
+
+  removeTab(tabId: number) {
+    this.tabs = this.tabs.filter((tab) => tab.id !== tabId)
+  }
+
   async getWindows(): Promise<Window[]> {
     return Promise.resolve(this.windows)
   }
 
   setWindows(num: number) {
     this.windows = [...Array(num).map(() => this.createWindow())]
+  }
+
+  updateWindow(windowId: number, updateInfo: UpdateInfo) {
+    // noop
   }
 
   getBadgeText() {
