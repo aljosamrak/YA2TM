@@ -17,6 +17,7 @@ import arrayContaining = jasmine.arrayContaining
 describe('SettingsComponent', () => {
   let component: SettingsComponent
   let fixture: ComponentFixture<SettingsComponent>
+  let settingsStub: SettingsServiceStub
 
   const analyticsSpy = jasmine.createSpyObj('AnalyticsService', ['event'])
   const databaseSpy = jasmine.createSpyObj('DatabaseService', [''])
@@ -24,7 +25,14 @@ describe('SettingsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SettingsComponent],
-      imports: [LoggerTestingModule, MatInputModule, MatSelectModule, MatSlideToggleModule, NoopAnimationsModule, ReactiveFormsModule],
+      imports: [
+        LoggerTestingModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSlideToggleModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+      ],
       providers: [
         { provide: AnalyticsService, useValue: analyticsSpy },
         { provide: DatabaseService, useValue: databaseSpy },
@@ -36,6 +44,7 @@ describe('SettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent)
     component = fixture.componentInstance
+    settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
   })
 
   it('should create', () => {
@@ -45,26 +54,26 @@ describe('SettingsComponent', () => {
   describe('setting values', () => {
     it('toggle input is saved', () => {
       fixture.detectChanges()
-      const preSetting = component.userPreferences
+      const preSetting = settingsStub.getUserPreferencesCopy()
       const slider = fixture.debugElement.query(By.css('form mat-slide-toggle')).componentInstance
 
       slider.toggle()
 
-      expect(component.userPreferences).not.toEqual(preSetting)
+      expect(settingsStub.userPreferences).not.toEqual(preSetting)
     })
 
     it('textarea input is saved', () => {
-      component.userPreferences.experimentsEnabled = true
+      settingsStub.userPreferences.experimentsEnabled = true
       fixture.detectChanges()
       const textarea = fixture.debugElement.query(By.css('form textarea')).nativeElement
 
-      expect(textarea.value).toEqual(component.userPreferences.deduplicateDontDeduplicateUrls)
+      expect(textarea.value).toEqual(settingsStub.userPreferences.deduplicateDontDeduplicateUrls)
 
       textarea.value = 'someValue'
       textarea.dispatchEvent(new Event('input'))
       fixture.detectChanges()
 
-      expect(component.userPreferences.deduplicateDontDeduplicateUrls).toEqual('someValue')
+      expect(settingsStub.userPreferences.deduplicateDontDeduplicateUrls).toEqual('someValue')
     })
   })
 
@@ -72,16 +81,20 @@ describe('SettingsComponent', () => {
     const experimentalSettings = ['Deduplicate tabs', 'Snoozed tabs', 'Experiments', 'About', 'Version']
     it('experiment disabled by default', () => {
       expect(
-        Array.from(fixture.nativeElement.querySelectorAll('mat-panel-title').values()).map((it: any) => it.textContent.trim()),
+        Array.from(fixture.nativeElement.querySelectorAll('mat-panel-title').values()).map((it: any) =>
+          it.textContent.trim(),
+        ),
       ).not.toEqual(arrayContaining(experimentalSettings))
     })
 
     it('experiments shown after enabled', () => {
-      component.userPreferences.experimentsEnabled = true
+      settingsStub.userPreferences.experimentsEnabled = true
       fixture.detectChanges()
 
       expect(
-        Array.from(fixture.nativeElement.querySelectorAll('mat-panel-title').values()).map((it: any) => it.textContent.trim()),
+        Array.from(fixture.nativeElement.querySelectorAll('mat-panel-title').values()).map((it: any) =>
+          it.textContent.trim(),
+        ),
       ).toEqual(arrayContaining(experimentalSettings))
     })
   })

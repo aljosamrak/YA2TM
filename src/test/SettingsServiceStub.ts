@@ -9,7 +9,13 @@ export class SettingsServiceStub {
   getUserPreferences() {
     return this.userPreferences
   }
-  updateUserPreferences() {
-    this.userPreferences$.next(this.userPreferences)
+
+  getUserPreferencesCopy() {
+    return Object.assign({}, this.userPreferences)
+  }
+
+  updateUserPreferences(newValue: UserPreferences) {
+    this.userPreferences = newValue
+    this.userPreferences$.next(newValue)
   }
 }

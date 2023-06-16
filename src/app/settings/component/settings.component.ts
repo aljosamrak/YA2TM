@@ -20,11 +20,11 @@ import { SettingsService } from '../service/settings.service'
 })
 export class SettingsComponent implements OnInit {
   subscription?: Subscription
+  formSubscription: Subscription
 
   settingsForm: FormGroup
 
   applicationVersion = environment.version
-  userPreferences: UserPreferences
 
   public FileType2LabelMapping: Record<any, string> = {
     [BadgeTextType.TABS_NUM]: 'Number of tabs',
@@ -46,27 +46,26 @@ export class SettingsComponent implements OnInit {
     private analytics: AnalyticsService,
     private databaseService: DatabaseService,
     private formBuilder: FormBuilder,
-    private settingsService: SettingsService,
+    public settingsService: SettingsService,
   ) {
-    this.userPreferences = settingsService.getUserPreferences()
     // create form group using the form builder
     this.settingsForm = this.createGroup(
       formBuilder,
       settingsService.getUserPreferences(),
     )
 
-    this.settingsForm.valueChanges.subscribe((formValue) => {
-      this.userPreferences = formValue
-      settingsService.updateUserPreferences(formValue)
-    })
+    this.formSubscription = this.getFormSubscription()
   }
 
   ngOnInit() {
     this.subscription = this.settingsService.userPreferences$
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
-        this.userPreferences = item
+        // Unsubscribe while patching to avoid the loop
+        this.formSubscription.unsubscribe()
         this.settingsForm.patchValue(item)
+        // Resubscribe after pathing the value
+        this.formSubscription = this.getFormSubscription()
       })
   }
 
@@ -74,7 +73,14 @@ export class SettingsComponent implements OnInit {
     // prevent memory leak when component is destroyed
     if (this.subscription) {
       this.subscription.unsubscribe()
+      this.formSubscription.unsubscribe()
     }
+  }
+
+  private getFormSubscription() {
+    return this.settingsForm.valueChanges.subscribe((formValue) => {
+      this.settingsService.updateUserPreferences(formValue)
+    })
   }
 
   private createGroup(
