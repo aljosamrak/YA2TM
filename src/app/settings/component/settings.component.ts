@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
@@ -6,11 +6,7 @@ import { throttleTime } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
-import {
-  BadgeTextType,
-  DeduplicateStrategy,
-  UserPreferences,
-} from '../model/user-preferences'
+import { BadgeTextType, DeduplicateStrategy, UserPreferences } from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
 @Component({
@@ -18,7 +14,7 @@ import { SettingsService } from '../service/settings.service'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.sass'],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   subscription?: Subscription
   formSubscription: Subscription
 
@@ -32,9 +28,7 @@ export class SettingsComponent implements OnInit {
     [BadgeTextType.DEDUPLICATED_TABS]: 'Number of deduplicated tabs',
     [BadgeTextType.DAY_DIFF]: 'Tab difference',
   }
-  public fileTypes = Object.values(BadgeTextType).filter(
-    (value) => typeof value === 'number',
-  )
+  public fileTypes = Object.values(BadgeTextType).filter((value) => typeof value === 'number')
 
   deduplicateStrategyMap: any[] = [
     { name: 'Remove new tab', id: DeduplicateStrategy.REMOVE_NEW_TAB },
@@ -49,10 +43,7 @@ export class SettingsComponent implements OnInit {
     public settingsService: SettingsService,
   ) {
     // create form group using the form builder
-    this.settingsForm = this.createGroup(
-      formBuilder,
-      settingsService.getUserPreferences(),
-    )
+    this.settingsForm = this.createGroup(formBuilder, settingsService.getUserPreferences())
 
     this.formSubscription = this.getFormSubscription()
   }
@@ -83,10 +74,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  private createGroup(
-    formBuilder: FormBuilder,
-    userPreferences: UserPreferences,
-  ): FormGroup {
+  private createGroup(formBuilder: FormBuilder, userPreferences: UserPreferences): FormGroup {
     const group = new FormGroup({})
 
     Object.keys(userPreferences).forEach((key) => {
