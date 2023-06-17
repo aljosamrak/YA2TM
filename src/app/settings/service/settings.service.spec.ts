@@ -7,13 +7,19 @@ import { SettingsService } from './settings.service'
 describe('SettingsService', () => {
   let service: SettingsService
 
-  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', ['get', 'addOnChangedListener'])
+  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', [
+    'get',
+    'addOnChangedListener',
+  ])
 
   beforeEach(() => {
     localStorageSpy.get.and.returnValue(Promise.resolve(new UserPreferences()))
 
     TestBed.configureTestingModule({
-      providers: [SettingsService, { provide: LocalStorageService, useValue: localStorageSpy }],
+      providers: [
+        SettingsService,
+        { provide: LocalStorageService, useValue: localStorageSpy },
+      ],
     })
     service = TestBed.inject(SettingsService)
   })
@@ -23,6 +29,11 @@ describe('SettingsService', () => {
   })
 
   it('getUserPreferences returns proper object with equals method', () => {
-    expect(service.getUserPreferences().equals(new UserPreferences())).toBeTrue()
+    expect(
+      UserPreferences.equals(
+        service.getUserPreferences(),
+        new UserPreferences(),
+      ),
+    ).toBeTrue()
   })
 })

@@ -46,7 +46,7 @@ export class UserPreferences {
   achievementsEnabled = false
   desiredTabs = 30
 
-  equals(other: UserPreferences) {
-    return isEqual(this, other)
+  static equals(a: UserPreferences, b: UserPreferences) {
+    return isEqual(a, b)
   }
 }

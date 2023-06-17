@@ -9,13 +9,17 @@ import { UserPreferences } from '../model/user-preferences'
   providedIn: 'root',
 })
 export class SettingsService {
-  private userPreferences = new BehaviorSubject<UserPreferences>(new UserPreferences())
+  private userPreferences = new BehaviorSubject<UserPreferences>(
+    new UserPreferences(),
+  )
   userPreferences$ = this.userPreferences.asObservable()
 
   constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
-        this.updateUserPreferences(this.mergeDeep(new UserPreferences(), userPreferences))
+        this.updateUserPreferences(
+          this.mergeDeep(new UserPreferences(), userPreferences),
+        )
       } else {
         this.updateUserPreferences(new UserPreferences())
       }
@@ -32,7 +36,7 @@ export class SettingsService {
   }
 
   updateUserPreferences(newValue: UserPreferences) {
-    if (this.userPreferences.getValue().equals(newValue)) {
+    if (UserPreferences.equals(this.userPreferences.getValue(), newValue)) {
       return
     }
 

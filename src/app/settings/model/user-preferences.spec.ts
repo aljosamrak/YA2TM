@@ -15,11 +15,15 @@ describe('UserPreferences', () => {
     it('same object equals', () => {
       userPreferences.favoriteColor = 'color'
 
-      expect(userPreferences.equals(userPreferences)).toBeTrue()
+      expect(
+        UserPreferences.equals(userPreferences, userPreferences),
+      ).toBeTrue()
     })
 
     it('two default objets are equal', () => {
-      expect(userPreferences.equals(new UserPreferences())).toBeTrue()
+      expect(
+        UserPreferences.equals(userPreferences, new UserPreferences()),
+      ).toBeTrue()
     })
 
     it('two similar objets are equal', () => {
@@ -27,13 +31,15 @@ describe('UserPreferences', () => {
       const other = new UserPreferences()
       other.deduplicateDontDeduplicateUrls = 'url'
 
-      expect(userPreferences.equals(other)).toBeTrue()
+      expect(UserPreferences.equals(userPreferences, other)).toBeTrue()
     })
 
     it('two different objets are not equal', () => {
       userPreferences.favoriteColor = 'color'
 
-      expect(userPreferences.equals(new UserPreferences())).toBeFalse()
+      expect(
+        UserPreferences.equals(userPreferences, new UserPreferences()),
+      ).toBeFalse()
     })
   })
 })
