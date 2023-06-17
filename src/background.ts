@@ -69,7 +69,7 @@ class Background {
     const options = {
       providers: [
         { provide: NGXLogger, useValue: logger },
-        { provide: LocalStorageService, deps: [] },
+        { provide: LocalStorageService, deps: [NGXLogger] },
         { provide: ChromeApiService, deps: [] },
         { provide: ChromeNotificationService, deps: [] },
         { provide: ChromeAlarmApiService, deps: [] },

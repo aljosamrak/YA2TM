@@ -17,7 +17,7 @@ export class TestingComponent {
     const defaultValue = 'defaultValue'
 
     // Test read stored value
-    const key = { key: 'testKey', defaultValue: () => '' }
+    const key = { key: 'testKey', defaultValue: () => '', isStringType: true }
     await this.localstorageService.set(key, value)
     const returnedValue1 = await this.localstorageService.get(key)
 
@@ -38,6 +38,7 @@ export class TestingComponent {
     const returnedValue3 = await this.localstorageService.get({
       key: 'unknownKey',
       defaultValue: () => defaultValue,
+      isStringType: true,
     })
 
     if (returnedValue3 !== defaultValue) {
