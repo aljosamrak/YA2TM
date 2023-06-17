@@ -29,16 +29,7 @@ export class LocalStorageService {
 
       const value = result[key.key]
 
-      if (typeof value !== 'string') {
-        return value
-      }
-
-      if (key.isStringType) {
-        // @ts-ignore
-        return value
-      }
-
-      return LocalStorageService.fromJsonString(value, key.defaultValue())
+      return this.convertValue(value, key)
     } catch (e) {
       this.logger.log(e)
       return key.defaultValue()
@@ -55,13 +46,42 @@ export class LocalStorageService {
     return chrome.storage.local.set({ [key.key]: stringValue })
   }
 
-  addOnChangedListener(callback: (changes: object, areaName: string) => void) {
-    chrome.storage.onChanged.addListener(callback)
+  /**
+   * Adds the callback for a new value for the provided key
+   *
+   * @param key for which the call back will be called
+   * @param callback that will be called on value change
+   *
+   * @returns callback that can be used for unsubscribe
+   */
+  addOnNewValueListener<T>(key: Key<T>, callback: (newValue: T) => void) {
+    const createdCallback = (changes: Change) => {
+      if (changes.hasOwnProperty(key.key)) {
+        callback(this.convertValue(changes[key.key].newValue, key))
+      }
+    }
+
+    chrome.storage.onChanged.addListener(createdCallback)
+
+    return createdCallback
   }
 
-  removeOnChangeListener(
-    callback: (changes: object, areaName: string) => void,
-  ) {
+  removeOnChangeListener(callback: (changes: Change, areaName: string) => void) {
     chrome.storage.onChanged.removeListener(callback)
   }
+
+  private convertValue<T>(value: any, key: Key<T>) {
+    if (typeof value !== 'string') {
+      return value
+    }
+
+    if (key.isStringType) {
+      // @ts-ignore
+      return value
+    }
+
+    return LocalStorageService.fromJsonString(value, key.defaultValue())
+  }
 }
+
+type Change = { [p: string]: chrome.storage.StorageChange }

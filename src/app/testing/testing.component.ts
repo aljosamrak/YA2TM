@@ -50,13 +50,17 @@ export class TestingComponent {
     // Test on change callback
     await chrome.storage.local.remove('testKey2')
     let returnedValue4 = ''
-    const fun = (changes: object) => {
-      if (changes.hasOwnProperty('testKey2')) {
-        // @ts-ignore
-        returnedValue4 = changes['testKey2'].newValue
-      }
-    }
-    this.localstorageService.addOnChangedListener(fun)
+
+    const subscription = this.localstorageService.addOnNewValueListener(
+      {
+        key: 'testKey2',
+        defaultValue: () => 'def',
+        isStringType: true,
+      },
+      (newValue) => {
+        returnedValue4 = newValue
+      },
+    )
     await chrome.storage.local.set({ ['testKey2']: value })
 
     await new Promise<void>((resolve) => {
@@ -67,7 +71,7 @@ export class TestingComponent {
     })
 
     await chrome.storage.local.remove('testKey2')
-    this.localstorageService.removeOnChangeListener(fun)
+    this.localstorageService.removeOnChangeListener(subscription)
 
     this.localStorageResult = Status.SUCCESS
   }

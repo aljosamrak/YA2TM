@@ -9,53 +9,30 @@ import { UserPreferences } from '../model/user-preferences'
   providedIn: 'root',
 })
 export class SettingsService {
-  private userPreferences = new BehaviorSubject<UserPreferences>(
-    new UserPreferences(),
-  )
+  private userPreferences = new BehaviorSubject<UserPreferences>(new UserPreferences())
   userPreferences$ = this.userPreferences.asObservable()
+  private readonly subscription: (changes: { [p: string]: chrome.storage.StorageChange }) => void
 
   constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
-        this.updateUserPreferences(
-          this.mergeDeep(new UserPreferences(), userPreferences),
-        )
+        this.updateUserPreferences(SettingsService.mergeDeep(new UserPreferences(), userPreferences))
       } else {
         this.updateUserPreferences(new UserPreferences())
       }
     })
 
-    localstorageService.addOnChangedListener((changes) => {
-      if (changes.hasOwnProperty(USER_PREFERENCES.key)) {
-        this.updateUserPreferences(
-          // @ts-ignore
-          changes[USER_PREFERENCES.key].newValue as UserPreferences,
-        )
-      }
-    })
+    this.subscription = localstorageService.addOnNewValueListener(USER_PREFERENCES, (newValue) =>
+      this.updateUserPreferences(newValue),
+    )
   }
 
-  updateUserPreferences(newValue: UserPreferences) {
-    if (UserPreferences.equals(this.userPreferences.getValue(), newValue)) {
-      return
-    }
-
-    this.userPreferences.next(newValue)
-    this.localstorageService.set(USER_PREFERENCES, newValue)
-  }
-
-  getUserPreferences(): UserPreferences {
-    return this.userPreferences.getValue()
-  }
-
-  enableExperiments() {
-    const settings: UserPreferences = this.getUserPreferences()
-    settings.experimentsEnabled = true
-    this.updateUserPreferences(settings)
+  private static isObject(item: any) {
+    return item && typeof item === 'object' && !Array.isArray(item)
   }
 
   /** Deep merge two objects. */
-  private mergeDeep(target: any, ...sources: any): any {
+  private static mergeDeep(target: any, ...sources: any): any {
     if (!sources.length) {
       return target
     }
@@ -77,7 +54,29 @@ export class SettingsService {
     return this.mergeDeep(target, ...sources)
   }
 
-  private static isObject(item: any) {
-    return item && typeof item === 'object' && !Array.isArray(item)
+  ngOnDestroy() {
+    // prevent memory leak when a component is destroyed
+    if (this.subscription) {
+      this.localstorageService.removeOnChangeListener(this.subscription)
+    }
+  }
+
+  updateUserPreferences(newValue: UserPreferences) {
+    if (UserPreferences.equals(newValue, this.userPreferences.getValue())) {
+      return
+    }
+
+    this.userPreferences.next(newValue)
+    this.localstorageService.set(USER_PREFERENCES, newValue)
+  }
+
+  getUserPreferences(): UserPreferences {
+    return this.userPreferences.getValue()
+  }
+
+  enableExperiments() {
+    const settings: UserPreferences = this.getUserPreferences()
+    settings.experimentsEnabled = true
+    this.updateUserPreferences(settings)
   }
 }
