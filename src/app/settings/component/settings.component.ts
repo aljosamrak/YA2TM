@@ -23,10 +23,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   applicationVersion = environment.version
 
   public FileType2LabelMapping: Record<any, string> = {
-    [BadgeTextType.TABS_NUM]: 'Number of tabs',
+    [BadgeTextType.ALL_TABS_NUM]: 'Number of all tabs',
     [BadgeTextType.WINDOW_NUM]: 'Number of Windows',
-    [BadgeTextType.DEDUPLICATED_TABS]: 'Number of deduplicated tabs',
-    [BadgeTextType.DAY_DIFF]: 'Tab difference',
+    // [BadgeTextType.DEDUPLICATED_TABS]: 'Number of deduplicated tabs',
+    // [BadgeTextType.DAY_DIFF]: 'Tab difference',
+    // TODO implement all possibilities
   }
   public fileTypes = Object.values(BadgeTextType).filter((value) => typeof value === 'number')
 

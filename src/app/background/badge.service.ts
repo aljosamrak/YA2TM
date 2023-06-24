@@ -45,10 +45,7 @@ export class BadgeService {
     return Promise.all([
       badgeTextPromise,
       this.chromeApiService.setBadgeBackgroundColor(
-        this.getBadgeColor(
-          tabs.length,
-          this.settingsService.getUserPreferences().desiredTabs,
-        ),
+        this.getBadgeColor(tabs.length, this.settingsService.getUserPreferences().desiredTabs),
       ),
     ])
   }
@@ -65,10 +62,8 @@ export class BadgeService {
 
   private async getBadgeText(badgeTextType: BadgeTextType): Promise<string> {
     switch (badgeTextType) {
-      case BadgeTextType.TABS_NUM:
-        return this.chromeApiService
-          .getTabs()
-          .then((tabs) => tabs.length.toString())
+      case BadgeTextType.ALL_TABS_NUM:
+        return this.chromeApiService.getTabs().then((tabs) => tabs.length.toString())
       case BadgeTextType.WINDOW_NUM:
         return this.chromeApiService
           .getWindows()

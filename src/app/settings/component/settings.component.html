@@ -58,46 +58,47 @@
         </mat-form-field>
       </div>
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Ignore hash part</mat-panel-title>
-        <mat-slide-toggle formControlName='deduplicateIgnoreHashPart' id='deduplicateIgnoreHashPart'></mat-slide-toggle>
-      </div>
+<!--      TODO implement deduplication features-->
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Ignore hash part</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='deduplicateIgnoreHashPart' id='deduplicateIgnoreHashPart'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Ignore search path</mat-panel-title>
-        <mat-slide-toggle
-          formControlName='deduplicateIgnoreSearchPart'
-          id='deduplicateIgnoreSearchPart'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Ignore search path</mat-panel-title>-->
+<!--        <mat-slide-toggle-->
+<!--          formControlName='deduplicateIgnoreSearchPart'-->
+<!--          id='deduplicateIgnoreSearchPart'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Ignore path part</mat-panel-title>
-        <mat-slide-toggle formControlName='deduplicateIgnorePathPart' id='deduplicateIgnorePathPart'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Ignore path part</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='deduplicateIgnorePathPart' id='deduplicateIgnorePathPart'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Ignore WWW</mat-panel-title>
-        <mat-slide-toggle formControlName='deduplicateIgnore3w' id='deduplicateIgnore3w'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Ignore WWW</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='deduplicateIgnore3w' id='deduplicateIgnore3w'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Ignore case</mat-panel-title>
-        <mat-slide-toggle formControlName='deduplicateIgnoreCase' id='deduplicateIgnoreCase'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Ignore case</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='deduplicateIgnoreCase' id='deduplicateIgnoreCase'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Compare with title</mat-panel-title>
-        <mat-slide-toggle
-          formControlName='deduplicateCompareWithTitle'
-          id='deduplicateCompareWithTitle'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Compare with title</mat-panel-title>-->
+<!--        <mat-slide-toggle-->
+<!--          formControlName='deduplicateCompareWithTitle'-->
+<!--          id='deduplicateCompareWithTitle'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> Deduplicate in all windows</mat-panel-title>
-        <mat-slide-toggle
-          formControlName='deduplicateSearchInAllWindows'
-          id='deduplicateSearchInAllWindows'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> Deduplicate in all windows</mat-panel-title>-->
+<!--        <mat-slide-toggle-->
+<!--          formControlName='deduplicateSearchInAllWindows'-->
+<!--          id='deduplicateSearchInAllWindows'></mat-slide-toggle>-->
+<!--      </div>-->
 
       <div class='d-flex p-2 pr-0 col-example'>
         <mat-panel-title> Don't deduplicate URLs containing</mat-panel-title>
@@ -119,15 +120,16 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel
-      hideToggle
-      [disabled]='!settingsService.getUserPreferences().snoozingEnabled'
-      *ngIf='settingsService.getUserPreferences().experimentsEnabled'>
-      <mat-expansion-panel-header>
-        <mat-panel-title> Snoozed tabs</mat-panel-title>
-        <mat-slide-toggle formControlName='snoozingEnabled' id='snoozingEnabled'></mat-slide-toggle>
-      </mat-expansion-panel-header>
-    </mat-expansion-panel>
+<!--      TODO implement deduplication features-->
+<!--    <mat-expansion-panel-->
+<!--      hideToggle-->
+<!--      [disabled]='!settingsService.getUserPreferences().snoozingEnabled'-->
+<!--      *ngIf='settingsService.getUserPreferences().experimentsEnabled'>-->
+<!--      <mat-expansion-panel-header>-->
+<!--        <mat-panel-title> Snoozed tabs</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='snoozingEnabled' id='snoozingEnabled'></mat-slide-toggle>-->
+<!--      </mat-expansion-panel-header>-->
+<!--    </mat-expansion-panel>-->
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -161,25 +163,27 @@
         <mat-panel-title> Experiments</mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> tabsEnabled</mat-panel-title>
-        <mat-slide-toggle formControlName='tabsEnabled' id='tabsEnabled'></mat-slide-toggle>
-      </div>
+<!--      TODO implement deduplication features-->
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> tabsEnabled</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='tabsEnabled' id='tabsEnabled'></mat-slide-toggle>-->
+<!--      </div>-->
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> drillDownEnabled</mat-panel-title>
-        <mat-slide-toggle formControlName='drillDownEnabled' id='drillDownEnabled'></mat-slide-toggle>
-      </div>
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> drillDownEnabled</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='drillDownEnabled' id='drillDownEnabled'></mat-slide-toggle>-->
+<!--      </div>-->
 
       <div class='d-flex p-2 pr-0 col-example'>
         <mat-panel-title> desiredTabs</mat-panel-title>
         <mat-slide-toggle formControlName='desiredTabs' id='desiredTabs'></mat-slide-toggle>
       </div>
 
-      <div class='d-flex p-2 pr-0 col-example'>
-        <mat-panel-title> achievementsEnabled</mat-panel-title>
-        <mat-slide-toggle formControlName='achievementsEnabled' id='achievementsEnabled'></mat-slide-toggle>
-      </div>
+<!--      TODO implement deduplication features-->
+<!--      <div class='d-flex p-2 pr-0 col-example'>-->
+<!--        <mat-panel-title> achievementsEnabled</mat-panel-title>-->
+<!--        <mat-slide-toggle formControlName='achievementsEnabled' id='achievementsEnabled'></mat-slide-toggle>-->
+<!--      </div>-->
     </mat-expansion-panel>
 
     <mat-expansion-panel *ngIf='settingsService.getUserPreferences().experimentsEnabled'>

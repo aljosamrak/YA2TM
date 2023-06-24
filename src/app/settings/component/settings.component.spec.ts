@@ -78,7 +78,14 @@ describe('SettingsComponent', () => {
   })
 
   describe('experiment', () => {
-    const experimentalSettings = ['Deduplicate tabs', 'Snoozed tabs', 'Experiments', 'About', 'Version']
+    const experimentalSettings = [
+      'Deduplicate tabs',
+      // TODO uncomment
+      // 'Snoozed tabs',
+      'Experiments',
+      'About',
+      'Version',
+    ]
     it('experiment disabled by default', () => {
       expect(
         Array.from(fixture.nativeElement.querySelectorAll('mat-panel-title').values()).map((it: any) =>

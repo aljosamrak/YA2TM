@@ -37,7 +37,7 @@ describe('BadgeService', () => {
   describe('setting badge text', () => {
     it('ALL_TAB preference the same as tab count', async () => {
       settingsStub.userPreferences.badgeEnabled = true
-      settingsStub.userPreferences.badgeTextType = BadgeTextType.TABS_NUM
+      settingsStub.userPreferences.badgeTextType = BadgeTextType.ALL_TABS_NUM
       chromeApiStub.setTabs(...Array(20).map((it) => it.toString()))
 
       await service.updateTabCount()
