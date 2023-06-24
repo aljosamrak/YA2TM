@@ -2,7 +2,6 @@
   <mat-accordion>
     <mat-expansion-panel
       hideToggle
-      [expanded]="settingsService.getUserPreferences().badgeEnabled"
       [disabled]="!settingsService.getUserPreferences().badgeEnabled">
       <mat-expansion-panel-header>
         <mat-panel-title> Enable badge </mat-panel-title>
@@ -41,7 +40,6 @@
 
     <mat-expansion-panel
       hideToggle
-      [expanded]="settingsService.getUserPreferences().deduplicateTabs"
       [disabled]="!settingsService.getUserPreferences().deduplicateTabs"
       *ngIf="settingsService.getUserPreferences().experimentsEnabled">
       <mat-expansion-panel-header>
@@ -124,7 +122,6 @@
 
     <mat-expansion-panel
       hideToggle
-      [expanded]="settingsService.getUserPreferences().snoozingEnabled"
       [disabled]="!settingsService.getUserPreferences().snoozingEnabled"
       *ngIf="settingsService.getUserPreferences().experimentsEnabled">
       <mat-expansion-panel-header>
@@ -133,7 +130,7 @@
       </mat-expansion-panel-header>
     </mat-expansion-panel>
 
-    <mat-expansion-panel expanded>
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title> Data </mat-panel-title>
       </mat-expansion-panel-header>
@@ -149,7 +146,7 @@
       </div>
     </mat-expansion-panel>
 
-    <mat-expansion-panel expanded>
+    <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title> Other </mat-panel-title>
       </mat-expansion-panel-header>
