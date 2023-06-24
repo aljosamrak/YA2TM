@@ -11,10 +11,7 @@ describe('SnoozeService', () => {
   let service: SnoozeService
 
   const databaseSpy = jasmine.createSpyObj('DatabaseService', [''])
-  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', [
-    'get',
-    'addOnChangedListener',
-  ])
+  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', ['get'])
 
   beforeEach(() => {
     TestBed.configureTestingModule({
