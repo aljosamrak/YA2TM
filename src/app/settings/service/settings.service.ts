@@ -16,7 +16,9 @@ export class SettingsService {
   constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
-        this.updateUserPreferences(SettingsService.mergeDeep(new UserPreferences(), userPreferences))
+        this.updateUserPreferences(
+          SettingsService.mergeDeep(new UserPreferences(), userPreferences),
+        )
       } else {
         this.updateUserPreferences(new UserPreferences())
       }
@@ -62,10 +64,6 @@ export class SettingsService {
   }
 
   updateUserPreferences(newValue: UserPreferences) {
-    if (UserPreferences.equals(newValue, this.userPreferences.getValue())) {
-      return
-    }
-
     this.userPreferences.next(newValue)
     this.localstorageService.set(USER_PREFERENCES, newValue)
   }
@@ -75,8 +73,7 @@ export class SettingsService {
   }
 
   enableExperiments() {
-    const settings: UserPreferences = this.getUserPreferences()
-    settings.experimentsEnabled = true
-    this.updateUserPreferences(settings)
+    this.getUserPreferences().experimentsEnabled = true
+    this.updateUserPreferences(this.getUserPreferences())
   }
 }
