@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { MatIconModule } from '@angular/material/icon'
 
 import { MatInputModule } from '@angular/material/input'
 import { MDBBootstrapModule } from 'angular-bootstrap-md'
@@ -40,6 +41,7 @@ import { PopupComponent } from './popup.component'
     MDBBootstrapModule.forRoot(),
     SettingsModule.forRoot(),
     MatInputModule,
+    MatIconModule,
   ],
   providers: [ChromeApiService, DatabaseService, LocalStorageService],
 })

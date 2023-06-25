@@ -13,7 +13,7 @@
 >
   <!-- Navbar-->
   <mdb-navbar
-    SideClass='navbar navbar-expand-lg navbar-dark purple lighten-1'
+    SideClass='navbar fixed-top navbar-dark bg-dark py-0'
     [containerInside]='false'
   >
     <div class='container-fluid justify-content-between'>
@@ -70,15 +70,11 @@
             <span>Testing</span>
           </a>
         </li>
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active'>
-          <a [routerLink]="'TODO'" class='nav-link waves-light' mdbWavesEffect>
-            <img
-              (click)='openFullScreen()'
-              alt=''
-              height='22'
-              loading='lazy'
-              src='assets/full-screen.png'
-            />
+        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' (click)='openFullScreen()'>
+          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'TODO'">
+            <mat-icon aria-hidden='false' aria-label='Open settings page'
+            >fullscreen
+            </mat-icon>
           </a>
         </li>
         <li *ngIf='achievementsEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
@@ -87,15 +83,19 @@
             class='nav-link waves-light'
             mdbWavesEffect
           >
-            <img alt='' height='22' loading='lazy' src='assets/trophy.png' />
+            <mat-icon aria-hidden='false'
+                      aria-label='Open settings page'>emoji_events
+            </mat-icon>
+            <img src='assets/trophy.png' height='22' alt='' loading='lazy' />
             <span class='badge rounded-pill badge-notification bg-danger'
             >2</span
             >
           </a>
         </li>
-        <li (click)='settingsClick()' class='nav-item' routerLinkActive='active'>
-          <a [routerLink]="'settings'" class='nav-link waves-light' mdbWavesEffect>
-            <img alt='' height='22' loading='lazy' src='assets/settings.png' />
+        <li class='nav-item' routerLinkActive='active' (click)='settingsClick()'>
+          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'settings'">
+            <mat-icon aria-hidden='false' aria-label='Open settings page'>settings
+            </mat-icon>
           </a>
         </li>
       </ul>
