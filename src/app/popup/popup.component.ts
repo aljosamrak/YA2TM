@@ -7,7 +7,7 @@ import { SettingsService } from '../settings/service/settings.service'
 @Component({
   selector: 'popup-root',
   templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.sass'],
+  styleUrls: ['./popup.component.scss'],
 })
 export class PopupComponent implements OnInit {
   subscription?: Subscription

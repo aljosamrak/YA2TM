@@ -12,7 +12,7 @@ export type DateRange = {
 @Component({
   selector: 'tab-insights',
   templateUrl: './tab-insights-component.component.html',
-  styleUrls: ['./tab-insights-component.component.sass'],
+  styleUrls: ['./tab-insights-component.component.scss'],
 })
 export class TabInsightsComponent implements OnInit {
   public trackedEvent = TrackedEvent

@@ -12,7 +12,7 @@ export type Tab = {
 @Component({
   selector: 'tab',
   templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.sass'],
+  styleUrls: ['./tab.component.scss'],
 })
 export class TabComponent {
   tab: Tab = {}

@@ -5,7 +5,7 @@ import { LocalStorageService } from '../storage/service/local-storage.service'
 @Component({
   selector: 'app-testing',
   templateUrl: './testing.component.html',
-  styleUrls: ['./testing.component.sass'],
+  styleUrls: ['./testing.component.scss'],
 })
 export class TestingComponent {
   localStorageResult: Status = Status.NOT_RUN

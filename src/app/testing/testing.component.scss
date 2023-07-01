@@ -1,0 +1,21 @@
+p {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+section {
+  display: flex;
+  padding: 10px;
+}
+.mat-raised-button {
+  margin-left: auto;
+  margin-right: 0;
+}
+.mat-raised-button.success {
+  background-color: #155724;
+}
+.mat-raised-button.fail {
+  background-color: #f44336;
+}
+.mat-raised-button.not-run {
+  background-color: #1e468e;
+}

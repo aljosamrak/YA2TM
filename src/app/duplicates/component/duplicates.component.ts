@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 
 import { ChromeApiService } from '../../chrome/chrome-api.service'
-import { DeduplicationService } from '../service/deduplication.service'
 import { SettingsService } from '../../settings/service/settings.service'
+import { DeduplicationService } from '../service/deduplication.service'
 import Tab = chrome.tabs.Tab
 
 @Component({
   selector: 'duplicates',
   templateUrl: './duplicates.component.html',
-  styleUrls: ['./duplicates.component.sass'],
+  styleUrls: ['./duplicates.component.scss'],
 })
 export class DuplicatesComponent implements OnInit {
   duplicates: Tab[] = []
@@ -35,9 +35,9 @@ export class DuplicatesComponent implements OnInit {
     }, new Map<string, Array<Tab>>())
 
     const duplicateTabs = new Array<Tab>()
-    urlCounts.forEach(tabs => {
+    urlCounts.forEach((tabs) => {
       if (tabs.length > 1) {
-        tabs.forEach(tab => duplicateTabs.push(tab))
+        tabs.forEach((tab) => duplicateTabs.push(tab))
       }
     })
 

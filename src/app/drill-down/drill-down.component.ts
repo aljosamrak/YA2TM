@@ -7,7 +7,7 @@ import groupBy from '../util/utils'
 @Component({
   selector: 'app-drill-down',
   templateUrl: './drill-down.component.html',
-  styleUrls: ['./drill-down.component.sass'],
+  styleUrls: ['./drill-down.component.scss'],
 })
 export class DrillDownComponent implements OnInit {
   recordMap?: Map<string, OpenTab[]>

@@ -6,7 +6,7 @@ import { SnoozedTab } from '../model/SnoozedTab'
 @Component({
   selector: 'snoozed-tabs',
   templateUrl: './snooze-tabs.component.html',
-  styleUrls: ['./snooze-tabs.component.sass'],
+  styleUrls: ['./snooze-tabs.component.scss'],
 })
 export class SnoozedTabsComponent implements OnInit {
   snoozedTabs: Array<SnoozedTab> = []
