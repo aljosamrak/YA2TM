@@ -4,9 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prebuild": "./scripts/create_version.sh",
+    "prebuild": "./scripts/create_version.sh; ./scripts/create_package_summary.sh",
     "build": "ng build",
-    "prewatch": "./scripts/create_version.sh",
+    "prewatch": "./scripts/create_version.sh; ./scripts/create_package_summary.sh",
     "watch": "ng build --verbose --configuration development --progress --watch",
     "test": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage",
     "test-watch": "ng test --watch",
