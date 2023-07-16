@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core'
 
 import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { ChromeNotificationService } from '../../chrome/chrome-notification'
-import {
-  DeduplicateStrategy,
-  UserPreferences,
-} from '../../settings/model/user-preferences'
+import { DeduplicateStrategy, UserPreferences } from '../../settings/model/user-preferences'
 import { SettingsService } from '../../settings/service/settings.service'
 import { TrackedEvent } from '../../storage/model/EventRecord'
 import { DatabaseService } from '../../storage/service/database.service'
@@ -24,20 +21,18 @@ export class DeduplicationService {
 
   static extractGreatSuspenderUrl(url: string) {
     // The Great Suspender encodes URLs when it suspends pages.
-    const suspenderPrefix =
-      'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#'
+    const suspenderPrefix = 'chrome-extension://jaekigmcljkkalnicnjoafgfjoefkpeg/suspended.html#'
     if (url.startsWith(suspenderPrefix)) {
       return url.slice(url.lastIndexOf('uri=') + 4)
     } else {
       return url
     }
   }
+
   static formatUrl(url: string, preferences: UserPreferences): string {
-    preferences.deduplicateStripUrlParts
-      .split(',')
-      .forEach((stripUrl: string) => {
-        url = url.replace(new RegExp(stripUrl.trim()), '')
-      })
+    preferences.deduplicateStripUrlParts.split(',').forEach((stripUrl: string) => {
+      url = url.replace(new RegExp(stripUrl.trim()), '')
+    })
 
     return url
   }
@@ -77,16 +72,8 @@ export class DeduplicationService {
         return
       }
 
-      const otherTabUrl = DeduplicationService.formatUrl(
-        otherTab.url,
-        preferences,
-      )
-      if (
-        tab.id !== otherTab.id &&
-        tab.url === otherTabUrl &&
-        tab.incognito === otherTab.incognito &&
-        !tab.pinned
-      ) {
+      const otherTabUrl = DeduplicationService.formatUrl(otherTab.url, preferences)
+      if (tab.id !== otherTab.id && tab.url === otherTabUrl && tab.incognito === otherTab.incognito && !tab.pinned) {
         switch (preferences.deduplicateStrategy) {
           case DeduplicateStrategy.REMOVE_NEW_TAB:
             this.removeAndSwitch(tab.id, otherTab.windowId, otherTab.id)
@@ -123,11 +110,7 @@ export class DeduplicationService {
     }
   }
 
-  removeAndSwitch(
-    removeTabId: number,
-    switchWindowId: number,
-    switchTabId: number,
-  ) {
+  removeAndSwitch(removeTabId: number, switchWindowId: number, switchTabId: number) {
     this.chromeApiService.updateTab(switchTabId, { selected: true })
     this.chromeApiService.updateWindow(switchWindowId, { focused: true })
     this.chromeApiService.removeTab(removeTabId)

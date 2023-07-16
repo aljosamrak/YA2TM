@@ -10,17 +10,10 @@ import { BaseTabChartComponent } from './base-tab-chart.component'
   selector: 'event-tab-chart-component',
   templateUrl: 'line-chart.component.html',
 })
-export class EventTabChartComponent
-  extends BaseTabChartComponent
-  implements OnInit
-{
+export class EventTabChartComponent extends BaseTabChartComponent implements OnInit {
   @Input() desiredEvent: TrackedEvent = TrackedEvent.TabOpened
   @Input() title = ''
   @Input() label = ''
-
-  ngOnInit(): void {
-    this.setTitle(this.title)
-  }
 
   @Input()
   override set data(records: EventRecord[]) {
@@ -33,5 +26,9 @@ export class EventTabChartComponent
     })
 
     this.setChartData(labels, [{ values, label: this.label }])
+  }
+
+  ngOnInit(): void {
+    this.setTitle(this.title)
   }
 }

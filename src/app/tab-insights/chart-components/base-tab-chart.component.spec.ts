@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
+import { SettingsService } from '../../settings/service/settings.service'
 
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
-import { SettingsService } from '../../settings/service/settings.service'
-import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
 
 describe('BaseTabChartComponentComponent', () => {
   let component: BaseTabChartComponent
@@ -17,9 +17,7 @@ describe('BaseTabChartComponentComponent', () => {
       declarations: [BaseTabChartComponent],
       providers: [{ provide: SettingsService, useClass: SettingsServiceStub }],
     }).compileComponents()
-    settingsStub = TestBed.inject(
-      SettingsService,
-    ) as unknown as SettingsServiceStub
+    settingsStub = TestBed.inject(SettingsService) as unknown as SettingsServiceStub
   })
 
   beforeEach(() => {

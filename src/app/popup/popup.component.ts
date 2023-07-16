@@ -24,15 +24,13 @@ export class PopupComponent implements OnInit {
   constructor(private settingsService: SettingsService) {}
 
   ngOnInit() {
-    this.subscription = this.settingsService.userPreferences$.subscribe(
-      (item: UserPreferences) => {
-        this.tabsEnabled = item.tabsEnabled
-        this.drillDownEnabled = item.drillDownEnabled
-        this.duplicateEnabled = item.deduplicateTabs
-        this.achievementsEnabled = item.achievementsEnabled
-        this.snoozingEnabled = item.snoozingEnabled
-      },
-    )
+    this.subscription = this.settingsService.userPreferences$.subscribe((item: UserPreferences) => {
+      this.tabsEnabled = item.tabsEnabled
+      this.drillDownEnabled = item.drillDownEnabled
+      this.duplicateEnabled = item.deduplicateTabs
+      this.achievementsEnabled = item.achievementsEnabled
+      this.snoozingEnabled = item.snoozingEnabled
+    })
   }
 
   openFullScreen() {

@@ -17,14 +17,14 @@ export type Tab = {
 export class TabComponent {
   tab: Tab = {}
 
+  constructor(private chromeApiService: ChromeApiService) {}
+
   @Input()
   set setTabId(id: number) {
     this.chromeApiService.getTab(id).then((tab) => {
       this.tab = tab
     })
   }
-
-  constructor(private chromeApiService: ChromeApiService) {}
 
   openTab(id: number, windowId: number) {
     this.chromeApiService.updateTab(id, { selected: true })

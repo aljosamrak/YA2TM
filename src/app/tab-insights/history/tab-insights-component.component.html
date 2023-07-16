@@ -1,33 +1,33 @@
 <div
-  style="
+  style='
     display: grid;
     flex-grow: 1;
     grid-template-columns: 50% 50%;
     grid-template-rows: 50% 50%;
     padding-right: 5px;
-  "
+  '
 >
   <total-window-chart-component
-    [dateRange]="dateRange"
-    [data]="data"
     (dataRangeOutput)='setDataRange($event)'
+    [data]='data'
+    [dateRange]='dateRange'
   ></total-window-chart-component>
 
   <diff-tab-chart-component
-    [dateRange]="dateRange"
-    [data]="data"
     (dataRangeOutput)='setDataRange($event)'
+    [data]='data'
+    [dateRange]='dateRange'
   ></diff-tab-chart-component>
 
   <open-close-tab-chart-component
-    [dateRange]="dateRange"
-    [data]="data"
     (dataRangeOutput)='setDataRange($event)'
+    [data]='data'
+    [dateRange]='dateRange'
   ></open-close-tab-chart-component>
 
   <total-tab-chart-component
-    [dateRange]="dateRange"
-    [data]="data"
     (dataRangeOutput)='setDataRange($event)'
+    [data]='data'
+    [dateRange]='dateRange'
   ></total-tab-chart-component>
 </div>

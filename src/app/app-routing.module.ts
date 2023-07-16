@@ -7,8 +7,7 @@ const routes: Routes = [
 
   {
     path: 'popup',
-    loadChildren: () =>
-      import(`./popup/popup.module`).then((m) => m.PopupModule),
+    loadChildren: () => import(`./popup/popup.module`).then((m) => m.PopupModule),
   },
 
   // Wildcard route for a 404 page

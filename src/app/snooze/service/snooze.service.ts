@@ -5,10 +5,10 @@ import { ChromeAlarmApiService } from '../../chrome/chrome-alarm-api.service'
 import { ChromeApiService } from '../../chrome/chrome-api.service'
 import { SettingsService } from '../../settings/service/settings.service'
 import { DatabaseService } from '../../storage/service/database.service'
-
-import Tab = chrome.tabs.Tab
 import Alarm = chrome.alarms.Alarm
 import OnClickData = chrome.contextMenus.OnClickData
+
+import Tab = chrome.tabs.Tab
 
 type ContextItem = {
   text: string
@@ -112,9 +112,7 @@ export class SnoozeService {
       })
     })
 
-    this.chromeApiService.addContextMenusOnClickedListener(
-      this.onContextMenuClick.bind(this),
-    )
+    this.chromeApiService.addContextMenusOnClickedListener(this.onContextMenuClick.bind(this))
 
     this.chromeAlarmApiService.addListener(this.unsnoozeTab.bind(this))
   }

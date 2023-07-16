@@ -1,18 +1,12 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core'
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { Chart, ChartConfiguration, ChartType } from 'chart.js'
 import 'chartjs-adapter-moment'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { BaseChartDirective } from 'ng2-charts'
+import { SettingsService } from '../../settings/service/settings.service'
 
 import { EventRecord } from '../../storage/model/EventRecord'
 import { DateRange } from '../history/tab-insights-component.component'
-import { SettingsService } from '../../settings/service/settings.service'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -38,49 +32,8 @@ export type Dataset = {
 export class BaseTabChartComponent {
   public lineChartType: ChartType = 'line'
   public lineChartData: ChartConfiguration['data'] = { datasets: [] }
-
-  @ViewChild(BaseChartDirective) protected chart: BaseChartDirective | undefined
-
   @Output()
   dataRangeOutput = new EventEmitter<DateRange>()
-
-  @Input()
-  set data(records: EventRecord[]) {}
-
-  @Input()
-  set dateRange(dateRange: DateRange) {
-    if (this.chart && this.chart.chart) {
-      this.chart.chart.zoomScale('x', dateRange)
-    }
-  }
-
-  setChartData(labels: Date[], datasets: Dataset[]) {
-    if (this.chart && this.chart.chart) {
-      this.lineChartData = {
-        datasets: datasets.map((dataset) => ({
-          data: dataset.values,
-          label: dataset.label,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: dataset.color ?? CHART_COLORS.green,
-          borderWidth: 1,
-          tension: 0.1,
-          normalized: true,
-          spanGaps: true,
-        })),
-        labels: labels,
-      }
-
-      // Make sure animations are not running
-      this.chart.chart.stop()
-      this.chart.chart.update('none')
-    }
-  }
-
-  onZoomPanChange(context: { chart: Chart }) {
-    const { min, max } = context.chart.scales['x']
-    this.dataRangeOutput.emit({ min, max })
-  }
-
   public lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -141,6 +94,49 @@ export class BaseTabChartComponent {
       },
     },
   }
+  @ViewChild(BaseChartDirective) protected chart: BaseChartDirective | undefined
+
+  constructor(private settingsService: SettingsService) {
+    // Add zoom plugin
+    Chart.register(zoomPlugin)
+  }
+
+  @Input()
+  set data(records: EventRecord[]) {}
+
+  @Input()
+  set dateRange(dateRange: DateRange) {
+    if (this.chart && this.chart.chart) {
+      this.chart.chart.zoomScale('x', dateRange)
+    }
+  }
+
+  setChartData(labels: Date[], datasets: Dataset[]) {
+    if (this.chart && this.chart.chart) {
+      this.lineChartData = {
+        datasets: datasets.map((dataset) => ({
+          data: dataset.values,
+          label: dataset.label,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: dataset.color ?? CHART_COLORS.green,
+          borderWidth: 1,
+          tension: 0.1,
+          normalized: true,
+          spanGaps: true,
+        })),
+        labels: labels,
+      }
+
+      // Make sure animations are not running
+      this.chart.chart.stop()
+      this.chart.chart.update('none')
+    }
+  }
+
+  onZoomPanChange(context: { chart: Chart }) {
+    const { min, max } = context.chart.scales['x']
+    this.dataRangeOutput.emit({ min, max })
+  }
 
   /**
    * Sets the title of the chart.
@@ -189,10 +185,5 @@ export class BaseTabChartComponent {
     values.push(currentWindowValue)
 
     return [labels, values] as const
-  }
-
-  constructor(private settingsService: SettingsService) {
-    // Add zoom plugin
-    Chart.register(zoomPlugin)
   }
 }

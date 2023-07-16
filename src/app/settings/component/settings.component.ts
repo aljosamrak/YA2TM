@@ -6,11 +6,7 @@ import { throttleTime } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { AnalyticsService } from '../../analytics/analytics.service'
 import { DatabaseService } from '../../storage/service/database.service'
-import {
-  BadgeTextType,
-  DeduplicateStrategy,
-  UserPreferences,
-} from '../model/user-preferences'
+import { BadgeTextType, DeduplicateStrategy, UserPreferences } from '../model/user-preferences'
 import { SettingsService } from '../service/settings.service'
 
 @Component({
@@ -33,9 +29,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     // [BadgeTextType.DAY_DIFF]: 'Tab difference',
     // TODO implement all possibilities
   }
-  public fileTypes = Object.values(BadgeTextType).filter(
-    (value) => typeof value === 'number',
-  )
+  public fileTypes = Object.values(BadgeTextType).filter((value) => typeof value === 'number')
 
   deduplicateStrategyMap: any[] = [
     { name: 'Remove new tab', id: DeduplicateStrategy.REMOVE_NEW_TAB },
@@ -50,10 +44,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public settingsService: SettingsService,
   ) {
     // create form group using the form builder
-    this.settingsForm = this.createGroup(
-      formBuilder,
-      settingsService.getUserPreferences(),
-    )
+    this.settingsForm = this.createGroup(formBuilder, settingsService.getUserPreferences())
 
     this.formSubscription = this.getFormSubscription()
   }
@@ -78,16 +69,25 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  clearTabData() {
+    this.databaseService.deleteData()
+  }
+
+  resetSettings() {
+    this.settingsService.updateUserPreferences(new UserPreferences())
+  }
+
+  resetUUID() {
+    this.analytics.resetUuid()
+  }
+
   private getFormSubscription() {
     return this.settingsForm.valueChanges.subscribe((formValue) => {
       this.settingsService.updateUserPreferences(formValue)
     })
   }
 
-  private createGroup(
-    formBuilder: FormBuilder,
-    userPreferences: UserPreferences,
-  ): FormGroup {
+  private createGroup(formBuilder: FormBuilder, userPreferences: UserPreferences): FormGroup {
     const group = new FormGroup({})
 
     Object.keys(userPreferences).forEach((key) => {
@@ -100,17 +100,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
     })
 
     return group
-  }
-
-  clearTabData() {
-    this.databaseService.deleteData()
-  }
-
-  resetSettings() {
-    this.settingsService.updateUserPreferences(new UserPreferences())
-  }
-
-  resetUUID() {
-    this.analytics.resetUuid()
   }
 }

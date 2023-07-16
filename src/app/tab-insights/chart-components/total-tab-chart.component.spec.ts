@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { TotalTabChartComponent } from './total-tab-chart.component'
-import { SettingsService } from '../../settings/service/settings.service'
 import { SettingsServiceStub } from '../../../test/SettingsServiceStub'
+import { SettingsService } from '../../settings/service/settings.service'
+import { TotalTabChartComponent } from './total-tab-chart.component'
 
 describe('TotalTabChartComponentComponent', () => {
   let component: TotalTabChartComponent

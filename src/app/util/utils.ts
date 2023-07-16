@@ -1,7 +1,4 @@
-export default function groupBy<T, K extends keyof any>(
-  list: T[],
-  getKey: (item: T) => K,
-) {
+export default function groupBy<T, K extends keyof any>(list: T[], getKey: (item: T) => K) {
   return list.reduce((previous, currentItem) => {
     const group = getKey(currentItem)
     if (!previous.get(group)) {

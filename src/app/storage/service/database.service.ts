@@ -18,10 +18,7 @@ export class DatabaseService extends Dexie {
   openedTabs!: Table<OpenTab, number>
   snoozedTabs!: Table<SnoozedTab, number>
 
-  constructor(
-    private logger: NGXLogger,
-    protected analytics: AnalyticsService,
-  ) {
+  constructor(private logger: NGXLogger, protected analytics: AnalyticsService) {
     super(DatabaseService.DATABASE_NAME)
 
     this.version(3)
@@ -49,16 +46,10 @@ export class DatabaseService extends Dexie {
     this.history.add(record).catch((err) => this.logger.error(err.message))
   }
 
-  public async query(
-    startDate: number,
-    endDate: number,
-  ): Promise<EventRecord[]> {
+  public async query(startDate: number, endDate: number): Promise<EventRecord[]> {
     const startTime = performance.now()
 
-    const dataPromise = this.history
-      .where('timestamp')
-      .between(startDate, endDate, true, true)
-      .toArray()
+    const dataPromise = this.history.where('timestamp').between(startDate, endDate, true, true).toArray()
 
     dataPromise.then((records) => {
       this.analytics.time({
@@ -93,9 +84,7 @@ export class DatabaseService extends Dexie {
   }
 
   addSnoozedTab(snoozedTab: SnoozedTab) {
-    this.snoozedTabs
-      .put(snoozedTab)
-      .catch((err) => this.logger.error(err.message))
+    this.snoozedTabs.put(snoozedTab).catch((err) => this.logger.error(err.message))
   }
 
   getSnoozedTabs() {

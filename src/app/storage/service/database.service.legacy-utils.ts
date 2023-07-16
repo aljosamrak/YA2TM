@@ -12,10 +12,7 @@ export async function openDatabase(databaseName: string, dbVersion?: number) {
   if (!dbVersion) {
     dbVersion = await indexedDB
       .databases()
-      .then(
-        (databaseInfos) =>
-          databaseInfos.find((info) => info.name === databaseName)?.version,
-      )
+      .then((databaseInfos) => databaseInfos.find((info) => info.name === databaseName)?.version)
   }
 
   return new Promise<IDBDatabase>((resolve) => {
@@ -28,24 +25,16 @@ export async function openDatabase(databaseName: string, dbVersion?: number) {
 /**
  * Creates the database with one object store with key timestamp and fills it with the given entries.
  */
-export async function createAndFillDbWithEventRecord(
-  databaseVersion: number,
-  storeName: string,
-  ...objects: any[]
-) {
+export async function createAndFillDbWithEventRecord(databaseVersion: number, storeName: string, ...objects: any[]) {
   await new Promise<void>((resolve) => {
     const delRequest = indexedDB.deleteDatabase(DatabaseService.DATABASE_NAME)
-    delRequest.onerror = () =>
-      fail(`Unable to clear Database, error: ${delRequest.error}`)
+    delRequest.onerror = () => fail(`Unable to clear Database, error: ${delRequest.error}`)
     delRequest.onsuccess = () => resolve()
   })
 
   const database = await new Promise<IDBDatabase>((resolve) => {
     // Create database
-    const request = indexedDB.open(
-      DatabaseService.DATABASE_NAME,
-      databaseVersion,
-    )
+    const request = indexedDB.open(DatabaseService.DATABASE_NAME, databaseVersion)
     request.onupgradeneeded = () => {
       const db = request.result
       db.createObjectStore(storeName, { keyPath: 'timestamp' })

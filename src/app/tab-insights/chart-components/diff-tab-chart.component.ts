@@ -4,42 +4,21 @@ import 'chartjs-adapter-moment'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
+import { SettingsService } from '../../settings/service/settings.service'
 
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent, CHART_COLORS } from './base-tab-chart.component'
-import { SettingsService } from '../../settings/service/settings.service'
 
 @Component({
   selector: 'diff-tab-chart-component',
   templateUrl: 'line-chart.component.html',
 })
-export class DiffTabChartComponent
-  extends BaseTabChartComponent
-  implements OnInit
-{
+export class DiffTabChartComponent extends BaseTabChartComponent implements OnInit {
   constructor(settingsService: SettingsService) {
     super(settingsService)
     // Add annotation plugin to the graph
     Chart.register(annotationPlugin)
     this.setTitle('Tab number difference')
-  }
-
-  ngOnInit(): void {
-    // https://www.chartjs.org/chartjs-plugin-annotation
-    if (this?.lineChartOptions?.plugins) {
-      this.lineChartOptions.plugins.annotation = {
-        annotations: {
-          zero: {
-            drawTime: 'beforeDraw',
-            type: 'line',
-            yMin: 0,
-            yMax: 0,
-            borderColor: CHART_COLORS.black,
-            borderWidth: 2,
-          },
-        },
-      }
-    }
   }
 
   @Input()
@@ -59,5 +38,23 @@ export class DiffTabChartComponent
     })
 
     this.setChartData(labels, [{ values, label: 'Tab difference' }])
+  }
+
+  ngOnInit(): void {
+    // https://www.chartjs.org/chartjs-plugin-annotation
+    if (this?.lineChartOptions?.plugins) {
+      this.lineChartOptions.plugins.annotation = {
+        annotations: {
+          zero: {
+            drawTime: 'beforeDraw',
+            type: 'line',
+            yMin: 0,
+            yMax: 0,
+            borderColor: CHART_COLORS.black,
+            borderWidth: 2,
+          },
+        },
+      }
+    }
   }
 }

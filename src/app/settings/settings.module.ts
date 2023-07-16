@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common'
-import {
-  ModuleWithProviders,
-  NgModule,
-  Optional,
-  SkipSelf,
-} from '@angular/core'
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { MatButtonModule } from '@angular/material/button'
 import { MatExpansionModule } from '@angular/material/expansion'
@@ -30,16 +25,15 @@ const MODULES = [
   exports: MODULES,
 })
 export class SettingsModule {
+  constructor(@Optional() @SkipSelf() parentModule: SettingsModule) {
+    if (parentModule) {
+      throw new Error('SettingsModule is already loaded. Import it in the AppModule only')
+    }
+  }
+
   public static forRoot(): ModuleWithProviders<SettingsModule> {
     return {
       ngModule: SettingsModule,
-    }
-  }
-  constructor(@Optional() @SkipSelf() parentModule: SettingsModule) {
-    if (parentModule) {
-      throw new Error(
-        'SettingsModule is already loaded. Import it in the AppModule only',
-      )
     }
   }
 }

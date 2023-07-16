@@ -5,11 +5,7 @@ import { SettingsService } from '../settings/service/settings.service'
 import { PopupComponent } from './popup.component'
 
 describe('PopupComponent', () => {
-  const analyticsSpy = jasmine.createSpyObj('AnalyticsService', [
-    'event',
-    'time',
-    'resetUuid',
-  ])
+  const analyticsSpy = jasmine.createSpyObj('AnalyticsService', ['event', 'time', 'resetUuid'])
 
   let component: PopupComponent
   let fixture: ComponentFixture<PopupComponent>

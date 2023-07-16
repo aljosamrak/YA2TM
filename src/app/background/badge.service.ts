@@ -3,10 +3,7 @@ import { Subscription } from 'rxjs'
 import { throttleTime } from 'rxjs/operators'
 
 import { ChromeApiService } from '../chrome/chrome-api.service'
-import {
-  BadgeTextType,
-  UserPreferences,
-} from '../settings/model/user-preferences'
+import { BadgeTextType, UserPreferences } from '../settings/model/user-preferences'
 import { SettingsService } from '../settings/service/settings.service'
 
 @Injectable({
@@ -15,10 +12,7 @@ import { SettingsService } from '../settings/service/settings.service'
 export class BadgeService {
   subscription?: Subscription
 
-  constructor(
-    private chromeApiService: ChromeApiService,
-    private settingsService: SettingsService,
-  ) {
+  constructor(private chromeApiService: ChromeApiService, private settingsService: SettingsService) {
     this.subscription = this.settingsService.userPreferences$
       .pipe(throttleTime(100))
       .subscribe((item: UserPreferences) => {
@@ -37,9 +31,9 @@ export class BadgeService {
     }
 
     // Set tab number
-    const badgeTextPromise = this.getBadgeText(
-      this.settingsService.getUserPreferences().badgeTextType,
-    ).then((text) => this.chromeApiService.setBadgeText(text))
+    const badgeTextPromise = this.getBadgeText(this.settingsService.getUserPreferences().badgeTextType).then((text) =>
+      this.chromeApiService.setBadgeText(text),
+    )
 
     // Set badge color
     return Promise.all([
@@ -65,9 +59,7 @@ export class BadgeService {
       case BadgeTextType.ALL_TABS_NUM:
         return this.chromeApiService.getTabs().then((tabs) => tabs.length.toString())
       case BadgeTextType.WINDOW_NUM:
-        return this.chromeApiService
-          .getWindows()
-          .then((windows) => windows.length.toString())
+        return this.chromeApiService.getWindows().then((windows) => windows.length.toString())
       default:
         throw Error('Unimplemented')
     }

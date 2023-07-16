@@ -20,9 +20,7 @@ export class DrillDownComponent implements OnInit {
       .getOpenTabs()
       .then((_data) => {
         this.recordMap = groupBy(_data, (openTab: OpenTab) =>
-          new Date(openTab?.createdTimestamp ?? currentTime)
-            .setHours(0, 0, 0, 0)
-            .toString(),
+          new Date(openTab?.createdTimestamp ?? currentTime).setHours(0, 0, 0, 0).toString(),
         )
       })
       .catch((err) => console.error(err.message))

@@ -13,10 +13,7 @@ import Tab = chrome.tabs.Tab
 export class DuplicatesComponent implements OnInit {
   duplicates: Tab[] = []
 
-  constructor(
-    private chromeApiService: ChromeApiService,
-    private settingsService: SettingsService,
-  ) {}
+  constructor(private chromeApiService: ChromeApiService, private settingsService: SettingsService) {}
 
   async ngOnInit(): Promise<void> {
     const preferences = this.settingsService.getUserPreferences()

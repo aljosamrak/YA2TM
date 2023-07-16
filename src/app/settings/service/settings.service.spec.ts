@@ -10,11 +10,7 @@ describe('SettingsService', () => {
   let subscription: Subscription
   let userPreferencesCallbackCalled: boolean
 
-  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', [
-    'get',
-    'set',
-    'addOnNewValueListener',
-  ])
+  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', ['get', 'set', 'addOnNewValueListener'])
   beforeEach(() => {
     localStorageSpy.get.and.returnValue(Promise.resolve(new UserPreferences()))
     TestBed.configureTestingModule({

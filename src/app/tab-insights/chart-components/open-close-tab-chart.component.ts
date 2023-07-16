@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
+import { SettingsService } from '../../settings/service/settings.service'
 
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
-import { SettingsService } from '../../settings/service/settings.service'
 
 export const CHART_COLORS = {
   red: 'rgb(255, 99, 132)',
@@ -33,16 +33,12 @@ export class OpenCloseTabChartComponent extends BaseTabChartComponent {
       return
     }
 
-    const [labels, values] = this.window<[number, number]>(
-      records,
-      [0, 0],
-      ([opened, closed], record) => {
-        return [
-          opened + (record.event === TrackedEvent.TabOpened ? 1 : 0),
-          closed + (record.event === TrackedEvent.TabClosed ? 1 : 0),
-        ]
-      },
-    )
+    const [labels, values] = this.window<[number, number]>(records, [0, 0], ([opened, closed], record) => {
+      return [
+        opened + (record.event === TrackedEvent.TabOpened ? 1 : 0),
+        closed + (record.event === TrackedEvent.TabClosed ? 1 : 0),
+      ]
+    })
 
     this.setChartData(labels, [
       {

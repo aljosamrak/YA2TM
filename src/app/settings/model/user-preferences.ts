@@ -7,6 +7,7 @@ export enum BadgeTextType {
   WINDOW_NUM, // DEDUPLICATED_TABS,
   // TODO implement all possibilities
 }
+
 // TODO do the same for tab color
 
 export enum DeduplicateStrategy {

@@ -7,11 +7,11 @@ import { DeduplicationService } from '../duplicates/service/deduplication.servic
 import { TrackedEvent } from '../storage/model/EventRecord'
 import { DatabaseService } from '../storage/service/database.service'
 import { BadgeService } from './badge.service'
+import Tab = chrome.tabs.Tab
+import TabChangeInfo = chrome.tabs.TabChangeInfo
+import Window = chrome.windows.Window
 
 import WindowEventFilter = chrome.windows.WindowEventFilter
-import Window = chrome.windows.Window
-import TabChangeInfo = chrome.tabs.TabChangeInfo
-import Tab = chrome.tabs.Tab
 
 @Injectable({
   providedIn: 'root',
@@ -46,20 +46,13 @@ export class TabService {
       title: tab.title,
     })
 
-    return this.saveEventToDatabase(
-      TrackedEvent.TabOpened,
-      currentTabsPromise,
-      tab,
-    )
+    return this.saveEventToDatabase(TrackedEvent.TabOpened, currentTabsPromise, tab)
   }
 
   private async tabRemoved(tabId: number) {
     this.databaseService.closeTab(tabId)
 
-    return this.saveEventToDatabase(
-      TrackedEvent.TabClosed,
-      this.chromeApiService.getTabs(),
-    )
+    return this.saveEventToDatabase(TrackedEvent.TabClosed, this.chromeApiService.getTabs())
   }
 
   private async tabUpdated(tabId: number, changeInfo: TabChangeInfo, tab: Tab) {
@@ -79,21 +72,12 @@ export class TabService {
     return this.deduplicationService.deduplicate(tab)
   }
 
-  private windowCreated(
-    _window: Window,
-    filter?: WindowEventFilter | undefined,
-  ) {
-    return this.saveEventToDatabase(
-      TrackedEvent.WindowOpened,
-      this.chromeApiService.getTabs(),
-    )
+  private windowCreated(_window: Window, filter?: WindowEventFilter | undefined) {
+    return this.saveEventToDatabase(TrackedEvent.WindowOpened, this.chromeApiService.getTabs())
   }
 
   private windowRemoved(windowId: number) {
-    return this.saveEventToDatabase(
-      TrackedEvent.WindowClosed,
-      this.chromeApiService.getTabs(),
-    )
+    return this.saveEventToDatabase(TrackedEvent.WindowClosed, this.chromeApiService.getTabs())
   }
 
   private async saveEventToDatabase(
@@ -106,10 +90,7 @@ export class TabService {
     // Query opened tabs and windows
     const timeNow = Date.now()
 
-    const [windows, tabs] = await Promise.all([
-      chrome.windows.getAll(),
-      chrome.tabs.query({}),
-    ])
+    const [windows, tabs] = await Promise.all([chrome.windows.getAll(), chrome.tabs.query({})])
 
     chrome.action.setBadgeText({ text: tabs.length.toString() })
 

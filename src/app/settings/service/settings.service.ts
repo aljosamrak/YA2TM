@@ -16,9 +16,7 @@ export class SettingsService {
   constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
       if (userPreferences) {
-        this.updateUserPreferences(
-          SettingsService.mergeDeep(new UserPreferences(), userPreferences),
-        )
+        this.updateUserPreferences(SettingsService.mergeDeep(new UserPreferences(), userPreferences))
       } else {
         this.updateUserPreferences(new UserPreferences())
       }

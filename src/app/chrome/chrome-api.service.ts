@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
+import OnClickData = chrome.contextMenus.OnClickData
+import CreateProperties = chrome.tabs.CreateProperties
 
 import Tab = chrome.tabs.Tab
 import UpdateProperties = chrome.tabs.UpdateProperties
 import UpdateInfo = chrome.windows.UpdateInfo
-import OnClickData = chrome.contextMenus.OnClickData
-import CreateProperties = chrome.tabs.CreateProperties
 
 /** Wrapper around Chrome API. */
 @Injectable({

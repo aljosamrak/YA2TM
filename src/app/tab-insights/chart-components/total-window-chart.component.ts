@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core'
 import 'chartjs-adapter-moment'
 import 'chartjs-plugin-zoom'
 import 'hammerjs'
+import { SettingsService } from '../../settings/service/settings.service'
 
 import { EventRecord } from '../../storage/model/EventRecord'
 import { BaseTabChartComponent } from './base-tab-chart.component'
-import { SettingsService } from '../../settings/service/settings.service'
 
 @Component({
   selector: 'total-window-chart-component',
@@ -23,11 +23,7 @@ export class TotalWindowChartComponent extends BaseTabChartComponent {
       return
     }
 
-    const [labels, values] = this.window(
-      records,
-      0,
-      (_, record) => record.windows,
-    )
+    const [labels, values] = this.window(records, 0, (_, record) => record.windows)
 
     this.setChartData(labels, [{ values, label: 'Windows' }])
   }

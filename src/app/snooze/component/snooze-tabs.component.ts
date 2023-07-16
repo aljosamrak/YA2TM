@@ -10,6 +10,7 @@ import { SnoozedTab } from '../model/SnoozedTab'
 })
 export class SnoozedTabsComponent implements OnInit {
   snoozedTabs: Array<SnoozedTab> = []
+
   constructor(private databaseService: DatabaseService) {}
 
   async ngOnInit(): Promise<void> {

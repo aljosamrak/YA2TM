@@ -8,9 +8,7 @@ describe('SnoozeComponent', () => {
   let component: SnoozedTabsComponent
   let fixture: ComponentFixture<SnoozedTabsComponent>
 
-  const databaseSpy = jasmine.createSpyObj('DatabaseService', [
-    'getSnoozedTabs',
-  ])
+  const databaseSpy = jasmine.createSpyObj('DatabaseService', ['getSnoozedTabs'])
 
   beforeEach(async () => {
     databaseSpy.getSnoozedTabs.and.returnValue(Promise.resolve([]))

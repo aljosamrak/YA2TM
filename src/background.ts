@@ -21,10 +21,7 @@ import {
 import { Observable } from 'rxjs'
 import 'zone.js'
 
-import {
-  AnalyticsIdConfig,
-  AnalyticsService,
-} from './app/analytics/analytics.service'
+import { AnalyticsIdConfig, AnalyticsService } from './app/analytics/analytics.service'
 import { BadgeService } from './app/background/badge.service'
 import { TabService } from './app/background/tab.service'
 import { ChromeAlarmApiService } from './app/chrome/chrome-alarm-api.service'
@@ -89,35 +86,17 @@ class Background {
 
         {
           provide: DeduplicationService,
-          deps: [
-            ChromeApiService,
-            ChromeNotificationService,
-            DatabaseService,
-            SettingsService,
-          ],
+          deps: [ChromeApiService, ChromeNotificationService, DatabaseService, SettingsService],
         },
 
         {
           provide: SnoozeService,
-          deps: [
-            ChromeAlarmApiService,
-            ChromeApiService,
-            DatabaseService,
-            NGXLogger,
-            SettingsService,
-          ],
+          deps: [ChromeAlarmApiService, ChromeApiService, DatabaseService, NGXLogger, SettingsService],
         },
 
         {
           provide: TabService,
-          deps: [
-            NGXLogger,
-            AnalyticsService,
-            BadgeService,
-            ChromeApiService,
-            DatabaseService,
-            DeduplicationService,
-          ],
+          deps: [NGXLogger, AnalyticsService, BadgeService, ChromeApiService, DatabaseService, DeduplicationService],
         },
       ],
     }

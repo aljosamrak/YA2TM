@@ -19,39 +19,39 @@
     <div class='container-fluid justify-content-between'>
       <!-- Left elements -->
       <ul class='navbar-nav flex-row d-none d-md-flex'>
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='tabsEnabled'>
-          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'tabs'">
+        <li *ngIf='tabsEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
+          <a [routerLink]="'tabs'" class='nav-link waves-light' mdbWavesEffect>
             <span>Tabs</span>
           </a>
         </li>
 
         <li class='nav-item me-3 me-lg-1' routerLinkActive='active'>
-          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'graphs'">
+          <a [routerLink]="'graphs'" class='nav-link waves-light' mdbWavesEffect>
             <span>Graphs</span>
           </a>
         </li>
 
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='drillDownEnabled'>
-          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'drillDown'">
+        <li *ngIf='drillDownEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
+          <a [routerLink]="'drillDown'" class='nav-link waves-light' mdbWavesEffect>
             <span>Drill Down</span>
           </a>
         </li>
 
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='duplicateEnabled'>
+        <li *ngIf='duplicateEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
           <a
+            [routerLink]="'duplicates'"
             class='nav-link waves-light'
             mdbWavesEffect
-            [routerLink]="'duplicates'"
           >
             <span>Duplicates</span>
           </a>
         </li>
 
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='snoozingEnabled'>
+        <li *ngIf='snoozingEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
           <a
+            [routerLink]="'snoozed'"
             class='nav-link waves-light'
             mdbWavesEffect
-            [routerLink]="'snoozed'"
           >
             <span>Snoozed tabs</span>
           </a>
@@ -61,41 +61,41 @@
 
       <!-- Right elements -->
       <ul class='navbar-nav flex-row'>
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='isDevelopMode()'>
+        <li *ngIf='isDevelopMode()' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
           <a
+            [routerLink]="'testing'"
             class='nav-link waves-light'
             mdbWavesEffect
-            [routerLink]="'testing'"
           >
             <span>Testing</span>
           </a>
         </li>
         <li class='nav-item me-3 me-lg-1' routerLinkActive='active'>
-          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'TODO'">
+          <a [routerLink]="'TODO'" class='nav-link waves-light' mdbWavesEffect>
             <img
-              src='assets/full-screen.png'
-              height='22'
-              alt=''
-              loading='lazy'
               (click)='openFullScreen()'
+              alt=''
+              height='22'
+              loading='lazy'
+              src='assets/full-screen.png'
             />
           </a>
         </li>
-        <li class='nav-item me-3 me-lg-1' routerLinkActive='active' *ngIf='achievementsEnabled'>
+        <li *ngIf='achievementsEnabled' class='nav-item me-3 me-lg-1' routerLinkActive='active'>
           <a
+            [routerLink]="'achievements'"
             class='nav-link waves-light'
             mdbWavesEffect
-            [routerLink]="'achievements'"
           >
-            <img src='assets/trophy.png' height='22' alt='' loading='lazy' />
+            <img alt='' height='22' loading='lazy' src='assets/trophy.png' />
             <span class='badge rounded-pill badge-notification bg-danger'
             >2</span
             >
           </a>
         </li>
-        <li class='nav-item' routerLinkActive='active' (click)='settingsClick()'>
-          <a class='nav-link waves-light' mdbWavesEffect [routerLink]="'settings'">
-            <img src='assets/settings.png' height='22' alt='' loading='lazy' />
+        <li (click)='settingsClick()' class='nav-item' routerLinkActive='active'>
+          <a [routerLink]="'settings'" class='nav-link waves-light' mdbWavesEffect>
+            <img alt='' height='22' loading='lazy' src='assets/settings.png' />
           </a>
         </li>
       </ul>

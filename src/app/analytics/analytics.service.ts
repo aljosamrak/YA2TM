@@ -62,21 +62,11 @@ export class AnalyticsService {
   }
 
   event(eventArgs: EventArgs) {
-    this.tracker.event(
-      eventArgs.category,
-      eventArgs.action,
-      eventArgs.label,
-      eventArgs.value,
-    )
+    this.tracker.event(eventArgs.category, eventArgs.action, eventArgs.label, eventArgs.value)
   }
 
   time(timingArgs: TimingArgs) {
-    this.tracker.timing(
-      timingArgs.category,
-      timingArgs.name,
-      timingArgs.value,
-      timingArgs.label,
-    )
+    this.tracker.timing(timingArgs.category, timingArgs.name, timingArgs.value, timingArgs.label)
   }
 
   resetUuid() {

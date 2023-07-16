@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
+import Alarm = chrome.alarms.Alarm
 
 import AlarmCreateInfo = chrome.alarms.AlarmCreateInfo
-import Alarm = chrome.alarms.Alarm
 
 @Injectable({
   providedIn: 'root',
