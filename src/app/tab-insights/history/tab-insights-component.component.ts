@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { EventRecord, TrackedEvent } from '../../storage/model/EventRecord'
 import { DatabaseService } from '../../storage/service/database.service'
 
-const DAYS_7 = 17 * 24 * 3600 * 1000
+const DAYS_7 = 7 * 24 * 3600 * 1000
 
 export type DateRange = {
   min: number
