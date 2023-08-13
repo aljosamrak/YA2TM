@@ -9,16 +9,16 @@ import { Key } from '../model/Key'
 export class LocalStorageService {
   constructor(private logger: NGXLogger) {}
 
-  private static fromJsonString<T>(jsonString: string, newObject: T) {
+  private static fromJsonString<T extends {} | string | undefined>(jsonString: string, newObject: T) {
     return <T>JSON.parse(jsonString, function (key, value) {
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && typeof newObject !== 'string' && typeof newObject !== 'undefined') {
         return Object.assign(newObject, value)
       }
       return value
     })
   }
 
-  async get<T>(key: Key<T>): Promise<T> {
+  async get<T extends {} | string | undefined>(key: Key<T>): Promise<T> {
     try {
       // TODO chrome.storage.sync
       const result = await chrome.storage.local.get(key.key)
@@ -54,7 +54,7 @@ export class LocalStorageService {
    *
    * @returns callback that can be used for unsubscribe
    */
-  addOnNewValueListener<T>(key: Key<T>, callback: (newValue: T) => void) {
+  addOnNewValueListener<T extends {}>(key: Key<T>, callback: (newValue: T) => void) {
     const createdCallback = (changes: Change) => {
       if (changes.hasOwnProperty(key.key)) {
         callback(this.convertValue(changes[key.key].newValue, key))
@@ -70,7 +70,7 @@ export class LocalStorageService {
     chrome.storage.onChanged.removeListener(callback)
   }
 
-  private convertValue<T>(value: any, key: Key<T>) {
+  private convertValue<T extends {} | string | undefined>(value: any, key: Key<T>) {
     if (typeof value !== 'string') {
       return value
     }
