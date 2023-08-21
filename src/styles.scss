@@ -1,4 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+// TODO get from constant
+$body-bg: #303030;
+// TODO it was working without this
+$body-color: #fff;
+
+@import '../node_modules/angular-bootstrap-md/assets/scss/bootstrap/bootstrap.scss';
+@import '../node_modules/angular-bootstrap-md/assets/scss/mdb.scss';
 
 html,
 body {
@@ -6,6 +12,3 @@ body {
   padding: 0;
   overflow: hidden !important;
 }
-
-@import '../node_modules/angular-bootstrap-md/assets/scss/bootstrap/bootstrap.scss';
-@import '../node_modules/angular-bootstrap-md/assets/scss/mdb.scss';
