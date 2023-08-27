@@ -11,7 +11,7 @@ import { UserPreferences } from '../model/user-preferences'
 export class SettingsService {
   private userPreferences = new BehaviorSubject<UserPreferences>(new UserPreferences())
   userPreferences$ = this.userPreferences.asObservable()
-  private readonly subscription: (changes: { [p: string]: chrome.storage.StorageChange }) => void
+  private subscription: ((changes: { [p: string]: chrome.storage.StorageChange }) => void) | undefined
 
   constructor(protected localstorageService: LocalStorageService) {
     localstorageService.get(USER_PREFERENCES).then((userPreferences) => {
@@ -21,10 +21,6 @@ export class SettingsService {
         this.updateUserPreferences(new UserPreferences())
       }
     })
-
-    this.subscription = localstorageService.addOnNewValueListener(USER_PREFERENCES, (newValue) =>
-      this.updateUserPreferences(newValue),
-    )
   }
 
   private static isObject(item: any) {
@@ -63,7 +59,11 @@ export class SettingsService {
 
   updateUserPreferences(newValue: UserPreferences) {
     this.userPreferences.next(newValue)
+    this.subscription = undefined
     this.localstorageService.set(USER_PREFERENCES, newValue)
+    this.subscription = this.localstorageService.addOnNewValueListener(USER_PREFERENCES, (_newValue) =>
+      this.updateUserPreferences(_newValue),
+    )
   }
 
   getUserPreferences(): UserPreferences {

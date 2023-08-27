@@ -84,4 +84,4 @@ export class LocalStorageService {
   }
 }
 
-type Change = { [p: string]: chrome.storage.StorageChange }
+export type Change = { [p: string]: chrome.storage.StorageChange }

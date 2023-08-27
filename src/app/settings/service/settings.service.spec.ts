@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing'
 import { skip, Subscription } from 'rxjs'
+import { LocalStorageStub } from '../../../test/LocalStorageStub'
 
 import { LocalStorageService } from '../../storage/service/local-storage.service'
 import { UserPreferences } from '../model/user-preferences'
@@ -8,20 +9,20 @@ import { SettingsService } from './settings.service'
 describe('SettingsService', () => {
   let service: SettingsService
   let subscription: Subscription
-  let userPreferencesCallbackCalled: boolean
+  let userPreferencesCallbackCalledTimes: number
+  let localStorageStub: LocalStorageStub
 
-  const localStorageSpy = jasmine.createSpyObj('LocalStorageService', ['get', 'set', 'addOnNewValueListener'])
   beforeEach(() => {
-    localStorageSpy.get.and.returnValue(Promise.resolve(new UserPreferences()))
     TestBed.configureTestingModule({
-      providers: [SettingsService, { provide: LocalStorageService, useValue: localStorageSpy }],
+      providers: [SettingsService, { provide: LocalStorageService, useClass: LocalStorageStub }],
     })
     service = TestBed.inject(SettingsService)
+    localStorageStub = TestBed.inject(LocalStorageService) as unknown as LocalStorageStub
 
     // Define callback to assert if it was called
-    userPreferencesCallbackCalled = false
+    userPreferencesCallbackCalledTimes = 0
     subscription = service.userPreferences$.pipe(skip(1)).subscribe((item: UserPreferences) => {
-      userPreferencesCallbackCalled = true
+      userPreferencesCallbackCalledTimes++
     })
   })
 
@@ -44,8 +45,8 @@ describe('SettingsService', () => {
     service.updateUserPreferences(preferences)
 
     expect(service.getUserPreferences().deduplicateStripUrlParts).toEqual('new value')
-    expect(userPreferencesCallbackCalled).toBeTrue()
-    expect(localStorageSpy.set).toHaveBeenCalled()
+    expect(userPreferencesCallbackCalledTimes).toBe(1)
+    expect(localStorageStub.setCallCount).toBe(1)
   })
 
   it('should be able to enable experiments', () => {
@@ -54,7 +55,13 @@ describe('SettingsService', () => {
     service.enableExperiments()
 
     expect(service.getUserPreferences().experimentsEnabled).toBeTrue()
-    expect(userPreferencesCallbackCalled).toBeTrue()
-    expect(localStorageSpy.set).toHaveBeenCalled()
+    expect(userPreferencesCallbackCalledTimes).toBe(1)
+    expect(localStorageStub.setCallCount).toBe(1)
+  })
+
+  it('updating preferences observable called once', () => {
+    service.updateUserPreferences(new UserPreferences())
+
+    expect(userPreferencesCallbackCalledTimes).toEqual(1)
   })
 })
