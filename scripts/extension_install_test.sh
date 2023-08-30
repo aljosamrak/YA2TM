@@ -25,6 +25,6 @@ errors=$(grep "$EXTENSION_SEARCH_PATTERN" "$RUN_DIR/chrome_debug.log")
 
 # Exit with error if any extension errors present
 if [[ $errors ]]; then
-  echo "${errors##*$EXTENSION_SEARCH_PATTERN}"
+  echo "${errors##*"$EXTENSION_SEARCH_PATTERN"}"
   exit 1
 fi
